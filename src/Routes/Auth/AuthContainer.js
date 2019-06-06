@@ -10,6 +10,7 @@ export default () => {
   const username = useInput("");
   const firstName = useInput("");
   const lastName = useInput("");
+  const secret = useInput("");
   const email = useInput("itnico.las.me@gmail.com");
   const requestSecretMutation = useMutation(LOG_IN, {
     variables: { email: email.value }
@@ -36,6 +37,7 @@ export default () => {
             setTimeout(() => setAction("signUp"), 3000);
           } else {
             toast.success("check your inbox");
+            setAction("confirm");
           }
         } catch {
           toast.error("request secret을 얻을 수 없습니다. 다시 시도하세용");
@@ -78,6 +80,7 @@ export default () => {
       lastName={lastName}
       email={email}
       onSubmit={onSubmit}
+      secret={secret}
     />
   );
 };
