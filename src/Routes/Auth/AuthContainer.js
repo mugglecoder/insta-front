@@ -10,50 +10,63 @@ export default () => {
   const username = useInput("");
   const firstName = useInput("");
   const lastName = useInput("");
-  const email = useInput("");
-  const requestSecret = useMutation(LOG_IN, {
-    update: (_, { data }) => {
-      const { requestSecret } = data;
-      if (!requestSecret) {
-        toast.error("아직계정이 없습니다. 계정을 만드시오! ㅎㅎ");
-        setTimeout(() => setAction("signUp"), 3000);
-      }
-    },
+  const email = useInput("itnico.las.me@gmail.com");
+  const requestSecretMutation = useMutation(LOG_IN, {
     variables: { email: email.value }
   });
-  const createAccount = useMutation(CREATE_ACCOUNT, {
+  const createAccountMutation = useMutation(CREATE_ACCOUNT, {
     variables: {
+      email: email.value,
       username: username.value,
       firstName: firstName.value,
-      lastName: lastName.value,
-      email: email.value
+      lastName: lastName.value
     }
   });
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
     if (action === "logIn") {
-      if (email !== "") {
-        requestSecret();
+      if (email.value !== "") {
+        try {
+          const { requestSecret } = await requestSecretMutation();
+          if (!requestSecret) {
+            toast.error("You dont have an account yet, create one");
+            setTimeout(() => setAction("signUp"), 3000);
+          }
+        } catch {
+          toast.error("request secret을 얻을 수 없습니다. 다시 시도하세용");
+        }
       } else {
-        toast.error("email is required!");
+        toast.error("Email is required");
       }
     } else if (action === "signUp") {
       if (
+        email.value !== "" &&
         username.value !== "" &&
         firstName.value !== "" &&
-        lastName.value !== "" &&
-        email.value !== ""
+        lastName.value !== ""
       ) {
-        toast.error("all field are required");
+        try {
+          const { createAccount } = await createAccountMutation();
+          if (!createAccount) {
+            toast.error("Can't create account");
+          } else {
+            toast.success("account created! log in now!");
+            setTimeout(() => setAction("logIn"), 3000);
+          }
+        } catch {
+          toast.error("can't createAccount, try again");
+        }
+      } else {
+        toast.error("All field are required");
       }
     }
   };
 
   return (
     <AuthPresenter
-      action={action}
       setAction={setAction}
+      action={action}
       username={username}
       firstName={firstName}
       lastName={lastName}
