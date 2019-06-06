@@ -28,10 +28,14 @@ export default () => {
     if (action === "logIn") {
       if (email.value !== "") {
         try {
-          const { requestSecret } = await requestSecretMutation();
+          const {
+            data: { requestSecret }
+          } = await requestSecretMutation();
           if (!requestSecret) {
             toast.error("You dont have an account yet, create one");
             setTimeout(() => setAction("signUp"), 3000);
+          } else {
+            toast.success("check your inbox");
           }
         } catch {
           toast.error("request secret을 얻을 수 없습니다. 다시 시도하세용");
@@ -47,15 +51,17 @@ export default () => {
         lastName.value !== ""
       ) {
         try {
-          const { createAccount } = await createAccountMutation();
+          const {
+            data: { createAccount }
+          } = await createAccountMutation();
           if (!createAccount) {
             toast.error("Can't create account");
           } else {
             toast.success("account created! log in now!");
             setTimeout(() => setAction("logIn"), 3000);
           }
-        } catch {
-          toast.error("can't createAccount, try again");
+        } catch (e) {
+          toast.error(e.message);
         }
       } else {
         toast.error("All field are required");
