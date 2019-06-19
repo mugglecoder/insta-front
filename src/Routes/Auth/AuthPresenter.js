@@ -50,6 +50,8 @@ const Form = styled(Box)`
 export default ({
   action,
   username,
+  password,
+  password2,
   firstName,
   lastName,
   email,
@@ -66,6 +68,7 @@ export default ({
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder={"Email"} {...email} type="email" />
+            <Input placeholder={"password"} {...password} type="password" />
             <Button text={"Log in"} />
           </form>
         </>
@@ -76,10 +79,12 @@ export default ({
             <title>Sign Up | Prismagram</title>
           </Helmet>
           <form onSubmit={onSubmit}>
+            <Input placeholder={"Email"} {...email} type="email" />
+            <Input placeholder={"Password"} {...password} />
+            <Input placeholder={"Password2"} {...password2} />
+            <Input placeholder={"Username"} {...username} />
             <Input placeholder={"First name"} {...firstName} />
             <Input placeholder={"Last name"} {...lastName} />
-            <Input placeholder={"Email"} {...email} type="email" />
-            <Input placeholder={"Username"} {...username} />
             <Button text={"Sign up"} />
           </form>
         </>

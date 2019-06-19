@@ -6,23 +6,28 @@ import {
   LOG_IN,
   CREATE_ACCOUNT,
   CONFIRM_SECRET,
-  LOCAL_LOG_IN
+  LOCAL_LOG_IN,
+  GETTOKEN,
+  VERIFIED
 } from "./AuthQueries";
 import { toast } from "react-toastify";
 
 export default () => {
   const [action, setAction] = useState("logIn");
+  const email = useInput("");
+  const password = useInput("");
+  const password2 = useInput("");
   const username = useInput("");
   const firstName = useInput("");
   const lastName = useInput("");
   const secret = useInput("");
-  const email = useInput("");
   const requestSecretMutation = useMutation(LOG_IN, {
     variables: { email: email.value }
   });
   const createAccountMutation = useMutation(CREATE_ACCOUNT, {
     variables: {
       email: email.value,
+      password: password.value,
       username: username.value,
       firstName: firstName.value,
       lastName: lastName.value
@@ -34,12 +39,35 @@ export default () => {
       secret: secret.value
     }
   });
+
+  const getTokenMutation = useMutation(GETTOKEN, {
+    variables: {
+      email: email.value
+    }
+  });
+
+  const verifiedMutation = useMutation(VERIFIED, {
+    variables: {
+      email: email.value
+    }
+  });
+
   const localLogInMutation = useMutation(LOCAL_LOG_IN);
 
   const onSubmit = async e => {
-    e.preventDefault();
+    e.persist();
+    const {
+      data: { verified }
+    } = await verifiedMutation();
     if (action === "logIn") {
-      if (email.value !== "") {
+      if (email.value !== "" && password.value !== "") {
+        if (verified === true) {
+          const {
+            data: { getToken }
+          } = await getTokenMutation();
+          localLogInMutation({ variables: { token: getToken } });
+          return window.location.reload();
+        }
         try {
           const {
             data: { requestSecret }
@@ -60,10 +88,16 @@ export default () => {
     } else if (action === "signUp") {
       if (
         email.value !== "" &&
+        password.value !== "" &&
+        password2.value !== "" &&
         username.value !== "" &&
         firstName.value !== "" &&
         lastName.value !== ""
       ) {
+        if (password.value !== password2.value) {
+          toast.error("비밀번호가 일치하지 않습니다");
+          return false;
+        }
         try {
           const {
             data: { createAccount }
@@ -101,6 +135,8 @@ export default () => {
   return (
     <AuthPresenter
       setAction={setAction}
+      password={password}
+      password2={password2}
       action={action}
       username={username}
       firstName={firstName}
