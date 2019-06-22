@@ -7,16 +7,16 @@ import {
   CREATE_ACCOUNT,
   CONFIRM_SECRET,
   LOCAL_LOG_IN,
-  GETTOKEN,
-  VERIFIED
+  VERIFIED,
+  PASSWORD
 } from "./AuthQueries";
 import { toast } from "react-toastify";
 
 export default () => {
   const [action, setAction] = useState("logIn");
   const email = useInput("");
-  const password = useInput("");
   const password2 = useInput("");
+  const password3 = useInput("");
   const username = useInput("");
   const firstName = useInput("");
   const lastName = useInput("");
@@ -27,7 +27,7 @@ export default () => {
   const createAccountMutation = useMutation(CREATE_ACCOUNT, {
     variables: {
       email: email.value,
-      password: password.value,
+      password2: password2.value,
       username: username.value,
       firstName: firstName.value,
       lastName: lastName.value
@@ -40,12 +40,6 @@ export default () => {
     }
   });
 
-  const getTokenMutation = useMutation(GETTOKEN, {
-    variables: {
-      email: email.value
-    }
-  });
-
   const verifiedMutation = useMutation(VERIFIED, {
     variables: {
       email: email.value
@@ -54,30 +48,46 @@ export default () => {
 
   const localLogInMutation = useMutation(LOCAL_LOG_IN);
 
+  const password2Mutation = useMutation(PASSWORD, {
+    variables: { email: email.value, password2: password2.value }
+  });
+
   const onSubmit = async e => {
     e.persist();
-    const {
-      data: { verified }
-    } = await verifiedMutation();
     if (action === "logIn") {
-      if (email.value !== "" && password.value !== "") {
-        if (verified === true) {
-          const {
-            data: { getToken }
-          } = await getTokenMutation();
-          localLogInMutation({ variables: { token: getToken } });
-          return window.location.reload();
-        }
+      const {
+        data: { verified }
+      } = await verifiedMutation();
+      if (email.value !== "" && password2.value !== "") {
         try {
           const {
             data: { requestSecret }
           } = await requestSecretMutation();
-          if (!requestSecret) {
-            toast.error("You dont have an account yet, create one");
-            setTimeout(() => setAction("signUp"), 3000);
+
+          //패스워드 체크하는거
+          const {
+            data: { checkPassword: passCheck }
+          } = await password2Mutation();
+
+          console.log(passCheck);
+
+          if (requestSecret === "no") {
+            toast.error("이메일 또는 비밀번호가 일치하지 않습니다");
+            return false;
+          } else if (verified === true) {
+            if (passCheck === true) {
+              localLogInMutation({ variables: { token: requestSecret } });
+              return window.location.reload();
+            } else {
+              toast.error("비번일치 놉");
+            }
           } else {
-            toast.success("Check your inbox for your login secret");
-            setAction("confirm");
+            if (passCheck === true) {
+              toast.success("Check your inbox for your login secret");
+              setAction("confirm");
+            } else {
+              toast.error("비번일치 놉");
+            }
           }
         } catch {
           toast.error("Can't request secret, try again");
@@ -88,13 +98,13 @@ export default () => {
     } else if (action === "signUp") {
       if (
         email.value !== "" &&
-        password.value !== "" &&
         password2.value !== "" &&
+        password3.value !== "" &&
         username.value !== "" &&
         firstName.value !== "" &&
         lastName.value !== ""
       ) {
-        if (password.value !== password2.value) {
+        if (password2.value !== password3.value) {
           toast.error("비밀번호가 일치하지 않습니다");
           return false;
         }
@@ -103,7 +113,8 @@ export default () => {
             data: { createAccount }
           } = await createAccountMutation();
           if (!createAccount) {
-            toast.error("Can't create account");
+            toast.error("이미 사용된 email 입니다");
+            return false;
           } else {
             toast.success("Account created! Log In now");
             setTimeout(() => setAction("logIn"), 3000);
@@ -135,8 +146,8 @@ export default () => {
   return (
     <AuthPresenter
       setAction={setAction}
-      password={password}
       password2={password2}
+      password3={password3}
       action={action}
       username={username}
       firstName={firstName}

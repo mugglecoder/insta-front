@@ -45,7 +45,6 @@ const Wrapper = styled.div`
 
 export default () => {
   const { data, loading } = useQuery(FEED_QUERY);
-  console.log(data);
   return (
     <Wrapper>
       <Helmet>
@@ -55,24 +54,20 @@ export default () => {
       {!loading &&
         data &&
         data.seeFeed &&
-        data.seeFeed.map((
-          post //내가 post.files[0]을 추가해놓음!!!
-        ) =>
-          post.files[0] ? (
-            <Post
-              key={post.id}
-              id={post.id}
-              user={post.user}
-              files={post.files}
-              likeCount={post.likeCount}
-              isLiked={post.isLiked}
-              comments={post.comments}
-              createdAt={post.createdAt}
-              location={post.location}
-              caption={post.caption}
-            />
-          ) : null
-        )}
+        data.seeFeed.map(post => (
+          <Post
+            key={post.id}
+            id={post.id}
+            user={post.user}
+            files={post.files}
+            likeCount={post.likeCount}
+            isLiked={post.isLiked}
+            comments={post.comments}
+            createdAt={post.createdAt}
+            location={post.location}
+            caption={post.caption}
+          />
+        ))}
     </Wrapper>
   );
 };

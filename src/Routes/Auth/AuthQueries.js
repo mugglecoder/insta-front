@@ -9,14 +9,14 @@ export const LOG_IN = gql`
 export const CREATE_ACCOUNT = gql`
   mutation createAccount(
     $username: String!
-    $password: String!
+    $password2: String!
     $email: String!
     $firstName: String
     $lastName: String
   ) {
     createAccount(
       username: $username
-      password: $password
+      password2: $password2
       email: $email
       firstName: $firstName
       lastName: $lastName
@@ -42,8 +42,8 @@ export const VERIFIED = gql`
   }
 `;
 
-export const GETTOKEN = gql`
-  mutation getToken($email: String!) {
-    getToken(email: $email)
+export const PASSWORD = gql`
+  mutation checkPassword($email: String, $password2: String) {
+    checkPassword(email: $email, password2: $password2)
   }
 `;
