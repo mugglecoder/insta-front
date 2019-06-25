@@ -69,15 +69,16 @@ export default () => {
             data: { checkPassword: passCheck }
           } = await password2Mutation();
 
-          console.log(passCheck);
-
           if (requestSecret === "no") {
             toast.error("이메일 또는 비밀번호가 일치하지 않습니다");
             return false;
           } else if (verified === true) {
             if (passCheck === true) {
-              localLogInMutation({ variables: { token: requestSecret } });
-              return window.location.reload();
+              const getTest = localLogInMutation({
+                variables: { token: requestSecret }
+              });
+              console.log(getTest, "getTest");
+              return false;
             } else {
               toast.error("비번일치 놉");
             }

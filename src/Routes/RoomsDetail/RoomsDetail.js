@@ -1,35 +1,72 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { gql } from "apollo-boost";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import RoomsDetailPresenter from "./RoomsDetailPresenter";
 
 const GETPOST = gql`
-  query detailPost($postId: String!) {
-    detailPost(postId: $postId) {
+  query detailPost($id: String!) {
+    detailPost(id: $id) {
       id
       count
+      numberOfFoors
+      MLSnumber
+      deposit
+      money
       content
       caption
+      airConditioner
+      washer
+      refrigerator
+      internet
+      microwave
+      wifi
+      bed
+      desk
+      induction
+      gasRange
+      doorLock
+      CCTV
+      pets
+      elevator
+      parking
+      electricHeating
+      cityGasHeating
+      nightElectric
+      wateTax
+      includingElectricity
+      cityGasIncluded
+
       comments {
         id
       }
       files {
+        id
         url
       }
       user {
+        id
         username
       }
     }
   }
 `;
 
+const LOCAL_LOG_IN = gql`
+  mutation logUserIn($token: String!) {
+    logUserIn(token: $token) @client
+  }
+`;
+
 export default props => {
-  const postId = props.history.location.pathname.split("/roomsdetail/")[1];
-
+  const id = props.history.location.pathname.split("/")[2];
   const { data, loading } = useQuery(GETPOST, {
-    variables: { postId }
+    variables: { id }
   });
-  console.log(data, loading);
+  const localLoginMutation = useMutation(LOCAL_LOG_IN);
 
-  return <RoomsDetailPresenter data={data} loading={loading} />;
+  const logIns = localLoginMutation({
+    variables: { token: localStorage.getItem("token") }
+  });
+
+  return <RoomsDetailPresenter data={data} loading={loading} logIn={logIns} />;
 };

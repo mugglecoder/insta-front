@@ -13,7 +13,7 @@ const Header = styled.header`
   background-color: white;
   border-bottom: ${props => props.theme.boxBorder};
   border-radius: 0;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -3,17 +3,18 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const Container = styled.div`
-  width: 300px;
+  width: 386px;
   height: 100%;
 `;
 
 const Column = styled.div`
   margin: 0px 10px;
-  height: 180px;
+  height: 250px;
 `;
 
 const SubColumn = styled.div`
-  margin: 10px 10px;
+  padding: 5px 2px;
+  margin: 2px 10px;
   margin-bottom: 30px;
 `;
 
@@ -23,33 +24,52 @@ const Files = styled.div`
 
 const File = styled.div`
   border-radius: 5px;
-
   width: 100%;
   position: absolute;
   top: 0;
   background-image: url(${props => props.src}});
   background: contain;
   background-position: center;
-  height: 180px;
-  background-size: 250px 250px;
+  height: 250px;
+  background-size: cover;
 `;
 
 const Subject = styled.div`
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 500;
   margin-bottom: 5px;
 `;
 
 const Username = styled.div``;
 
+const SmallSub = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin: 7px 0px;
+`;
+
 const Deposit = styled.span`
+  display: inline-block;
+  margin-right: 5px;
   font-weight: 600;
-  color: red;
+  font-size: 16px;
+  color: #c87777;
+`;
+
+const SelectType = styled.div`
+  margin-right: 7px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgb(169, 193, 232);
 `;
 
 const Money = styled.span`
+  display: inline-block;
+  margin-left: 5px;
   font-weight: 600;
-  color: red;
+  font-size: 16px;
+  color: #c87777;
 `;
 
 const Date = styled.div``;
@@ -58,6 +78,7 @@ const Count = styled.div``;
 
 const BoardParts = ({
   caption,
+  selectType,
   username,
   createdAt,
   count,
@@ -68,12 +89,21 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
+        {url.length === 0 ? (
+          <File
+            src={
+              "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
+            }
+          />
+        ) : (
+          false
+        )}
         {url &&
           url.map((item, index) => (
             <File
               key={index}
               src={
-                item.url.length === 0
+                item.length === 0 || item.url.length === 0
                   ? "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
                   : item.url
               }
@@ -82,11 +112,13 @@ const BoardParts = ({
       </Files>
     </Column>
     <SubColumn>
+      <SmallSub>
+        <SelectType>{selectType}</SelectType>
+        <Deposit>보증금 {deposit}</Deposit>
+        {" / "}
+        <Money> 월세 {money}</Money>
+      </SmallSub>
       <Subject>{caption}</Subject>
-
-      <Deposit>{deposit}</Deposit>
-      {" / "}
-      <Money>{money}</Money>
     </SubColumn>
   </Container>
 );

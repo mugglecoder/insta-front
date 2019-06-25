@@ -8,14 +8,16 @@ import Profile from "../Routes/Profile";
 import Search from "../Routes/Search";
 import BoardMain from "../Routes/BoardMain";
 import RoomsDetail from "../Routes/RoomsDetail";
+import WritePost from "../Routes/WritePost";
 
 const LoggedInRoutes = ({ history }) => (
   <Switch>
     {console.log(history)}
     <Route exact path="/" component={BoardMain} />
-    <Route path="/roomsdetail/:id" component={RoomsDetail} />
     <Route path="/board" component={Feed} />
-    <Route path="/explore" component={Explore} />
+    <Route path="/roomsdetail/:id" component={RoomsDetail} />
+    <Route path="/writeboard/:id" component={WritePost} />
+    <Route path="/upload" component={Explore} />
     <Route path="/search" component={Search} />
     <Route path="/:username" component={Profile} />
   </Switch>
