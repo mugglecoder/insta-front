@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery, useMutation } from "react-apollo-hooks";
-import { ME } from "../SharedQueries";
+import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
-import { toast } from "react-toastify";
 import axios from "axios";
 
 const UPLOAD = gql`
@@ -202,9 +200,11 @@ const InputFiles = styled.input`
 `;
 
 export default props => {
-  const { data, loading } = useQuery(ME);
   const [select, setSelect] = useState("");
   const [files, setFiles] = useState(null);
+  useEffect(() => {
+    console.log("마운트");
+  }, []);
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
   const [refrigerator, setRefrigerator] = useState(false);
@@ -259,7 +259,6 @@ export default props => {
       wateTax,
       includingElectricity,
       cityGasIncluded,
-      files,
       caption: caption.value,
       deposit: deposit.value,
       money: money.value,
@@ -492,25 +491,22 @@ export default props => {
     return false;
   };
   const uploadFileHandle = e => {
-    console.log(e.target.files[0]);
+    console.log(e.target.files);
     setFiles(e.target.files[0]);
   };
 
   const onSubmit = async e => {
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*"
-      }
-    };
-
     e.preventDefault();
     const data = new FormData();
     data.append("file", files);
-    axios
-      .post("/upload", data, axiosConfig)
+    const go = data.get("files");
+    setFiles(go);
+    console.log(go, "gogogogogo");
+    console.log(files, "useState file이 비어 있는가?");
+    await axios
+      .post("http://localhost:4000/upload", data)
       .then(res => {
-        console.log(res.statusText);
+        console.log(res.statusText, "여기에서 오케이가 떴나");
       })
       .catch(function(error) {
         if (error.response) {
@@ -525,8 +521,12 @@ export default props => {
         console.log(error.config);
       });
 
-    // await test();
-    console.log("bobobobobobobo");
+    const {
+      data: {
+        upload: { id }
+      }
+    } = await test();
+    props.history.push(`/roomsdetail/${id}`);
   };
   return (
     <Wrapper>
@@ -765,7 +765,7 @@ export default props => {
               <InputFiles
                 type="file"
                 name="file"
-                multiple="multiple"
+                multiple
                 onChange={uploadFileHandle}
               />
             </label>

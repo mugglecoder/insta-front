@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
-import { useQuery, useMutation } from "react-apollo-hooks";
+import { useQuery } from "react-apollo-hooks";
 import BoardParts from "../Components/BoardParts";
 import { Link, withRouter } from "react-router-dom";
 import Loader from "../Components/Loader";

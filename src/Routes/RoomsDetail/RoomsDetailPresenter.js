@@ -37,8 +37,6 @@ const Username = styled.div`
   margin-bottom: 20px;
 `;
 
-const Count = styled.span``;
-
 const ContentMain = styled.div`
   margin-top: 10px;
   padding: 40px;
@@ -50,13 +48,6 @@ const Deposit = styled.span`
   font-weight: 600;
   color: grey;
   margin-right: 10px;
-`;
-
-const Money = styled.span`
-  font-size: 16px;
-  display: inline-block;
-  font-weight: 600;
-  color: grey;
 `;
 
 const Content = styled.div`

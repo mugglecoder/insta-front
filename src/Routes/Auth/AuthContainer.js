@@ -53,7 +53,8 @@ export default () => {
   });
 
   const onSubmit = async e => {
-    e.persist();
+    console.log(e);
+    e.preventDefault();
     if (action === "logIn") {
       const {
         data: { verified }

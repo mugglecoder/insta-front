@@ -14,17 +14,18 @@ const LoggedInRoutes = ({ history }) => (
   <Switch>
     {console.log(history)}
     <Route exact path="/" component={BoardMain} />
+    <Route path="/upload" component={Explore} />
     <Route path="/board" component={Feed} />
     <Route path="/roomsdetail/:id" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
-    <Route path="/upload" component={Explore} />
     <Route path="/search" component={Search} />
     <Route path="/:username" component={Profile} />
   </Switch>
 );
 
-const LoggedOutRoutes = () => (
+const LoggedOutRoutes = ({ history }) => (
   <Switch>
+    {console.log(history)}
     <Route exact path="/" component={Auth} />
   </Switch>
 );

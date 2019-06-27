@@ -40,8 +40,6 @@ const Subject = styled.div`
   margin-bottom: 5px;
 `;
 
-const Username = styled.div``;
-
 const SmallSub = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -71,10 +69,6 @@ const Money = styled.span`
   font-size: 16px;
   color: #c87777;
 `;
-
-const Date = styled.div``;
-
-const Count = styled.div``;
 
 const BoardParts = ({
   caption,
