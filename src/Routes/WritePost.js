@@ -72,6 +72,10 @@ const UPLOAD = gql`
       MLSnumber: $MLSnumber
     ) {
       id
+      files {
+        id
+        url
+      }
     }
   }
 `;
@@ -202,7 +206,6 @@ const InputFiles = styled.input`
 export default props => {
   const [select, setSelect] = useState("");
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
-  const [jotdo, setJotdo] = useState("jot");
 
   const [files, setWhyNot] = useState(null);
 
@@ -526,7 +529,6 @@ export default props => {
         }
         console.log(error.config);
       });
-    setWhyNot(resData);
 
     const {
       data: {

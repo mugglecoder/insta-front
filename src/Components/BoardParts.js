@@ -99,7 +99,7 @@ const BoardParts = ({
               src={
                 item.length === 0 || item.url.length === 0
                   ? "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
-                  : item.url
+                  : `http://localhost:4000/${item.url}`
               }
             />
           ))}
