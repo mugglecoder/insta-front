@@ -201,15 +201,21 @@ const InputFiles = styled.input`
 
 export default props => {
   const [select, setSelect] = useState("");
-  const [files, setFiles] = useState(null);
-  useEffect(() => {
-    console.log("마운트");
-  }, []);
+  const [imageUploadMulter, setImageUploadMulter] = useState(null);
+  const [jotdo, setJotdo] = useState("jot");
+
+  const [files, setWhyNot] = useState(null);
+
+  useEffect(() => console.log("The value after update", imageUploadMulter), [
+    imageUploadMulter
+  ]);
+
+  useEffect(() => console.log("F I L E SSSSSS", files), [files]);
+
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
   const [refrigerator, setRefrigerator] = useState(false);
   const [internet, setInternet] = useState(false);
-
   const [microwave, setMicrowave] = useState(false);
   const [wifi, setWifi] = useState(false);
   const [bed, setBed] = useState(false);
@@ -264,7 +270,8 @@ export default props => {
       money: money.value,
       content: content.value,
       numberOfFoors: numberOfFoors.value,
-      MLSnumber: MLSnumber.value
+      MLSnumber: MLSnumber.value,
+      files
     }
   });
 
@@ -490,23 +497,22 @@ export default props => {
     }
     return false;
   };
-  const uploadFileHandle = e => {
-    console.log(e.target.files);
-    setFiles(e.target.files[0]);
+  const uploadFileHandle = async e => {
+    setImageUploadMulter(e.target.files[0]);
+    console.log(imageUploadMulter);
   };
 
   const onSubmit = async e => {
     e.preventDefault();
+
     const data = new FormData();
-    data.append("file", files);
-    const go = data.get("files");
-    setFiles(go);
-    console.log(go, "gogogogogo");
-    console.log(files, "useState file이 비어 있는가?");
-    await axios
+    data.append("file", imageUploadMulter);
+    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
+    const resData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
-        console.log(res.statusText, "여기에서 오케이가 떴나");
+        console.log(res.data.path, "axios 안의 res.data");
+        return res.data.path;
       })
       .catch(function(error) {
         if (error.response) {
@@ -520,13 +526,15 @@ export default props => {
         }
         console.log(error.config);
       });
+    setWhyNot(resData);
 
     const {
       data: {
         upload: { id }
       }
     } = await test();
-    props.history.push(`/roomsdetail/${id}`);
+
+    // props.history.push(`/roomsdetail/${id}`);
   };
   return (
     <Wrapper>
