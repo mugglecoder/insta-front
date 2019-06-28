@@ -62,8 +62,10 @@ export default withRouter(props => {
   const { data, loading } = useQuery(FEEDLIST);
   const token = localStorage.getItem("token");
   const onClick = () => {
-    if (dataOfMe) {
-      return props.history.push(`/writeboard/${dataOfMe.me.id}`);
+    if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
+      return props.history.push(
+        `/writeboard/${dataOfMe && dataOfMe.me && dataOfMe.me.id}`
+      );
     } else {
       return false;
     }

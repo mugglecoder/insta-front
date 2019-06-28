@@ -12,6 +12,7 @@ import WritePost from "../Routes/WritePost";
 
 const LoggedInRoutes = ({ history }) => (
   <Switch>
+    {console.log(history)}
     <Route exact path="/" component={BoardMain} />
     <Route path="/upload" component={Explore} />
     <Route path="/board" component={Feed} />

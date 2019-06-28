@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
@@ -7,6 +7,8 @@ import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
+import { getOperationAST } from "graphql";
+import { string } from "postcss-selector-parser";
 
 const UPLOAD = gql`
   mutation upload(
@@ -176,7 +178,6 @@ const InputFiles = styled.input`
   text-align: center !important;
   margin: 0;
   width: 100% !important;
-
   &:focus {
     outline: 2px dashed #92b0b3;
     outline-offset: -10px;
@@ -205,15 +206,24 @@ const InputFiles = styled.input`
 
 export default props => {
   const [select, setSelect] = useState("");
+  const [axiosData, setAxiosFuck] = useState("");
+  useEffect(
+    () =>
+      console.log(
+        "The value after update Axios!!!!",
+        axiosData ? setFiles(axiosData) : "jotdo"
+      ),
+    [axiosData]
+  );
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
+  useEffect(
+    () =>
+      console.log("The value after update 이미지가 들어감", imageUploadMulter),
+    [imageUploadMulter]
+  );
 
-  const [files, setWhyNot] = useState(null);
-
-  useEffect(() => console.log("The value after update", imageUploadMulter), [
-    imageUploadMulter
-  ]);
-
-  useEffect(() => console.log("F I L E SSSSSS", files), [files]);
+  const [files, setFiles] = useState("test");
+  useEffect(() => console.log("The value after update FIELS", files), [files]);
 
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
@@ -236,13 +246,21 @@ export default props => {
   const [wateTax, setWateTax] = useState(false);
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
-
   const caption = useInput("");
   const deposit = useInput("");
   const money = useInput("");
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
+  console.log(files, "여기에는 있냐 이건 파일스스스스스스");
+
+  const getName = () => {
+    if (imageUploadMulter) {
+      return imageUploadMulter.name;
+    } else {
+      return false;
+    }
+  };
 
   const test = useMutation(UPLOAD, {
     variables: {
@@ -250,6 +268,7 @@ export default props => {
       airConditioner,
       washer,
       refrigerator,
+      files: getName(),
       internet,
       microwave,
       wifi,
@@ -273,8 +292,7 @@ export default props => {
       money: money.value,
       content: content.value,
       numberOfFoors: numberOfFoors.value,
-      MLSnumber: MLSnumber.value,
-      files
+      MLSnumber: MLSnumber.value
     }
   });
 
@@ -470,6 +488,7 @@ export default props => {
     }
     return false;
   };
+
   const wateTaxS = e => {
     const target = e.target.checked;
     console.log(target);
@@ -500,44 +519,34 @@ export default props => {
     }
     return false;
   };
+
   const uploadFileHandle = async e => {
     setImageUploadMulter(e.target.files[0]);
-    console.log(imageUploadMulter);
+    console.log(imageUploadMulter, "이미지가 잘 들어감");
   };
 
   const onSubmit = async e => {
     e.preventDefault();
-
     const data = new FormData();
     data.append("file", imageUploadMulter);
-    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
-    const resData = await axios
+
+    const axiosData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
-        console.log(res.data.path, "axios 안의 res.data");
-        return res.data.path;
-      })
-      .catch(function(error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error", error.message);
-        }
-        console.log(error.config);
+        return res;
       });
 
+    console.log(axiosData, "66666666");
+    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
+    await setAxiosFuck(axiosData);
     const {
       data: {
         upload: { id }
       }
     } = await test();
-
     // props.history.push(`/roomsdetail/${id}`);
   };
+
   return (
     <Wrapper>
       <form
@@ -776,7 +785,7 @@ export default props => {
                 type="file"
                 name="file"
                 multiple
-                onChange={uploadFileHandle}
+                onChange={e => uploadFileHandle(e)}
               />
             </label>
           </InputFilesContainer>
