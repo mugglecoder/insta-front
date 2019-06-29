@@ -9,6 +9,7 @@ import Search from "../Routes/Search";
 import BoardMain from "../Routes/BoardMain";
 import RoomsDetail from "../Routes/RoomsDetail";
 import WritePost from "../Routes/WritePost";
+import Loading from "../Routes/Loading";
 
 const LoggedInRoutes = ({ history }) => (
   <Switch>
@@ -16,6 +17,7 @@ const LoggedInRoutes = ({ history }) => (
     <Route exact path="/" component={BoardMain} />
     <Route path="/upload" component={Explore} />
     <Route path="/board" component={Feed} />
+    <Route path="/uploading" component={Loading} />
     <Route path="/roomsdetail/:id" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
     <Route path="/search" component={Search} />

@@ -15,14 +15,14 @@ const Column = styled.div`
 
 const ColumnL = styled.div`
   padding: 40px;
-  height: 600px;
+  height: 580px;
   width: 400px;
   background-color: #cce0e0;
   margin-right: 15px;
 `;
 
 const ColumnR = styled.div`
-  height: 600px;
+  height: 580px;
   width: 100%;
 `;
 
@@ -106,11 +106,11 @@ const Files = styled.div`
 
 const File = styled.img`
   background-image: url(${props => props.src});
-  background-position: center;
-  background-size: cover;
   height: 100%;
   width: 100%;
-  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background: no-repeat;
 `;
 
 const FileS = styled.div`
@@ -242,21 +242,16 @@ const RoomsDetailPresenter = ({ data, loading }) => (
           <h1>디테일</h1>
           <hr />
         </DetailText>
-        <Files>
-          {data.detailPost &&
-            data.detailPost.files.map(item =>
-              item.url ? (
-                <FileS key={item.id} src={item.url} />
-              ) : (
-                <FileS
-                  key={item.id}
-                  src={
-                    "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
-                  }
-                />
-              )
-            )}
-        </Files>
+        <File
+          src={
+            data.detailPost &&
+            data.detailPost.files &&
+            data.detailPost.files[0] &&
+            data.detailPost.files[0].url
+              ? `http://localhost:4000/${data.detailPost.files[0].url}`
+              : "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
+          }
+        />
       </>
     )}
 
@@ -273,3 +268,19 @@ const RoomsDetailPresenter = ({ data, loading }) => (
 );
 
 export default RoomsDetailPresenter;
+
+// map
+
+//<Files>
+//{data.detailPost &&
+//  data.detailPost.files.map(item =>
+//    item.url ? (
+//      <FileS key={item.id} src={item.url} />
+//    ) : (
+//      <FileS
+//        key={item.id}
+//        src={`http://localhost:4000/${data.detailPost.files[0].url}`}
+//      />
+//    )
+//  )}
+//</Files>

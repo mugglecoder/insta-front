@@ -573,6 +573,7 @@ export default props => {
       });
     setFiles(axiosData);
     setOnsubmit(true);
+    props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(axiosData);
 
     //props.history.push(`/roomsdetail/${id}`);
@@ -823,7 +824,7 @@ export default props => {
             </label>
           </InputFilesContainer>
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
-          <Button text={"Sign up"} />
+          <Button text={"Sign up"} name="myButton" />
         </Inputs>
       </form>
     </Wrapper>

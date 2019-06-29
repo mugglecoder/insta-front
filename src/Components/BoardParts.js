@@ -3,7 +3,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const Container = styled.div`
-  width: 386px;
+  max-width: 386px;
+  width: 32vw;
   height: 100%;
 `;
 
@@ -22,15 +23,14 @@ const Files = styled.div`
   position: relative;
 `;
 
-const File = styled.div`
+const File = styled.img`
   border-radius: 5px;
+  height: 250px;
   width: 100%;
   position: absolute;
   top: 0;
   background-image: url(${props => props.src}});
-  background: contain;
   background-position: center;
-  height: 250px;
   background-size: cover;
 `;
 
@@ -83,26 +83,16 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
-        {url.length === 0 ? (
+        {console.log(url.files)}
+        {url && url.files && url.files[0] === undefined ? (
           <File
             src={
               "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
             }
           />
         ) : (
-          false
+          <File src={`http://localhost:4000/${url.files[0].url}`} />
         )}
-        {url &&
-          url.map((item, index) => (
-            <File
-              key={index}
-              src={
-                item.length === 0 || item.url.length === 0
-                  ? "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
-                  : `http://localhost:4000/${item.url}`
-              }
-            />
-          ))}
       </Files>
     </Column>
     <SubColumn>

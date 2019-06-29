@@ -103,7 +103,7 @@ export default withRouter(props => {
                 username={item.user.username}
                 createdAt={item.createdAt.slice(0, 10)}
                 count={item.count}
-                url={item.files}
+                url={item}
                 deposit={item.deposit}
                 money={item.money}
               />
