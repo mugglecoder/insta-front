@@ -104,7 +104,7 @@ const Files = styled.div`
   width: 100%;
 `;
 
-const File = styled.div`
+const File = styled.img`
   background-image: url(${props => props.src});
   background-position: center;
   background-size: cover;
@@ -152,7 +152,7 @@ const RoomsDetailPresenter = ({ data, loading }) => (
                 data.detailPost.files &&
                 data.detailPost.files[0] &&
                 data.detailPost.files[0].url
-                  ? data.detailPost.files[0].url
+                  ? `http://localhost:4000/${data.detailPost.files[0].url}`
                   : "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
               }
             />

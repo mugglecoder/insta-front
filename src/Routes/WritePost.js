@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
@@ -7,8 +7,6 @@ import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
-import { getOperationAST } from "graphql";
-import { string } from "postcss-selector-parser";
 
 const UPLOAD = gql`
   mutation upload(
@@ -206,15 +204,7 @@ const InputFiles = styled.input`
 
 export default props => {
   const [select, setSelect] = useState("");
-  const [axiosData, setAxiosFuck] = useState("");
-  useEffect(
-    () =>
-      console.log(
-        "The value after update Axios!!!!",
-        axiosData ? setFiles(axiosData) : "jotdo"
-      ),
-    [axiosData]
-  );
+
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
   useEffect(
     () =>
@@ -222,8 +212,25 @@ export default props => {
     [imageUploadMulter]
   );
 
-  const [files, setFiles] = useState("test");
-  useEffect(() => console.log("The value after update FIELS", files), [files]);
+  const [files, setFiles] = useState(null);
+  console.log(files);
+
+  const [testt, setOnsubmit] = useState(false);
+
+  useEffect(() => {
+    console.log("이거 실행되어야함");
+    if (testt) {
+      if (testt === true) {
+        return lastCall();
+      }
+      console.log("잘되나봐");
+    }
+  }, [testt]);
+
+  const [fuckAround, setFuckAround] = useState(true);
+  useEffect(() => {
+    setOnsubmit(false);
+  }, [fuckAround]);
 
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
@@ -252,23 +259,21 @@ export default props => {
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
-  console.log(files, "여기에는 있냐 이건 파일스스스스스스");
 
-  const getName = () => {
-    if (imageUploadMulter) {
-      return imageUploadMulter.name;
-    } else {
-      return false;
-    }
-  };
-
+  //  const getName = () => {
+  //    if (imageUploadMulter) {
+  //      return imageUploadMulter.name;
+  //    } else {
+  //      return false;
+  //    }
+  //  };
   const test = useMutation(UPLOAD, {
     variables: {
       selectType: select,
       airConditioner,
       washer,
       refrigerator,
-      files: getName(),
+      files,
       internet,
       microwave,
       wifi,
@@ -520,30 +525,58 @@ export default props => {
     return false;
   };
 
-  const uploadFileHandle = async e => {
+  const uploadFileHandle = e => {
+    console.log(e.target.files);
     setImageUploadMulter(e.target.files[0]);
     console.log(imageUploadMulter, "이미지가 잘 들어감");
   };
 
+  const setter = async () => {
+    const {
+      data: {
+        upload: { id }
+      }
+    } = await test();
+    console.log(id, "술취함");
+    if (id && onSubmit) {
+      setFuckAround(false);
+      props.history.push(`/roomsdetail/${id}`);
+      return false;
+    }
+  };
+
+  const lastCall = axiosData => {
+    if (axiosData) {
+      setFiles(axiosData);
+    } else {
+      console.log(axiosData, "씨발놈아");
+      setFiles(axiosData);
+      console.log(files, "여긴 if 밖에");
+    }
+    setFuckAround(false);
+    if (testt) {
+      setter();
+    }
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
+
+    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
     const data = new FormData();
     data.append("file", imageUploadMulter);
 
     const axiosData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
-        return res;
+        return res.data.path;
       });
+    setFiles(axiosData);
+    setOnsubmit(true);
+    return lastCall(axiosData);
 
-    console.log(axiosData, "66666666");
-    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
-    await setAxiosFuck(axiosData);
-    const {
-      data: {
-        upload: { id }
-      }
-    } = await test();
+    //props.history.push(`/roomsdetail/${id}`);
+
     // props.history.push(`/roomsdetail/${id}`);
   };
 
@@ -785,7 +818,7 @@ export default props => {
                 type="file"
                 name="file"
                 multiple
-                onChange={e => uploadFileHandle(e)}
+                onChange={uploadFileHandle}
               />
             </label>
           </InputFilesContainer>
