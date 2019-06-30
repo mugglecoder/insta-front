@@ -35,6 +35,7 @@ const File = styled.img`
 `;
 
 const Subject = styled.div`
+  overflow-wrap: break-word;
   font-size: 17px;
   font-weight: 500;
   margin-bottom: 5px;
@@ -83,7 +84,6 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
-        {console.log(url.files)}
         {url && url.files && url.files[0] === undefined ? (
           <File
             src={

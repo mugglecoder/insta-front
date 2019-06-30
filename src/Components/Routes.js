@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Feed from "../Routes/Feed";
 import Auth from "../Routes/Auth";
 import Explore from "../Routes/Explore";
@@ -10,18 +10,19 @@ import BoardMain from "../Routes/BoardMain";
 import RoomsDetail from "../Routes/RoomsDetail";
 import WritePost from "../Routes/WritePost";
 import Loading from "../Routes/Loading";
+import LinkPage from "../Routes/LinkPage";
 
-const LoggedInRoutes = ({ history }) => (
+const LoggedInRoutes = ({ match }) => (
   <Switch>
-    {console.log(history)}
-    <Route exact path="/" component={BoardMain} />
+    <Route exact path="/" render={() => <Redirect to="/new/1" />} />
+    <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
+    <Route exact path="/new/:page" component={LinkPage} />
+    <Route path="/roomsdetail/:id/new/:page" component={RoomsDetail} />
     <Route path="/upload" component={Explore} />
     <Route path="/board" component={Feed} />
     <Route path="/uploading" component={Loading} />
-    <Route path="/roomsdetail/:id" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
     <Route path="/search" component={Search} />
-    <Route path="/:username" component={Profile} />
   </Switch>
 );
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Loader from "../../Components/Loader";
 import BoardMain from "../BoardMain";
-
+import LinkPage from "../../Routes/LinkPage";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -27,6 +27,7 @@ const ColumnR = styled.div`
 `;
 
 const Caption = styled.div`
+  overflow-wrap: break-word;
   font-size: 27px;
   font-weight: 500;
 `;
@@ -96,7 +97,7 @@ const DetailText = styled.div`
   }
 `;
 
-const Files = styled.div`
+const FilesA = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,14 +114,13 @@ const File = styled.img`
   background: no-repeat;
 `;
 
-const FileS = styled.div`
+const FileS = styled.img`
+  background-size: contain;
   background-image: url(${props => props.src});
   background-position: center;
-  background-size: cover;
-  height: 600px;
-  width: 800px;
+  width: 100%;
   background-repeat: no-repeat;
-  margin: 30px 0px;
+  margin: 80px 0px;
 `;
 
 const MoreRooms = styled.div`
@@ -131,11 +131,15 @@ const MoreRooms = styled.div`
   }
 `;
 
-const RoomsDetailPresenter = ({ data, loading }) => (
+const ContentWrap = styled.div`
+  padding: 20px;
+`;
+
+const RoomsDetailPresenter = ({ props, data, loading }) => (
   <Wrapper>
     {loading && <Loader />}
-    {!loading && data.detailPost && (
-      <>
+    {!loading && (
+      <ContentWrap>
         <Column>
           <ColumnL>
             <Username>
@@ -242,17 +246,20 @@ const RoomsDetailPresenter = ({ data, loading }) => (
           <h1>디테일</h1>
           <hr />
         </DetailText>
-        <File
-          src={
-            data.detailPost &&
-            data.detailPost.files &&
-            data.detailPost.files[0] &&
-            data.detailPost.files[0].url
-              ? `http://localhost:4000/${data.detailPost.files[0].url}`
-              : "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
-          }
-        />
-      </>
+        <FilesA>
+          {data.detailPost &&
+            data.detailPost.files.map(item =>
+              item.url ? (
+                <FileS
+                  key={item.id}
+                  src={`http://localhost:4000/${item.url}`}
+                />
+              ) : (
+                false
+              )
+            )}
+        </FilesA>
+      </ContentWrap>
     )}
 
     {loading ? (
@@ -261,7 +268,7 @@ const RoomsDetailPresenter = ({ data, loading }) => (
       <MoreRooms>
         <h1>더 많은 매물이 있습니다.</h1>
         <hr />
-        <BoardMain />
+        <LinkPage props={props} />
       </MoreRooms>
     )}
   </Wrapper>
@@ -270,17 +277,3 @@ const RoomsDetailPresenter = ({ data, loading }) => (
 export default RoomsDetailPresenter;
 
 // map
-
-//<Files>
-//{data.detailPost &&
-//  data.detailPost.files.map(item =>
-//    item.url ? (
-//      <FileS key={item.id} src={item.url} />
-//    ) : (
-//      <FileS
-//        key={item.id}
-//        src={`http://localhost:4000/${data.detailPost.files[0].url}`}
-//      />
-//    )
-//  )}
-//</Files>

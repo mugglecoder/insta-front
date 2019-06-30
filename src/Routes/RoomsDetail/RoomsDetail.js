@@ -68,5 +68,12 @@ export default props => {
     variables: { token: localStorage.getItem("token") }
   });
 
-  return <RoomsDetailPresenter data={data} loading={loading} logIn={logIns} />;
+  return (
+    <RoomsDetailPresenter
+      props={props}
+      data={data}
+      loading={loading}
+      logIn={logIns}
+    />
+  );
 };

@@ -259,7 +259,7 @@ export default props => {
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
-
+  let fileData = [];
   //  const getName = () => {
   //    if (imageUploadMulter) {
   //      return imageUploadMulter.name;
@@ -526,9 +526,12 @@ export default props => {
   };
 
   const uploadFileHandle = e => {
-    console.log(e.target.files);
-    setImageUploadMulter(e.target.files[0]);
     console.log(imageUploadMulter, "이미지가 잘 들어감");
+
+    let filess = e.target.files; // create file object
+    setImageUploadMulter(filess);
+
+    return true;
   };
 
   const setter = async () => {
@@ -540,17 +543,18 @@ export default props => {
     console.log(id, "술취함");
     if (id && onSubmit) {
       setFuckAround(false);
-      props.history.push(`/roomsdetail/${id}`);
+      props.history.push(`/roomsdetail/${id}/new`);
+      window.location.reload();
       return false;
     }
   };
 
   const lastCall = axiosData => {
-    if (axiosData) {
-      setFiles(axiosData);
+    if (fileData) {
+      setFiles(fileData);
     } else {
-      console.log(axiosData, "씨발놈아");
-      setFiles(axiosData);
+      console.log(fileData, "씨발놈아");
+      setFiles(fileData);
       console.log(files, "여긴 if 밖에");
     }
     setFuckAround(false);
@@ -564,17 +568,27 @@ export default props => {
 
     console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
     const data = new FormData();
-    data.append("file", imageUploadMulter);
+
+    for (var x = 0; x < imageUploadMulter.length; x++) {
+      data.append("file", imageUploadMulter[x]);
+    }
 
     const axiosData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
-        return res.data.path;
+        console.log(res, "res");
+        return res.data;
       });
-    setFiles(axiosData);
+
+    axiosData.forEach(element => {
+      fileData.push(element.path);
+    });
+    console.log(fileData, "된다");
+
+    setFiles(fileData);
     setOnsubmit(true);
     props.history.push({ pathname: "/uploading", state: { id: 123 } });
-    return lastCall(axiosData);
+    return lastCall(fileData);
 
     //props.history.push(`/roomsdetail/${id}`);
 

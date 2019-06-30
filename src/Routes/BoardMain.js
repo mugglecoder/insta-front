@@ -30,6 +30,20 @@ const FEEDLIST = gql`
   }
 `;
 
+const NEXTPAGE = gql`
+  query nextBoard {
+    nextBoard {
+      id
+    }
+  }
+`;
+
+const POSTCOUNT = gql`
+  {
+    seeFullPost
+  }
+`;
+
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -57,10 +71,28 @@ const LogInButton = styled.button`
   width: 100px;
 `;
 
+const PPcontainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+`;
+const Pcontainer = styled.div`
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+const P = styled.p`
+  display: flex;
+`;
+
 export default withRouter(props => {
   const { data: dataOfMe } = useQuery(ME);
+  const { data: pageCount } = useQuery(POSTCOUNT);
   const { data, loading } = useQuery(FEEDLIST);
+  const { data: data2 } = useQuery(NEXTPAGE);
   const token = localStorage.getItem("token");
+
   const onClick = () => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
       return props.history.push(
@@ -70,8 +102,21 @@ export default withRouter(props => {
       return false;
     }
   };
+
+  const nextPage = () => {
+    console.log(data2);
+    props.history.push("/get");
+    return data2;
+  };
+
+  const pageFullCount = pageCount.seeFullPost;
+  console.log(pageFullCount, "pageFullCount");
+  console.log(pageCount, "pageCount");
+  console.log(data, "data");
+
   return (
     <Wrapper>
+      {loading && <Loader />}
       {!loading && token && data.seeFeed ? (
         <LogInButtonWrap>
           <LogInButton onClick={onClick}>글쓰기</LogInButton>
@@ -80,8 +125,6 @@ export default withRouter(props => {
         false
       )}
       <Container>
-        {loading && <Loader />}
-
         {!loading &&
           data &&
           data.seeFeed &&
@@ -110,6 +153,21 @@ export default withRouter(props => {
             </SLink>
           ))}
       </Container>
+      {!loading && (
+        <PPcontainer>
+          <Pcontainer>
+            <P>이전</P>
+            <P>
+              <button onClick={nextPage}>1</button>
+            </P>
+            <P>2</P>
+            <P>3</P>
+            <P>4</P>
+            <P>5</P>
+            <P>다음</P>
+          </Pcontainer>
+        </PPcontainer>
+      )}
     </Wrapper>
   );
 });
