@@ -202,6 +202,17 @@ const InputFiles = styled.input`
   }
 `;
 
+const ImgPreView = styled.img`
+  border-radius: 5px;
+  height: 150px;
+  width: 150px;
+  position: relative;
+  top: 0;
+  background-image: url(${props => props.src}});
+  background-position: center;
+  background-size: cover;
+`;
+
 export default props => {
   const [select, setSelect] = useState("");
 
@@ -213,7 +224,6 @@ export default props => {
   );
 
   const [files, setFiles] = useState(null);
-  console.log(files);
 
   const [testt, setOnsubmit] = useState(false);
 
@@ -253,6 +263,13 @@ export default props => {
   const [wateTax, setWateTax] = useState(false);
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
+  const [filesss, setFilesss] = useState("");
+  const [IMG, setIMG] = useState("");
+  const [IMG2, setIMG2] = useState("");
+
+  console.log(IMG, "IMG ");
+  console.log(IMG2, "tempImage 이건 언제 시작되는가2");
+  console.log(filesss);
   const caption = useInput("");
   const deposit = useInput("");
   const money = useInput("");
@@ -525,12 +542,22 @@ export default props => {
     return false;
   };
 
-  const uploadFileHandle = e => {
-    console.log(imageUploadMulter, "이미지가 잘 들어감");
+  const uploadFileHandle = async e => {
+    let filess = e.target.files;
+    setFilesss(filess);
+    let reader = new FileReader();
+    reader.readAsDataURL(filess[0]);
+    await setIMG(reader);
 
-    let filess = e.target.files; // create file object
+    const IMGdata = IMG && IMG.result;
+    let tempImage = await new Image();
+    tempImage.src = IMGdata;
+
+    setIMG2(tempImage);
     setImageUploadMulter(filess);
-
+    console.log(filesss, "이건 언제 시작되는가1");
+    console.log(IMG && IMG.result, "data");
+    console.log(IMG2.src, "Tlqlfkfksdfj");
     return true;
   };
 
@@ -540,7 +567,6 @@ export default props => {
         upload: { id }
       }
     } = await test();
-    console.log(id, "술취함");
     if (id && onSubmit) {
       setFuckAround(false);
       props.history.push(`/roomsdetail/${id}/new`);
@@ -553,9 +579,7 @@ export default props => {
     if (fileData) {
       setFiles(fileData);
     } else {
-      console.log(fileData, "씨발놈아");
       setFiles(fileData);
-      console.log(files, "여긴 if 밖에");
     }
     setFuckAround(false);
     if (testt) {
@@ -565,8 +589,6 @@ export default props => {
 
   const onSubmit = async e => {
     e.preventDefault();
-
-    console.log(imageUploadMulter, " imageUploadMulter 이 비어 있는가?");
     const data = new FormData();
 
     for (var x = 0; x < imageUploadMulter.length; x++) {
@@ -576,14 +598,12 @@ export default props => {
     const axiosData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
-        console.log(res, "res");
         return res.data;
       });
 
     axiosData.forEach(element => {
       fileData.push(element.path);
     });
-    console.log(fileData, "된다");
 
     setFiles(fileData);
     setOnsubmit(true);
@@ -836,6 +856,7 @@ export default props => {
                 onChange={uploadFileHandle}
               />
             </label>
+            <ImgPreView src={IMG2.src}>{}</ImgPreView>
           </InputFilesContainer>
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
           <Button text={"Sign up"} name="myButton" />

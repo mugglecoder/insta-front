@@ -1,201 +1,150 @@
-import React, { Component, Fragment } from "react";
-import Link from "./Link";
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
-import { LINKS_PER_PAGE } from "../constants";
+import React from "react";
+import PropTypes from "prop-types";
 
-export const FEED_QUERY = gql`
-  query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
-    feed(first: $first, skip: $skip, orderBy: $orderBy) {
-      links {
-        id
-        createdAt
-        url
-        description
-        postedBy {
-          id
-          name
-        }
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      count
+const propTypes = {
+  items: PropTypes.array.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  initialPage: PropTypes.number,
+  pageSize: PropTypes.number
+};
+
+const defaultProps = {
+  initialPage: 1,
+  pageSize: 10
+};
+
+class Pagination extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { pager: {} };
+  }
+
+  componentWillMount() {
+    // set page if items array isn't empty
+    if (this.props.items && this.props.items.length) {
+      this.setPage(this.props.initialPage);
     }
   }
-`;
 
-const NEW_LINKS_SUBSCRIPTION = gql`
-  subscription {
-    newLink {
-      id
-      url
-      description
-      createdAt
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
+  componentDidUpdate(prevProps, prevState) {
+    // reset page if items array has changed
+    if (this.props.items !== prevProps.items) {
+      this.setPage(this.props.initialPage);
     }
   }
-`;
 
-const NEW_VOTES_SUBSCRIPTION = gql`
-  subscription {
-    newVote {
-      id
-      link {
-        id
-        url
-        description
-        createdAt
-        postedBy {
-          id
-          name
-        }
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      user {
-        id
-      }
+  setPage(page) {
+    var { items, pageSize } = this.props;
+    var pager = this.state.pager;
+
+    if (page < 1 || page > pager.totalPages) {
+      return;
     }
+
+    // get new pager object for specified page
+    pager = this.getPager(items.length, page, pageSize);
+
+    // get new page of items from items array
+    var pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+
+    // update state
+    this.setState({ pager: pager });
+
+    // call change page function in parent component
+    this.props.onChangePage(pageOfItems);
   }
-`;
 
-class LinkList extends Component {
-  _updateCacheAfterVote = (store, createVote, linkId) => {
-    const isNewPage = this.props.location.pathname.includes("new");
-    const page = parseInt(this.props.match.params.page, 10);
+  getPager(totalItems, currentPage, pageSize) {
+    // default to first page
+    currentPage = currentPage || 1;
 
-    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage ? LINKS_PER_PAGE : 100;
-    const orderBy = isNewPage ? "createdAt_DESC" : null;
-    const data = store.readQuery({
-      query: FEED_QUERY,
-      variables: { first, skip, orderBy }
-    });
+    // default page size is 10
+    pageSize = pageSize || 10;
 
-    const votedLink = data.feed.links.find(link => link.id === linkId);
-    votedLink.votes = createVote.link.votes;
-    store.writeQuery({ query: FEED_QUERY, data });
-  };
+    // calculate total pages
+    var totalPages = Math.ceil(totalItems / pageSize);
 
-  _subscribeToNewLinks = subscribeToMore => {
-    subscribeToMore({
-      document: NEW_LINKS_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newLink = subscriptionData.data.newLink;
-        const exists = prev.feed.links.find(({ id }) => id === newLink.id);
-        if (exists) return prev;
-
-        return Object.assign({}, prev, {
-          feed: {
-            links: [newLink, ...prev.feed.links],
-            count: prev.feed.links.length + 1,
-            __typename: prev.feed.__typename
-          }
-        });
+    var startPage, endPage;
+    if (totalPages <= 10) {
+      // less than 10 total pages so show all
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      // more than 10 total pages so calculate start and end pages
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
       }
-    });
-  };
-
-  _subscribeToNewVotes = subscribeToMore => {
-    subscribeToMore({
-      document: NEW_VOTES_SUBSCRIPTION
-    });
-  };
-  _getQueryVariables = () => {
-    const isNewPage = this.props.location.pathname.includes("new");
-    const page = parseInt(this.props.match.params.page, 10);
-
-    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage ? LINKS_PER_PAGE : 100;
-    const orderBy = isNewPage ? "createdAt_DESC" : null;
-    return { first, skip, orderBy };
-  };
-
-  _getLinksToRender = data => {
-    const isNewPage = this.props.location.pathname.includes("new");
-    if (isNewPage) {
-      return data.feed.links;
     }
-    const rankedLinks = data.feed.links.slice();
-    rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length);
-    return rankedLinks;
-  };
-  _nextPage = data => {
-    const page = parseInt(this.props.match.params.page, 10);
-    if (page <= data.feed.count / LINKS_PER_PAGE) {
-      const nextPage = page + 1;
-      this.props.history.push(`/new/${nextPage}`);
-    }
-  };
 
-  _previousPage = () => {
-    const page = parseInt(this.props.match.params.page, 10);
-    if (page > 1) {
-      const previousPage = page - 1;
-      this.props.history.push(`/new/${previousPage}`);
-    }
-  };
+    // calculate start and end item indexes
+    var startIndex = (currentPage - 1) * pageSize;
+    var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
+
+    // create an array of pages to ng-repeat in the pager control
+    var pages = [...Array(endPage + 1 - startPage).keys()].map(
+      i => startPage + i
+    );
+
+    // return object with all pager properties required by the view
+    return {
+      totalItems: totalItems,
+      currentPage: currentPage,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: startIndex,
+      endIndex: endIndex,
+      pages: pages
+    };
+  }
 
   render() {
+    var pager = this.state.pager;
+
+    if (!pager.pages || pager.pages.length <= 1) {
+      // don't display pager if there is only 1 page
+      return null;
+    }
+
     return (
-      <Query query={FEED_QUERY} variables={this._getQueryVariables()}>
-        {({ loading, error, data, subscribeToMore }) => {
-          if (loading) return <div>Fetching</div>;
-          if (error) return <div>Error</div>;
-
-          this._subscribeToNewLinks(subscribeToMore);
-          this._subscribeToNewVotes(subscribeToMore);
-
-          const linksToRender = this._getLinksToRender(data);
-          const isNewPage = this.props.location.pathname.includes("new");
-          const pageIndex = this.props.match.params.page
-            ? (this.props.match.params.page - 1) * LINKS_PER_PAGE
-            : 0;
-
-          return (
-            <Fragment>
-              {linksToRender.map((link, index) => (
-                <Link
-                  key={link.id}
-                  link={link}
-                  index={index + pageIndex}
-                  updateStoreAfterVote={this._updateCacheAfterVote}
-                />
-              ))}
-              {isNewPage && (
-                <div className="flex ml4 mv3 gray">
-                  <div className="pointer mr2" onClick={this._previousPage}>
-                    Previous
-                  </div>
-                  <div className="pointer" onClick={() => this._nextPage(data)}>
-                    Next
-                  </div>
-                </div>
-              )}
-            </Fragment>
-          );
-        }}
-      </Query>
+      <ul className="pagination">
+        <li className={pager.currentPage === 1 ? "disabled" : ""}>
+          <a onClick={() => this.setPage(1)}>First</a>
+        </li>
+        <li className={pager.currentPage === 1 ? "disabled" : ""}>
+          <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous</a>
+        </li>
+        {pager.pages.map((page, index) => (
+          <li
+            key={index}
+            className={pager.currentPage === page ? "active" : ""}
+          >
+            <a onClick={() => this.setPage(page)}>{page}</a>
+          </li>
+        ))}
+        <li
+          className={pager.currentPage === pager.totalPages ? "disabled" : ""}
+        >
+          <a onClick={() => this.setPage(pager.currentPage + 1)}>Next</a>
+        </li>
+        <li
+          className={pager.currentPage === pager.totalPages ? "disabled" : ""}
+        >
+          <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
+        </li>
+      </ul>
     );
   }
 }
 
-export default LinkList;
+Pagination.propTypes = propTypes;
+Pagination.defaultProps = defaultProps;
+export default Pagination;

@@ -20,6 +20,7 @@ const SLink = styled(Link)`
 
 const PPcontainer = styled.div`
   margin-top: 20px;
+  width: 100%;
   display: flex;
   justify-content: center;
 `;

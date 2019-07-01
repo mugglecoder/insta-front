@@ -38,11 +38,9 @@ export default props => {
   const [first, setFrist] = useState(0);
   console.log(skip, first, "skip과  //  frist");
 
-  const page =
-    parseInt(
-      props && props.match && props.match.params && props.match.params.page
-    ) || window.location.href.split("/new/")[1];
-
+  const page = parseInt(
+    props && props.match && props.match.params && props.match.params.page
+  );
   const { data: dataOfMe } = useQuery(ME);
 
   const _getQueryVariables = () => {
@@ -97,11 +95,10 @@ export default props => {
 
   const _nextPage = e => {
     e.preventDefault();
-    const page =
-      parseInt(
-        props && props.match && props.match.params && props.match.params.page
-      ) || window.location.href.split("/new/")[1];
-    console.log(page, "여기 page");
+    const page = parseInt(
+      props && props.match && props.match.params && props.match.params.page
+    );
+
     if (
       page <=
       (data && data.seeFullPost && data.seeFullPost.count / LINKS_PER_PAGE)
@@ -116,10 +113,9 @@ export default props => {
 
   const _previousPage = async e => {
     e.preventDefault();
-    const page =
-      parseInt(
-        props && props.match && props.match.params && props.match.params.page
-      ) || window.location.href.split("/new/")[1];
+    const page = parseInt(
+      props && props.match && props.match.params && props.match.params.page
+    );
     if (page > 1) {
       const previousPage = page - 1;
       props.history.push(`/new/${previousPage}`);

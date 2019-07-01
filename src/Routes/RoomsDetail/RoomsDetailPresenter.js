@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Loader from "../../Components/Loader";
-import BoardMain from "../BoardMain";
-import LinkPage from "../../Routes/LinkPage";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import BoardParts from "../../Components/BoardParts";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -135,7 +135,60 @@ const ContentWrap = styled.div`
   padding: 20px;
 `;
 
-const RoomsDetailPresenter = ({ props, data, loading }) => (
+const LogInButtonWrap = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const LogInButton = styled.button`
+  margin-bottom: 20px;
+  height: 50px;
+  width: 100px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+`;
+
+const SLink = styled(Link)`
+  color: grey;
+`;
+
+const PPcontainer = styled.div`
+  width: 100%;
+
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+`;
+const Pcontainer = styled.div`
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+const P = styled.p`
+  display: flex;
+`;
+
+const RoomsDetailPresenter = ({
+  props,
+  data,
+  data2,
+  loading,
+  page,
+  onClick,
+  skip,
+  first,
+  token,
+  dataOfMe,
+  _previousPage,
+  _nextPage
+}) => (
   <Wrapper>
     {loading && <Loader />}
     {!loading && (
@@ -268,12 +321,63 @@ const RoomsDetailPresenter = ({ props, data, loading }) => (
       <MoreRooms>
         <h1>더 많은 매물이 있습니다.</h1>
         <hr />
-        <LinkPage props={props} />
+        {data2.seeFullPost ? (
+          <LogInButtonWrap>
+            <Link
+              key={data2.seeFullPost.id}
+              to={{
+                pathname: `/writeboard/${dataOfMe &&
+                  dataOfMe.me &&
+                  dataOfMe.me.id}`,
+                state: {
+                  fromNotifications: true
+                }
+              }}
+            >
+              <LogInButton onClick={onClick}>글쓰기</LogInButton>
+            </Link>
+          </LogInButtonWrap>
+        ) : (
+          false
+        )}
+        {data2 && data2.seeFullPost && (
+          <Container>
+            {data2 &&
+              data2.seeFullPost &&
+              data2.seeFullPost.post.map((item, key) => (
+                <SLink key={item.id} to={`/roomsdetail/${item.id}/new/${page}`}>
+                  <BoardParts
+                    key={key}
+                    selectType={item.selectType}
+                    caption={item.caption}
+                    username={item.user.username}
+                    createdAt={item.createdAt.slice(0, 10)}
+                    count={item.count}
+                    url={item}
+                    deposit={item.deposit}
+                    money={item.money}
+                  />
+                </SLink>
+              ))}
+            {!loading && (
+              <PPcontainer>
+                <Pcontainer>
+                  <P>
+                    이전
+                    <button onClick={_previousPage} />
+                  </P>
+                  <P>
+                    다음
+                    <button onClick={_nextPage} />
+                  </P>
+                </Pcontainer>
+              </PPcontainer>
+            )}
+          </Container>
+        )}
       </MoreRooms>
     )}
   </Wrapper>
 );
 
 export default RoomsDetailPresenter;
-
-// map
