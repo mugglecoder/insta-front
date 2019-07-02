@@ -8,7 +8,10 @@ import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
 import { FilePond, registerPlugin } from "react-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
 import "filepond/dist/filepond.min.css";
+import "../css/filepond-plugin-image-preview.css";
 
 const UPLOAD = gql`
   mutation upload(
@@ -213,6 +216,22 @@ const ImgPreView = styled.img`
   background-image: url(${props => props.src}});
   background-position: center;
   background-size: cover;
+`;
+
+const Pond = styled.div`
+  margin-top: 10px;
+  margin: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+const Ponds = styled.div`
+  width: 50%;
+  p {
+    display: block;
+    font-size: 15px;
+    margin: 8px;
+  }
 `;
 
 export default props => {
@@ -610,6 +629,13 @@ export default props => {
     console.log("파일이 올라감!!!!");
   };
 
+  const testt2 = () => {
+    console.log("v");
+  };
+
+  const test123 = () => {
+    console.log("이거 떠야햏");
+  };
   return (
     <Wrapper>
       <form
@@ -620,151 +646,6 @@ export default props => {
         encType="multipart/form-data"
       >
         <Inputs>
-          <FilePond
-            server={{
-              url: "http://localhost:4000/upload",
-              revert: (uniqueFileId, load, error) => {
-                console.log(uniqueFileId, "in revert");
-                // Should remove the earlier created temp file here
-                // ...
-
-                // Can call the error method if something is wrong, should exit after
-                error("oh my goodness");
-
-                // Should call the load method when done, no parameters required
-                load();
-              },
-              revert: "/",
-              process: (
-                fieldName,
-                file,
-                metadata,
-                load,
-                error,
-                progress,
-                abort
-              ) => {
-                console.log(file, "file", fieldName, "filedname");
-                // fieldName is the name of the input field
-                // file is the actual file object to send
-                let request = [];
-
-                const formData = new FormData();
-                formData.append(fieldName, file, file.name, request);
-
-                request = new XMLHttpRequest();
-                request.open("POST", "http://localhost:4000/upload");
-
-                console.log(request, "array of request");
-                // Should call the progress method to update the progress to 100% before calling load
-                // Setting computable to false switches the loading indicator to infinite mode
-                request.upload.onprogress = e => {
-                  progress(e.lengthComputable, e.loaded, e.total);
-                };
-
-                request.onload = function() {
-                  if (request.status >= 200 && request.status < 300) {
-                    load(request.responseText);
-                  } else {
-                    error("oh no");
-                  }
-                };
-
-                request.send(formData);
-
-                // Should expose an abort method so the request can be cancelled
-                return {
-                  abort: () => {
-                    // This function is entered if the user has tapped the cancel button
-                    request.abort();
-
-                    // Let FilePond know the request has been cancelled
-                    abort();
-                  }
-                };
-              },
-              remove: (source, load, error) => {
-                console.log(source, "source");
-                error("oh my goodness");
-                load();
-              },
-              restore: (
-                uniqueFileId,
-                load,
-                error,
-                progress,
-                abort,
-                headers
-              ) => {
-                // Should get the temporary file object from the server
-                // ...
-                console.log(uniqueFileId, "from restore uniquefiled");
-                // Can call the error method if something is wrong, should exit after
-                error("oh my goodness");
-
-                // Can call the header method to supply FilePond with early response header string
-                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
-                console.log(headers, "headers");
-
-                // Should call the progress method to update the progress to 100% before calling load
-                // (computable, loadedSize, totalSize)
-                progress(true, 0, 1024);
-
-                // Should call the load method with a file object when done
-                load();
-
-                // Should expose an abort method so the request can be cancelled
-                return {
-                  abort: () => {
-                    // User tapped abort, cancel our ongoing actions here
-
-                    // Let FilePond know the request has been cancelled
-                    abort();
-                  }
-                };
-              },
-              load: (source, load, error, progress, abort, headers) => {
-                // Should request a file object from the server here
-                // ...
-                console.log(source, "source");
-                // Can call the error method if something is wrong, should exit after
-                error("oh my goodness");
-
-                // Can call the header method to supply FilePond with early response header string
-                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
-                console.log(headers, "headers");
-
-                // Should call the progress method to update the progress to 100% before calling load
-                // (endlessMode, loadedSize, totalSize)
-                progress(true, 0, 1024);
-
-                // Should call the load method with a file object or blob when done
-                load();
-
-                // Should expose an abort method so the request can be cancelled
-                return {
-                  abort: () => {
-                    // User tapped cancel, abort our ongoing actions here
-
-                    // Let FilePond know the request has been cancelled
-                    abort();
-                  }
-                };
-              }
-            }}
-            serverId={console.log(serverId)}
-            ref={ref => ref}
-            files={files}
-            name={"file"}
-            allowMultiple={true}
-            oninit={() => handleInit()}
-            onupdatefiles={fileItems => {
-              setPond({
-                files: fileItems.map(fileItem => fileItem.file)
-              });
-            }}
-          />
-
           <Input onSubmit={noClick} placeholder={" 제목"} {...caption} />
           <SelectInput>
             <InputDeposit
@@ -987,20 +868,168 @@ export default props => {
               />
             </label>
           </OptionCheckBox>
-          <InputFilesContainer>
-            <label>
-              <InputFiles
-                type="file"
-                name="file"
-                multiple
-                onChange={uploadFileHandle}
-              />
-            </label>
-          </InputFilesContainer>
+
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
+          <Pond>
+            <Ponds>
+              <p>여기에 파일을 드랍하거나 클릭 하세요</p>
+              <p>사진을 업로드 하고 우측 상단의 화살표를 누르셔야 합니다!</p>
+              <FilePond
+                imagePreviewMinHeight={600}
+                imagePreviewMaxHeight={600}
+                imagePreviewTransparencyIndicator={"#f00"}
+                server={{
+                  url: "http://localhost:4000/upload",
+                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
+
+                  process: (
+                    fieldName,
+                    file,
+                    metadata,
+                    load,
+                    error,
+                    progress,
+                    abort
+                  ) => {
+                    console.log(file, "file", fieldName, "filedname");
+                    // fieldName is the name of the input field
+                    // file is the actual file object to send
+                    let request = [];
+
+                    const formData = new FormData();
+                    formData.append(fieldName, file, file.name, request);
+
+                    request = new XMLHttpRequest();
+                    request.open("POST", "http://localhost:4000/upload");
+
+                    console.log(request, "array of request");
+                    // Should call the progress method to update the progress to 100% before calling load
+                    // Setting computable to false switches the loading indicator to infinite mode
+                    request.upload.onprogress = e => {
+                      progress(e.lengthComputable, e.loaded, e.total);
+                    };
+
+                    request.onload = function() {
+                      if (request.status >= 200 && request.status < 300) {
+                        load(request.responseText);
+                      } else {
+                        error("oh no");
+                      }
+                    };
+
+                    request.send(formData);
+
+                    // Should expose an abort method so the request can be cancelled
+                    return {
+                      abort: () => {
+                        // This function is entered if the user has tapped the cancel button
+                        request.abort();
+
+                        // Let FilePond know the request has been cancelled
+                        abort();
+                      }
+                    };
+                  },
+                  remove: (source, load, error) => {
+                    console.log(source, "source");
+                    error("oh my goodness");
+                    load();
+                  },
+                  restore: (
+                    uniqueFileId,
+                    load,
+                    error,
+                    progress,
+                    abort,
+                    headers
+                  ) => {
+                    // Should get the temporary file object from the server
+                    // ...
+                    console.log(uniqueFileId, "from restore uniquefiled");
+                    // Can call the error method if something is wrong, should exit after
+                    error("oh my goodness");
+
+                    // Can call the header method to supply FilePond with early response header string
+                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+                    console.log(headers, "headers");
+
+                    // Should call the progress method to update the progress to 100% before calling load
+                    // (computable, loadedSize, totalSize)
+                    progress(true, 0, 1024);
+
+                    // Should call the load method with a file object when done
+                    load();
+
+                    // Should expose an abort method so the request can be cancelled
+                    return {
+                      abort: () => {
+                        // User tapped abort, cancel our ongoing actions here
+
+                        // Let FilePond know the request has been cancelled
+                        abort();
+                      }
+                    };
+                  },
+                  load: (source, load, error, progress, abort, headers) => {
+                    // Should request a file object from the server here
+                    // ...
+                    console.log(source, "source");
+                    // Can call the error method if something is wrong, should exit after
+                    error("oh my goodness");
+
+                    // Can call the header method to supply FilePond with early response header string
+                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+                    console.log(headers, "headers");
+
+                    // Should call the progress method to update the progress to 100% before calling load
+                    // (endlessMode, loadedSize, totalSize)
+                    progress(true, 0, 1024);
+
+                    // Should call the load method with a file object or blob when done
+                    load();
+
+                    // Should expose an abort method so the request can be cancelled
+                    return {
+                      abort: () => {
+                        // User tapped cancel, abort our ongoing actions here
+
+                        // Let FilePond know the request has been cancelled
+                        abort();
+                      }
+                    };
+                  }
+                }}
+                revert={("/", test123)}
+                ref={ref => ref}
+                files={files}
+                name={"file"}
+                allowImagePreview={true}
+                beforeDropFile={testt2}
+                instantUpload={false}
+                allowMultiple={true}
+                oninit={() => handleInit()}
+                onupdatefiles={fileItems => {
+                  setPond({
+                    files: fileItems.map(fileItem => fileItem.file)
+                  });
+                }}
+              />
+            </Ponds>
+          </Pond>
           <Button text={"Sign up"} name="myButton" />
         </Inputs>
       </form>
     </Wrapper>
   );
 };
+
+//<InputFilesContainer>
+//            <label>
+//              <InputFiles
+//                type="file"
+//                name="file"
+//                multiple
+//                onChange={uploadFileHandle}
+//              />
+//            </label>
+//          </InputFilesContainer>

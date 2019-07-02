@@ -10,6 +10,8 @@ import Routes from "./Routes";
 import Theme from "../Styles/Theme";
 import Footer from "./Footer";
 import Header from "./Header";
+import ScriptTag from "react-script-tag";
+import { HeadProvider, Link } from "react-head";
 
 const QUERY = gql`
   {
@@ -31,19 +33,32 @@ export default () => {
 
   return (
     <ThemeProvider theme={Theme}>
-      <>
-        <GlobalStyles />
-        <Router>
-          <>
-            {isLoggedIn && <Header />}
-            <Wrapper>
-              <Routes isLoggedIn={isLoggedIn} />
-              <Footer />
-            </Wrapper>
-          </>
-        </Router>
-        <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
-      </>
+      <HeadProvider>
+        <Link href="../css/filepond.css" rel="stylesheet" />
+        <Link
+          href="../css/filepond-plugin-image-preview.css"
+          rel="stylesheet"
+        />
+
+        <ScriptTag src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js" />
+        <ScriptTag
+          src="..css/
+        filepond.js"
+        />
+        <>
+          <GlobalStyles />
+          <Router>
+            <>
+              {isLoggedIn && <Header />}
+              <Wrapper>
+                <Routes isLoggedIn={isLoggedIn} />
+                <Footer />
+              </Wrapper>
+            </>
+          </Router>
+          <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+        </>
+      </HeadProvider>
     </ThemeProvider>
   );
 };
