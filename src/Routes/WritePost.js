@@ -7,6 +7,8 @@ import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
 
 const UPLOAD = gql`
   mutation upload(
@@ -264,18 +266,16 @@ export default props => {
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
-  const [IMG, setIMG] = useState("");
-  const [IMG2, setIMG2] = useState("");
-
-  console.log(IMG, "IMG ");
-  console.log(IMG2, "tempImage 이건 언제 시작되는가2");
-  console.log(filesss);
+  const [pond, setPond] = useState("");
   const caption = useInput("");
   const deposit = useInput("");
   const money = useInput("");
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
+
+  const [form, setFormData] = useState("");
+
   let fileData = [];
   //  const getName = () => {
   //    if (imageUploadMulter) {
@@ -284,6 +284,8 @@ export default props => {
   //      return false;
   //    }
   //  };
+
+  console.log(pond, "fileData");
   const test = useMutation(UPLOAD, {
     variables: {
       selectType: select,
@@ -544,20 +546,9 @@ export default props => {
 
   const uploadFileHandle = async e => {
     let filess = e.target.files;
-    setFilesss(filess);
-    let reader = new FileReader();
-    reader.readAsDataURL(filess[0]);
-    await setIMG(reader);
 
-    const IMGdata = IMG && IMG.result;
-    let tempImage = await new Image();
-    tempImage.src = IMGdata;
-
-    setIMG2(tempImage);
     setImageUploadMulter(filess);
-    console.log(filesss, "이건 언제 시작되는가1");
-    console.log(IMG && IMG.result, "data");
-    console.log(IMG2.src, "Tlqlfkfksdfj");
+
     return true;
   };
 
@@ -615,6 +606,10 @@ export default props => {
     // props.history.push(`/roomsdetail/${id}`);
   };
 
+  const handleInit = () => {
+    console.log("파일이 올라감!!!!");
+  };
+
   return (
     <Wrapper>
       <form
@@ -625,6 +620,151 @@ export default props => {
         encType="multipart/form-data"
       >
         <Inputs>
+          <FilePond
+            server={{
+              url: "http://localhost:4000/upload",
+              revert: (uniqueFileId, load, error) => {
+                console.log(uniqueFileId, "in revert");
+                // Should remove the earlier created temp file here
+                // ...
+
+                // Can call the error method if something is wrong, should exit after
+                error("oh my goodness");
+
+                // Should call the load method when done, no parameters required
+                load();
+              },
+              revert: "/",
+              process: (
+                fieldName,
+                file,
+                metadata,
+                load,
+                error,
+                progress,
+                abort
+              ) => {
+                console.log(file, "file", fieldName, "filedname");
+                // fieldName is the name of the input field
+                // file is the actual file object to send
+                let request = [];
+
+                const formData = new FormData();
+                formData.append(fieldName, file, file.name, request);
+
+                request = new XMLHttpRequest();
+                request.open("POST", "http://localhost:4000/upload");
+
+                console.log(request, "array of request");
+                // Should call the progress method to update the progress to 100% before calling load
+                // Setting computable to false switches the loading indicator to infinite mode
+                request.upload.onprogress = e => {
+                  progress(e.lengthComputable, e.loaded, e.total);
+                };
+
+                request.onload = function() {
+                  if (request.status >= 200 && request.status < 300) {
+                    load(request.responseText);
+                  } else {
+                    error("oh no");
+                  }
+                };
+
+                request.send(formData);
+
+                // Should expose an abort method so the request can be cancelled
+                return {
+                  abort: () => {
+                    // This function is entered if the user has tapped the cancel button
+                    request.abort();
+
+                    // Let FilePond know the request has been cancelled
+                    abort();
+                  }
+                };
+              },
+              remove: (source, load, error) => {
+                console.log(source, "source");
+                error("oh my goodness");
+                load();
+              },
+              restore: (
+                uniqueFileId,
+                load,
+                error,
+                progress,
+                abort,
+                headers
+              ) => {
+                // Should get the temporary file object from the server
+                // ...
+                console.log(uniqueFileId, "from restore uniquefiled");
+                // Can call the error method if something is wrong, should exit after
+                error("oh my goodness");
+
+                // Can call the header method to supply FilePond with early response header string
+                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+                console.log(headers, "headers");
+
+                // Should call the progress method to update the progress to 100% before calling load
+                // (computable, loadedSize, totalSize)
+                progress(true, 0, 1024);
+
+                // Should call the load method with a file object when done
+                load();
+
+                // Should expose an abort method so the request can be cancelled
+                return {
+                  abort: () => {
+                    // User tapped abort, cancel our ongoing actions here
+
+                    // Let FilePond know the request has been cancelled
+                    abort();
+                  }
+                };
+              },
+              load: (source, load, error, progress, abort, headers) => {
+                // Should request a file object from the server here
+                // ...
+                console.log(source, "source");
+                // Can call the error method if something is wrong, should exit after
+                error("oh my goodness");
+
+                // Can call the header method to supply FilePond with early response header string
+                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+                console.log(headers, "headers");
+
+                // Should call the progress method to update the progress to 100% before calling load
+                // (endlessMode, loadedSize, totalSize)
+                progress(true, 0, 1024);
+
+                // Should call the load method with a file object or blob when done
+                load();
+
+                // Should expose an abort method so the request can be cancelled
+                return {
+                  abort: () => {
+                    // User tapped cancel, abort our ongoing actions here
+
+                    // Let FilePond know the request has been cancelled
+                    abort();
+                  }
+                };
+              }
+            }}
+            serverId={console.log(serverId)}
+            ref={ref => ref}
+            files={files}
+            name={"file"}
+            allowMultiple={true}
+            oninit={() => handleInit()}
+            onupdatefiles={fileItems => {
+              setPond({
+                files: fileItems.map(fileItem => fileItem.file)
+              });
+            }}
+          />
+
           <Input onSubmit={noClick} placeholder={" 제목"} {...caption} />
           <SelectInput>
             <InputDeposit
@@ -856,7 +996,6 @@ export default props => {
                 onChange={uploadFileHandle}
               />
             </label>
-            <ImgPreView src={IMG2.src}>{}</ImgPreView>
           </InputFilesContainer>
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
           <Button text={"Sign up"} name="myButton" />
