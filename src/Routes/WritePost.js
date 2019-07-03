@@ -9,7 +9,7 @@ import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-
+import ReactDOM from "react-dom";
 import "filepond/dist/filepond.min.css";
 import "../css/filepond-plugin-image-preview.css";
 
@@ -220,18 +220,12 @@ const ImgPreView = styled.img`
 
 const Pond = styled.div`
   margin-top: 10px;
-  margin: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
 `;
 const Ponds = styled.div`
-  width: 50%;
-  p {
-    display: block;
-    font-size: 15px;
-    margin: 8px;
-  }
+  width: 100%;
 `;
 
 export default props => {
@@ -262,7 +256,6 @@ export default props => {
   useEffect(() => {
     setOnsubmit(false);
   }, [fuckAround]);
-
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
   const [refrigerator, setRefrigerator] = useState(false);
@@ -285,7 +278,16 @@ export default props => {
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
-  const [pond, setPond] = useState("");
+  const [pond, setPond] = useState([
+    {
+      source: "index.html",
+      options: {
+        type: "local"
+      }
+    }
+  ]);
+  console.log(pond, "fileData");
+
   const caption = useInput("");
   const deposit = useInput("");
   const money = useInput("");
@@ -304,7 +306,6 @@ export default props => {
   //    }
   //  };
 
-  console.log(pond, "fileData");
   const test = useMutation(UPLOAD, {
     variables: {
       selectType: select,
@@ -636,6 +637,21 @@ export default props => {
   const test123 = () => {
     console.log("이거 떠야햏");
   };
+
+  const saver = detail => detail;
+  //pond2 에 셋스테이트 하고 변화가 일어나면 거기에서 주소를 얻어냄
+  const pond2 = document.querySelector(".filepond--root");
+  if (pond2) {
+    pond2.addEventListener("FilePond:addfile", e => {
+      console.log(
+        "File addedddddddddddddfdfdfdfdfdfdfdfd",
+        e.detail.file,
+        e.detail.file && e.detail.file.serverId
+      );
+      return saver(e.detail.file);
+    });
+  }
+
   return (
     <Wrapper>
       <form
@@ -874,15 +890,49 @@ export default props => {
             <Ponds>
               <p>여기에 파일을 드랍하거나 클릭 하세요</p>
               <p>사진을 업로드 하고 우측 상단의 화살표를 누르셔야 합니다!</p>
+
               <FilePond
                 imagePreviewMinHeight={600}
+                className="fuckoff"
                 imagePreviewMaxHeight={600}
                 imagePreviewTransparencyIndicator={"#f00"}
                 server={{
                   url: "http://localhost:4000/upload",
-                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
+                  files: [
+                    {
+                      tempFilePath: "/test/",
+                      // the server file reference
+                      source: "12345",
 
-                  process: (
+                      // set type to limbo to tell FilePond this is a temp file
+                      options: {
+                        type: "limbo"
+                      }
+                    }
+                  ],
+                  revert: async (uniqueFileId, load, error) => {
+                    console.log(uniqueFileId, "유니크필ㄷ");
+                    // Should remove the earlier created temp file here
+                    // ...
+                    const request = await axios({
+                      method: "DELETE",
+                      url: "http://localhost:4000/upload"
+                    })
+                      .then(res => {
+                        console.log(res, "axios res");
+                      })
+                      .catch(response => {
+                        console.log(response);
+                      });
+                    console.log(request, "axios");
+                    // Can call the error method if something is wrong, should exit after
+                    error("oh my goodness");
+
+                    // Should call the load method when done, no parameters required
+                    load();
+                  },
+                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
+                  process: async (
                     fieldName,
                     file,
                     metadata,
@@ -891,26 +941,42 @@ export default props => {
                     progress,
                     abort
                   ) => {
-                    console.log(file, "file", fieldName, "filedname");
+                    console.log(file, "file");
+                    //                    ////axios
+                    //                    const formData = new FormData();
+                    //                    formData.append(fieldName, file, file.name);
+                    //                    const request = await axios({
+                    //                      method: "POST",
+                    //                      url: "http://localhost:4000/upload",
+                    //                      data: formData
+                    //                    })
+                    //                      .then(res => {
+                    //                        console.log(res, "axios res");
+                    //                      })
+                    //                      .catch(response => {
+                    //                        console.log(response, "error");
+                    //                      });
+                    //                    console.log(request, "processsss ");
+
                     // fieldName is the name of the input field
                     // file is the actual file object to send
-                    let request = [];
-
+                    let request = []; //
+                    const id = "saver();";
+                    console.log(id);
                     const formData = new FormData();
-                    formData.append(fieldName, file, file.name, request);
+                    formData.append(fieldName, file, file.name, id); //
 
                     request = new XMLHttpRequest();
-                    request.open("POST", "http://localhost:4000/upload");
+                    request.open("POST", "http://localhost:4000/upload"); //
 
-                    console.log(request, "array of request");
-                    // Should call the progress method to update the progress to 100% before calling load
-                    // Setting computable to false switches the loading indicator to infinite mode
+                    //                    // Should call the progress method to update the progress to 100% before calling load
+                    //                    // Setting computable to false switches the loading indicator to infinite mode
                     request.upload.onprogress = e => {
                       progress(e.lengthComputable, e.loaded, e.total);
                     };
-
                     request.onload = function() {
                       if (request.status >= 200 && request.status < 300) {
+                        console.log(request.responseText, "dd");
                         load(request.responseText);
                       } else {
                         error("oh no");
@@ -918,14 +984,9 @@ export default props => {
                     };
 
                     request.send(formData);
-
-                    // Should expose an abort method so the request can be cancelled
                     return {
                       abort: () => {
-                        // This function is entered if the user has tapped the cancel button
                         request.abort();
-
-                        // Let FilePond know the request has been cancelled
                         abort();
                       }
                     };
@@ -934,74 +995,13 @@ export default props => {
                     console.log(source, "source");
                     error("oh my goodness");
                     load();
-                  },
-                  restore: (
-                    uniqueFileId,
-                    load,
-                    error,
-                    progress,
-                    abort,
-                    headers
-                  ) => {
-                    // Should get the temporary file object from the server
-                    // ...
-                    console.log(uniqueFileId, "from restore uniquefiled");
-                    // Can call the error method if something is wrong, should exit after
-                    error("oh my goodness");
-
-                    // Can call the header method to supply FilePond with early response header string
-                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
-                    console.log(headers, "headers");
-
-                    // Should call the progress method to update the progress to 100% before calling load
-                    // (computable, loadedSize, totalSize)
-                    progress(true, 0, 1024);
-
-                    // Should call the load method with a file object when done
-                    load();
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                      abort: () => {
-                        // User tapped abort, cancel our ongoing actions here
-
-                        // Let FilePond know the request has been cancelled
-                        abort();
-                      }
-                    };
-                  },
-                  load: (source, load, error, progress, abort, headers) => {
-                    // Should request a file object from the server here
-                    // ...
-                    console.log(source, "source");
-                    // Can call the error method if something is wrong, should exit after
-                    error("oh my goodness");
-
-                    // Can call the header method to supply FilePond with early response header string
-                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
-                    console.log(headers, "headers");
-
-                    // Should call the progress method to update the progress to 100% before calling load
-                    // (endlessMode, loadedSize, totalSize)
-                    progress(true, 0, 1024);
-
-                    // Should call the load method with a file object or blob when done
-                    load();
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                      abort: () => {
-                        // User tapped cancel, abort our ongoing actions here
-
-                        // Let FilePond know the request has been cancelled
-                        abort();
-                      }
-                    };
                   }
                 }}
-                revert={("/", test123)}
+                labelIdle='<h1>여기에 파일을 드랍하거나 클릭 하세요</h1> <span class="filepond--label-action"> 검색 </span>'
+                labelFileProcessingComplete="업로드 완료!"
+                stylePanelAspectRatio={null}
+                styleItemPanelAspectRatio="0.4"
                 ref={ref => ref}
-                files={files}
                 name={"file"}
                 allowImagePreview={true}
                 beforeDropFile={testt2}

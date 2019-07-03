@@ -162,3 +162,6 @@
   margin-bottom: 0.1875em;
   margin-left: 0.1875em;
 }
+.filepond--item {
+  width: calc(50% - 0.5em);
+}
