@@ -238,7 +238,7 @@ export default props => {
     [imageUploadMulter]
   );
 
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState([]);
 
   const [testt, setOnsubmit] = useState(false);
 
@@ -580,43 +580,21 @@ export default props => {
     } = await test();
     if (id && onSubmit) {
       setFuckAround(false);
-      props.history.push(`/roomsdetail/${id}/new`);
+      props.history.push(`/roomsdetail/${id}/new/1`);
       window.location.reload();
       return false;
     }
   };
 
   const lastCall = axiosData => {
-    if (fileData) {
-      setFiles(fileData);
-    } else {
-      setFiles(fileData);
-    }
     setFuckAround(false);
-    if (testt) {
-      setter();
-    }
+
+    setter();
   };
 
   const onSubmit = async e => {
     e.preventDefault();
-    const data = new FormData();
 
-    for (var x = 0; x < imageUploadMulter.length; x++) {
-      data.append("file", imageUploadMulter[x]);
-    }
-
-    const axiosData = await axios
-      .post("http://localhost:4000/upload", data)
-      .then(res => {
-        return res.data;
-      });
-
-    axiosData.forEach(element => {
-      fileData.push(element.path);
-    });
-
-    setFiles(fileData);
     setOnsubmit(true);
     props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(fileData);
@@ -649,6 +627,8 @@ export default props => {
       );
     });
   }
+
+  const [response, setResponse] = useState("");
 
   return (
     <Wrapper>
@@ -886,24 +866,22 @@ export default props => {
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
           <Pond>
             <Ponds>
-              <p>여기에 파일을 드랍하거나 클릭 하세요</p>
-              <p>사진을 업로드 하고 우측 상단의 화살표를 누르셔야 합니다!</p>
-
               <FilePond
                 imagePreviewMinHeight={600}
-                className="fuckoff"
                 imagePreviewMaxHeight={600}
                 imagePreviewTransparencyIndicator={"#f00"}
                 server={{
                   url: "http://localhost:4000/upload",
 
                   revert: async (uniqueFileId, load, error) => {
-                    console.log(uniqueFileId, "유니크필ㄷ");
                     // Should remove the earlier created temp file here
                     // ...
                     const request = await axios({
                       method: "DELETE",
-                      url: "http://localhost:4000/upload"
+                      url: "http://localhost:4000/upload",
+                      data: {
+                        id: uniqueFileId
+                      }
                     })
                       .then(res => {
                         console.log(res, "axios res");
@@ -923,8 +901,7 @@ export default props => {
                     url: "/",
                     method: "POST",
                     withCredentials: false,
-                    onload: response =>
-                      console.log(response, "프로세스 리스폰스"),
+                    onload: response => response,
                     onerror: response => response.data,
                     ondata: formData => {
                       formData.append("Hello", "World");
@@ -946,7 +923,7 @@ export default props => {
                 name={"file"}
                 allowImagePreview={true}
                 beforeDropFile={testt2}
-                instantUpload={false}
+                instantUpload={true}
                 allowMultiple={true}
                 oninit={() => handleInit()}
                 onupdatefiles={fileItems => {
