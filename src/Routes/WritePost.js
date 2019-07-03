@@ -638,7 +638,6 @@ export default props => {
     console.log("이거 떠야햏");
   };
 
-  const saver = detail => detail;
   //pond2 에 셋스테이트 하고 변화가 일어나면 거기에서 주소를 얻어냄
   const pond2 = document.querySelector(".filepond--root");
   if (pond2) {
@@ -648,7 +647,6 @@ export default props => {
         e.detail.file,
         e.detail.file && e.detail.file.serverId
       );
-      return saver(e.detail.file);
     });
   }
 
@@ -898,18 +896,7 @@ export default props => {
                 imagePreviewTransparencyIndicator={"#f00"}
                 server={{
                   url: "http://localhost:4000/upload",
-                  files: [
-                    {
-                      tempFilePath: "/test/",
-                      // the server file reference
-                      source: "12345",
 
-                      // set type to limbo to tell FilePond this is a temp file
-                      options: {
-                        type: "limbo"
-                      }
-                    }
-                  ],
                   revert: async (uniqueFileId, load, error) => {
                     console.log(uniqueFileId, "유니크필ㄷ");
                     // Should remove the earlier created temp file here
@@ -932,64 +919,18 @@ export default props => {
                     load();
                   },
                   registerPlugin: registerPlugin(FilePondPluginImagePreview),
-                  process: async (
-                    fieldName,
-                    file,
-                    metadata,
-                    load,
-                    error,
-                    progress,
-                    abort
-                  ) => {
-                    console.log(file, "file");
-                    //                    ////axios
-                    //                    const formData = new FormData();
-                    //                    formData.append(fieldName, file, file.name);
-                    //                    const request = await axios({
-                    //                      method: "POST",
-                    //                      url: "http://localhost:4000/upload",
-                    //                      data: formData
-                    //                    })
-                    //                      .then(res => {
-                    //                        console.log(res, "axios res");
-                    //                      })
-                    //                      .catch(response => {
-                    //                        console.log(response, "error");
-                    //                      });
-                    //                    console.log(request, "processsss ");
-
-                    // fieldName is the name of the input field
-                    // file is the actual file object to send
-                    let request = []; //
-                    const id = "saver();";
-                    console.log(id);
-                    const formData = new FormData();
-                    formData.append(fieldName, file, file.name, id); //
-
-                    request = new XMLHttpRequest();
-                    request.open("POST", "http://localhost:4000/upload"); //
-
-                    //                    // Should call the progress method to update the progress to 100% before calling load
-                    //                    // Setting computable to false switches the loading indicator to infinite mode
-                    request.upload.onprogress = e => {
-                      progress(e.lengthComputable, e.loaded, e.total);
-                    };
-                    request.onload = function() {
-                      if (request.status >= 200 && request.status < 300) {
-                        console.log(request.responseText, "dd");
-                        load(request.responseText);
-                      } else {
-                        error("oh no");
-                      }
-                    };
-
-                    request.send(formData);
-                    return {
-                      abort: () => {
-                        request.abort();
-                        abort();
-                      }
-                    };
+                  process: {
+                    url: "/",
+                    method: "POST",
+                    withCredentials: false,
+                    onload: response =>
+                      console.log(response, "프로세스 리스폰스"),
+                    onerror: response => response.data,
+                    ondata: formData => {
+                      formData.append("Hello", "World");
+                      console.log(formData, "폼데이타");
+                      return formData;
+                    }
                   },
                   remove: (source, load, error) => {
                     console.log(source, "source");
