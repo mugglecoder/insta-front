@@ -34,17 +34,6 @@ export default () => {
   return (
     <ThemeProvider theme={Theme}>
       <HeadProvider>
-        <Link href="../css/filepond.css" rel="stylesheet" />
-        <Link
-          href="../css/filepond-plugin-image-preview.css"
-          rel="stylesheet"
-        />
-
-        <ScriptTag src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js" />
-        <ScriptTag
-          src="..css/
-        filepond.js"
-        />
         <>
           <GlobalStyles />
           <Router>
@@ -53,6 +42,7 @@ export default () => {
               <Wrapper>
                 <Routes isLoggedIn={isLoggedIn} />
                 <Footer />
+                <ScriptTag src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js" />
               </Wrapper>
             </>
           </Router>

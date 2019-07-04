@@ -7,12 +7,9 @@ import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
-import { FilePond, registerPlugin } from "react-filepond";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import ReactDOM from "react-dom";
-import "filepond/dist/filepond.min.css";
-import "../css/filepond-plugin-image-preview.css";
-
+import ScriptTag from "react-script-tag";
+import FileUploadWithPreview from "file-upload-with-preview";
+import "../../src/css/preview.css";
 const UPLOAD = gql`
   mutation upload(
     $selectType: String
@@ -218,13 +215,13 @@ const ImgPreView = styled.img`
   background-size: cover;
 `;
 
-const Pond = styled.div`
+const Div = styled.div`
   margin-top: 10px;
   width: 100%;
   display: flex;
   justify-content: center;
 `;
-const Ponds = styled.div`
+const Divs = styled.div`
   width: 100%;
 `;
 
@@ -239,7 +236,7 @@ export default props => {
   );
 
   const [files, setFiles] = useState([]);
-
+  console.log(files, "files");
   const [testt, setOnsubmit] = useState(false);
 
   useEffect(() => {
@@ -278,7 +275,7 @@ export default props => {
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
-  const [pond, setPond] = useState([]);
+  const [pathArray, setPathArray] = useState([]);
 
   //console.log(pond, "pond");
 
@@ -292,6 +289,8 @@ export default props => {
   const [form, setFormData] = useState("");
 
   let fileData = [];
+  console.log(fileData, "fileData?");
+  let arrayOfPath = [];
   //  const getName = () => {
   //    if (imageUploadMulter) {
   //      return imageUploadMulter.name;
@@ -558,6 +557,13 @@ export default props => {
     return false;
   };
 
+  const uploadFileHandle = async e => {
+    let filess = e.target.files;
+    setImageUploadMulter(filess);
+
+    return true;
+  };
+
   const setter = async () => {
     const {
       data: {
@@ -573,14 +579,36 @@ export default props => {
   };
 
   const lastCall = axiosData => {
+    if (fileData) {
+      setFiles(fileData);
+    } else {
+      setFiles(fileData);
+    }
     setFuckAround(false);
-
-    setter();
+    if (testt) {
+      setter();
+    }
   };
 
   const onSubmit = async e => {
     e.preventDefault();
+    const data = new FormData();
 
+    for (var x = 0; x < imageUploadMulter.length; x++) {
+      data.append("file", imageUploadMulter[x]);
+    }
+
+    const axiosData = await axios
+      .post("http://localhost:4000/upload", data)
+      .then(res => {
+        return res.data;
+      });
+    console.log(axiosData, "axios data");
+    axiosData.forEach(element => {
+      fileData.push(element.path);
+    });
+
+    setFiles(fileData);
     setOnsubmit(true);
     props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(fileData);
@@ -590,21 +618,19 @@ export default props => {
     // props.history.push(`/roomsdetail/${id}`);
   };
 
-  const handleInit = () => {
-    console.log("파일이 올라감!!!!");
-  };
+  //파일 업로드 하는 부분
+  useEffect(() => {
+    new FileUploadWithPreview("myUniqueUploadId", {
+      showDeleteButtonOnImages: true,
+      text: {
+        chooseFile: "파일을 선택하세요!",
+        browse: "찾기",
+        selectedCount: "개의 파일이 선택되었습니다!"
+      },
 
-  //pond2 에 셋스테이트 하고 변화가 일어나면 거기에서 주소를 얻어냄
-  const pond2 = document.querySelector(".filepond--root");
-  if (pond2) {
-    pond2.addEventListener("FilePond:loaded", e => {
-      console.log("F", e);
+      presetFiles: []
     });
-  }
-
-  const [responseS, setResponse] = useState([]);
-
-  console.log(responseS, "rest;;;");
+  }, []);
 
   return (
     <Wrapper>
@@ -840,141 +866,33 @@ export default props => {
           </OptionCheckBox>
 
           <InputContent onSubmit={noClick} placeholder={"내용"} {...content} />
-          <Pond>
-            <Ponds>
-              <FilePond
-                imagePreviewMinHeight={600}
-                imagePreviewMaxHeight={600}
-                imagePreviewTransparencyIndicator={"#f00"}
-                server={{
-                  url: "http://localhost:4000/upload",
-                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
-                  process: async (
-                    fieldName,
-                    file,
-                    metadata,
-                    load,
-                    error,
-                    progress,
-                    abort
-                  ) => {
-                    // fieldName is the name of the input field
-                    // file is the actual file object to send
 
-                    const request = await new XMLHttpRequest();
-                    request.open("POST", "http://localhost:4000/upload");
-
-                    // Should call the progress method to update the progress to 100% before calling load
-                    // Setting computable to false switches the loading indicator to infinite mode
-                    request.upload.onprogress = e => {
-                      progress(e.lengthComputable, e.loaded, e.total);
-                    };
-
-                    request.onload = async () => {
-                      if (request.status >= 200 && request.status < 300) {
-                        load(request.responseText);
-                        setResponse([request.responseText, ...responseS]);
-                      } else {
-                        error("oh no");
-                      }
-                    };
-                    const formData = new FormData();
-                    formData.append(fieldName, file, file.name);
-
-                    await request.send(formData);
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                      abort: () => {
-                        // This function is entered if the user has tapped the cancel button
-                        request.abort();
-
-                        // Let FilePond know the request has been cancelled
-                        abort();
-                      }
-                    };
-                  },
-                  fetch: (url, load, error, progress, abort, headers) => {
-                    console.log(url, progress);
-                    // Should get a file object from the URL here
-                    // ...
-                    const request = new XMLHttpRequest();
-                    request.post("POST", "http://localhost:4000/upload");
-                    console.log(request, "fetch");
-                    // Can call the error method if something is wrong, should exit after
-                    error("oh my goodness");
-
-                    // Can call the header method to supply FilePond with early response header string
-                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
-                    headers();
-
-                    // Should call the progress method to update the progress to 100% before calling load
-                    // (computable, loadedSize, totalSize)
-                    progress(true, 0, 1024);
-
-                    // Should call the load method with a file object when done
-                    load();
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                      abort: () => {
-                        // User tapped abort, cancel our ongoing actions here
-
-                        // Let FilePond know the request has been cancelled
-                        abort();
-                      }
-                    };
-                  },
-                  revert: async (uniqueFileId, load, error) => {
-                    console.log(uniqueFileId, "f");
-                    // Should remove the earlier created temp file here
-                    // ...
-                    console.log(responseS.splice(uniqueFileId), "??");
-
-                    const request = await axios({
-                      method: "DELETE",
-                      url: "http://localhost:4000/upload",
-                      data: {
-                        id: uniqueFileId
-                      }
-                    })
-                      .then(res => {
-                        console.log(res, "axios res");
-                      })
-                      .catch(response => {
-                        console.log(response);
-                      });
-                    console.log(request, "axios");
-                    // Can call the error method if something is wrong, should exit after
-                    error("oh my goodness");
-
-                    // Should call the load method when done, no parameters required
-                    load();
-                  },
-                  remove: (source, load, error) => {
-                    console.log(source, "source");
-                    error("oh my goodness");
-                    load();
-                  }
-                }}
-                labelIdle='<h1>여기에 파일을 드랍하거나 클릭 하세요</h1> <span class="filepond--label-action"> 검색 </span>'
-                labelFileProcessingComplete="업로드 완료!"
-                stylePanelAspectRatio={null}
-                styleItemPanelAspectRatio="0.4"
-                ref={ref => ref}
-                name={"file"}
-                allowImagePreview={true}
-                instantUpload={true}
-                allowMultiple={true}
-                oninit={() => handleInit()}
-                onupdatefiles={fileItems => {
-                  setPond({
-                    files: fileItems.map(fileItem => fileItem.file)
-                  });
-                }}
+          <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+            <label>
+              모든 파일 지우기
+              <a
+                href="javascript:void(0)"
+                class="custom-file-container__image-clear"
+                title="Clear Image"
+              >
+                &times;
+              </a>
+            </label>
+            <label class="custom-file-container__custom-file">
+              <input
+                type="file"
+                class="custom-file-container__custom-file__custom-file-input"
+                accept="*"
+                multiple
+                aria-label="Choose File"
+                onChange={uploadFileHandle}
               />
-            </Ponds>
-          </Pond>
+              <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+              <span class="custom-file-container__custom-file__custom-file-control" />
+            </label>
+            <div class="custom-file-container__image-preview" />
+          </div>
+
           <Button text={"Sign up"} name="myButton" />
         </Inputs>
       </form>

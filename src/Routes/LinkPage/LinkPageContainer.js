@@ -123,7 +123,7 @@ export default props => {
       return setSet2(true);
     }
   };
-
+  console.log(data && data.seeFullPost && data.seeFullPost.post, "dataaaaa");
   return (
     <LinkPagePresenter
       props={props}

@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const Container = styled.div`
   max-width: 386px;
@@ -70,8 +72,18 @@ const Money = styled.span`
   font-size: 16px;
   color: #c87777;
 `;
+const images = [
+  {
+    original: "http://lorempixel.com/1000/600/nature/1/",
+    thumbnail: "http://lorempixel.com/250/150/nature/1/"
+  }
+];
+
+let url = [];
 
 const BoardParts = ({
+  urls,
+  arr,
   caption,
   selectType,
   username,
@@ -84,15 +96,16 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
-        {url && url.files && url.files[0] === undefined ? (
-          <File
-            src={
-              "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
-            }
-          />
-        ) : (
-          <File src={`http://localhost:4000/${url.files[0].url}`} />
-        )}
+        <ImageGallery
+          items={urls}
+          showFullscreenButton={false}
+          useBrowserFullscreen={false}
+          showThumbnails={false}
+          showPlayButton={false}
+          showBullets={false}
+          lazyLoad={true}
+          showIndex={true}
+        />
       </Files>
     </Column>
     <SubColumn>
