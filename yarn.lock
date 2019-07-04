@@ -4184,6 +4184,11 @@ file-loader@3.0.1:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
 
+file-upload-with-preview@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/file-upload-with-preview/-/file-upload-with-preview-4.0.2.tgz#2e8c0886fbd0a0e489d122df753589c6cbb17ef1"
+  integrity sha512-hhO8JhBO2QsRU2Frii0SQOEnsW4R8tt1DbE88ACsK1F9L0kcklliAMuSUrfvwdDGtAmaVwNewF+jAYD4FjhAyg==
+
 filepond-plugin-image-preview@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.2.1.tgz#549df8a3fcb9743244ffeb17813b96ec5c547a6f"

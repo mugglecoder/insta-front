@@ -278,22 +278,9 @@ export default props => {
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
-  const [pond, setPond] = useState([
-    {
-      source: "index.html",
-      options: {
-        type: "local"
-      }
-    }
-  ]);
+  const [pond, setPond] = useState([]);
 
-  let getFilePath = [];
-
-  const [filePath, setFilePath] = useState(getFilePath);
-
-  console.log(pond, "pond");
-
-  console.log(filePath, "여기에 들어가야해 ㅋㅋㅋ");
+  //console.log(pond, "pond");
 
   const caption = useInput("");
   const deposit = useInput("");
@@ -610,16 +597,14 @@ export default props => {
   //pond2 에 셋스테이트 하고 변화가 일어나면 거기에서 주소를 얻어냄
   const pond2 = document.querySelector(".filepond--root");
   if (pond2) {
-    pond2.addEventListener("FilePond:addfile", e => {
-      console.log(
-        "File addedddddddddddddfdfdfdfdfdfdfdfd",
-        e.detail.file,
-        e.detail.file && e.detail.file.serverId
-      );
+    pond2.addEventListener("FilePond:loaded", e => {
+      console.log("F", e);
     });
   }
 
-  const [response, setResponse] = useState("");
+  const [responseS, setResponse] = useState([]);
+
+  console.log(responseS, "rest;;;");
 
   return (
     <Wrapper>
@@ -863,10 +848,89 @@ export default props => {
                 imagePreviewTransparencyIndicator={"#f00"}
                 server={{
                   url: "http://localhost:4000/upload",
+                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
+                  process: async (
+                    fieldName,
+                    file,
+                    metadata,
+                    load,
+                    error,
+                    progress,
+                    abort
+                  ) => {
+                    // fieldName is the name of the input field
+                    // file is the actual file object to send
 
+                    const request = await new XMLHttpRequest();
+                    request.open("POST", "http://localhost:4000/upload");
+
+                    // Should call the progress method to update the progress to 100% before calling load
+                    // Setting computable to false switches the loading indicator to infinite mode
+                    request.upload.onprogress = e => {
+                      progress(e.lengthComputable, e.loaded, e.total);
+                    };
+
+                    request.onload = async () => {
+                      if (request.status >= 200 && request.status < 300) {
+                        load(request.responseText);
+                        setResponse([request.responseText, ...responseS]);
+                      } else {
+                        error("oh no");
+                      }
+                    };
+                    const formData = new FormData();
+                    formData.append(fieldName, file, file.name);
+
+                    await request.send(formData);
+
+                    // Should expose an abort method so the request can be cancelled
+                    return {
+                      abort: () => {
+                        // This function is entered if the user has tapped the cancel button
+                        request.abort();
+
+                        // Let FilePond know the request has been cancelled
+                        abort();
+                      }
+                    };
+                  },
+                  fetch: (url, load, error, progress, abort, headers) => {
+                    console.log(url, progress);
+                    // Should get a file object from the URL here
+                    // ...
+                    const request = new XMLHttpRequest();
+                    request.post("POST", "http://localhost:4000/upload");
+                    console.log(request, "fetch");
+                    // Can call the error method if something is wrong, should exit after
+                    error("oh my goodness");
+
+                    // Can call the header method to supply FilePond with early response header string
+                    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+                    headers();
+
+                    // Should call the progress method to update the progress to 100% before calling load
+                    // (computable, loadedSize, totalSize)
+                    progress(true, 0, 1024);
+
+                    // Should call the load method with a file object when done
+                    load();
+
+                    // Should expose an abort method so the request can be cancelled
+                    return {
+                      abort: () => {
+                        // User tapped abort, cancel our ongoing actions here
+
+                        // Let FilePond know the request has been cancelled
+                        abort();
+                      }
+                    };
+                  },
                   revert: async (uniqueFileId, load, error) => {
+                    console.log(uniqueFileId, "f");
                     // Should remove the earlier created temp file here
                     // ...
+                    console.log(responseS.splice(uniqueFileId), "??");
+
                     const request = await axios({
                       method: "DELETE",
                       url: "http://localhost:4000/upload",
@@ -886,19 +950,6 @@ export default props => {
 
                     // Should call the load method when done, no parameters required
                     load();
-                  },
-                  registerPlugin: registerPlugin(FilePondPluginImagePreview),
-                  process: {
-                    url: "/",
-                    method: "POST",
-                    withCredentials: false,
-                    onload: response => response,
-                    onerror: response => response.data,
-                    ondata: formData => {
-                      formData.append("Hello", "World");
-                      console.log(formData.get("file"), "폼데이타");
-                      return formData;
-                    }
                   },
                   remove: (source, load, error) => {
                     console.log(source, "source");
