@@ -286,7 +286,14 @@ export default props => {
       }
     }
   ]);
-  console.log(pond, "fileData");
+
+  let getFilePath = [];
+
+  const [filePath, setFilePath] = useState(getFilePath);
+
+  console.log(pond, "pond");
+
+  console.log(filePath, "여기에 들어가야해 ㅋㅋㅋ");
 
   const caption = useInput("");
   const deposit = useInput("");
@@ -564,14 +571,6 @@ export default props => {
     return false;
   };
 
-  const uploadFileHandle = async e => {
-    let filess = e.target.files;
-
-    setImageUploadMulter(filess);
-
-    return true;
-  };
-
   const setter = async () => {
     const {
       data: {
@@ -606,14 +605,6 @@ export default props => {
 
   const handleInit = () => {
     console.log("파일이 올라감!!!!");
-  };
-
-  const testt2 = () => {
-    console.log("v");
-  };
-
-  const test123 = () => {
-    console.log("이거 떠야햏");
   };
 
   //pond2 에 셋스테이트 하고 변화가 일어나면 거기에서 주소를 얻어냄
@@ -905,7 +896,7 @@ export default props => {
                     onerror: response => response.data,
                     ondata: formData => {
                       formData.append("Hello", "World");
-                      console.log(formData, "폼데이타");
+                      console.log(formData.get("file"), "폼데이타");
                       return formData;
                     }
                   },
@@ -922,7 +913,6 @@ export default props => {
                 ref={ref => ref}
                 name={"file"}
                 allowImagePreview={true}
-                beforeDropFile={testt2}
                 instantUpload={true}
                 allowMultiple={true}
                 oninit={() => handleInit()}
