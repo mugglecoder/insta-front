@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
+import className from "classnames";
+import _JSXStyle from "styled-jsx/style";
 import "react-image-gallery/styles/css/image-gallery.css";
 
 const Container = styled.div`
@@ -11,8 +13,8 @@ const Container = styled.div`
 `;
 
 const Column = styled.div`
-  margin: 0px 10px;
-  height: 250px;
+  margin: 0px 15px;
+  height: 240px;
 `;
 
 const SubColumn = styled.div`
@@ -25,22 +27,17 @@ const Files = styled.div`
   position: relative;
 `;
 
-const File = styled.img`
-  border-radius: 5px;
-  height: 250px;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  background-image: url(${props => props.src}});
-  background-position: center;
-  background-size: cover;
+const File = styled(ImageGallery)`
+  &&& {
+    height: 600px;
+  }
 `;
 
 const Subject = styled.div`
   overflow-wrap: break-word;
   font-size: 17px;
-  font-weight: 500;
   margin-bottom: 5px;
+  color: #747474;
 `;
 
 const SmallSub = styled.div`
@@ -74,16 +71,21 @@ const Money = styled.span`
 `;
 const images = [
   {
-    original: "http://lorempixel.com/1000/600/nature/1/",
-    thumbnail: "http://lorempixel.com/250/150/nature/1/"
+    original:
+      "http:/localhost:4000/images/test/1562238886106-경북대원룸_DSC09909.jpg",
+    thumbnail:
+      "http:/localhost:4000/images/test/1562238886106-경북대원룸_DSC09909.jpg"
   }
 ];
 
 let url = [];
 
 const BoardParts = ({
-  urls,
-  arr,
+  data,
+  onclick,
+  id,
+  page,
+  path,
   caption,
   selectType,
   username,
@@ -96,15 +98,17 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
-        <ImageGallery
-          items={urls}
+        <File
+          items={path}
           showFullscreenButton={false}
           useBrowserFullscreen={false}
           showThumbnails={false}
           showPlayButton={false}
-          showBullets={false}
+          showBullets={true}
           lazyLoad={true}
-          showIndex={true}
+          showIndex={false}
+          sizes={500}
+          onClick={onclick}
         />
       </Files>
     </Column>

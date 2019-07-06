@@ -1,8 +1,11 @@
 import React from "react";
+import ReactDOM from "react-dom";
+
 import styled from "styled-components";
 import Loader from "../../Components/Loader";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BoardParts from "../../Components/BoardParts";
+import ImageGallery from "react-image-gallery";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -14,10 +17,11 @@ const Column = styled.div`
 `;
 
 const ColumnL = styled.div`
+  opacity: 0.7;
   padding: 40px;
   height: 580px;
   width: 400px;
-  background-color: #cce0e0;
+  background-color: #bae0db;
   margin-right: 15px;
 `;
 
@@ -27,6 +31,7 @@ const ColumnR = styled.div`
 `;
 
 const Caption = styled.div`
+  color: black;
   overflow-wrap: break-word;
   font-size: 27px;
   font-weight: 500;
@@ -39,12 +44,11 @@ const Username = styled.div`
 `;
 
 const ContentMain = styled.div`
-  margin-top: 10px;
-  padding: 40px;
+  padding: 30px;
 `;
 
 const Deposit = styled.span`
-  font-size: 16px;
+  font-size: 18px;
   display: inline-block;
   font-weight: 600;
   color: grey;
@@ -89,7 +93,7 @@ const OptionText = styled.div`
 `;
 
 const DetailText = styled.div`
-  margin: 20px 0px;
+  margin: 50px 0px;
   margin-top: 10px;
   h1 {
     font-size: 20px;
@@ -98,11 +102,8 @@ const DetailText = styled.div`
 `;
 
 const FilesA = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 75%;
   height: 100%;
-  width: 100%;
 `;
 
 const File = styled.img`
@@ -175,15 +176,22 @@ const P = styled.p`
   display: flex;
 `;
 
+const ImageGalleryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const RoomsDetailPresenter = ({
+  path,
   props,
   data,
   data2,
   loading,
   page,
   onClick,
-  skip,
-  first,
+  onClick2,
   token,
   dataOfMe,
   _previousPage,
@@ -191,6 +199,25 @@ const RoomsDetailPresenter = ({
 }) => (
   <Wrapper>
     {loading && <Loader />}
+    {console.log(data.detailPost)}
+    {!loading && token && data.detailPost ? (
+      <LogInButtonWrap>
+        <Link
+          key={data.detailPost.id}
+          to={{
+            pathname: `/edit/${data && data.detailPost.id}`,
+            state: {
+              fromNotifications: true,
+              data: "tett"
+            }
+          }}
+        >
+          수정하기
+        </Link>
+      </LogInButtonWrap>
+    ) : (
+      false
+    )}
     {!loading && (
       <ContentWrap>
         <Column>
@@ -295,26 +322,30 @@ const RoomsDetailPresenter = ({
             <Option>cityGasIncluded</Option>
           )}
         </Options>
+
         <DetailText>
           <h1>디테일</h1>
           <hr />
         </DetailText>
-        <FilesA>
-          {data.detailPost &&
-            data.detailPost.files.map(item =>
-              item.url ? (
-                <FileS
-                  key={item.id}
-                  src={`http://localhost:4000/${item.url}`}
-                />
-              ) : (
-                false
-              )
-            )}
-        </FilesA>
+        <ImageGalleryContainer>
+          <FilesA>
+            <div className={`.test ${"menuActive" ? "height:500px" : ""}`}>
+              <ImageGallery
+                additionalClass={`test`}
+                items={path}
+                showFullscreenButton={false}
+                useBrowserFullscreen={false}
+                showThumbnails={true}
+                showPlayButton={false}
+                showBullets={true}
+                lazyLoad={true}
+                showIndex={false}
+              />
+            </div>
+          </FilesA>
+        </ImageGalleryContainer>
       </ContentWrap>
     )}
-
     {loading ? (
       false
     ) : (
@@ -329,9 +360,7 @@ const RoomsDetailPresenter = ({
                 pathname: `/writeboard/${dataOfMe &&
                   dataOfMe.me &&
                   dataOfMe.me.id}`,
-                state: {
-                  fromNotifications: true
-                }
+                data
               }}
             >
               <LogInButton onClick={onClick}>글쓰기</LogInButton>
@@ -344,21 +373,50 @@ const RoomsDetailPresenter = ({
           <Container>
             {data2 &&
               data2.seeFullPost &&
-              data2.seeFullPost.post.map((item, key) => (
-                <SLink key={item.id} to={`/roomsdetail/${item.id}/new/${page}`}>
+              data2.seeFullPost.post.map((item, key) => {
+                let arrayOfPath = [];
+                let test = [];
+                let path = [];
+                data2.seeFullPost &&
+                  data2.seeFullPost.post[key] &&
+                  data2.seeFullPost.post[key].files.map(item =>
+                    arrayOfPath.push(item.url)
+                  );
+                arrayOfPath.map((item, key) => test.push(item));
+
+                const s = test.reduce((s, a) => {
+                  {
+                    for (var i = 0; i < test.lengsh; i++);
+                    let get;
+                    get = {
+                      original: `http://localhost:4000/${a}`,
+                      thumbnail: `http://localhost:4000/${a}`
+                    };
+                    return path.push(get);
+                  }
+                }, {});
+
+                const onclick = () =>
+                  props.history.push(`/roomsdetail/${item.id}/new/${page}`);
+                return (
                   <BoardParts
+                    onclick={onclick}
+                    path={path}
+                    id={item.id}
+                    page={page}
+                    data={data}
                     key={key}
                     selectType={item.selectType}
                     caption={item.caption}
                     username={item.user.username}
                     createdAt={item.createdAt.slice(0, 10)}
                     count={item.count}
-                    url={item}
+                    url={item.files}
                     deposit={item.deposit}
                     money={item.money}
                   />
-                </SLink>
-              ))}
+                );
+              })}
             {!loading && (
               <PPcontainer>
                 <Pcontainer>

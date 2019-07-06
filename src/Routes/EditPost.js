@@ -1,17 +1,72 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation, useQuery } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
-import ScriptTag from "react-script-tag";
 import FileUploadWithPreview from "file-upload-with-preview";
-import WritePresenter from "./WriteOrModify/WritePresenter";
-const UPLOAD = gql`
-  mutation upload(
+import "../../src/css/preview.css";
+import { string } from "postcss-selector-parser";
+
+const GETPOST = gql`
+  query detailPost($id: String) {
+    detailPost(id: $id) {
+      id
+      location
+      caption
+      content
+      selectType
+      deposit
+      money
+      user {
+        id
+      }
+      files {
+        id
+      }
+      likes {
+        id
+      }
+      comments {
+        id
+      }
+      isLiked
+      likeCount
+      count
+      airConditioner
+      washer
+      refrigerator
+      internet
+      microwave
+      wifi
+      bed
+      desk
+      induction
+      gasRange
+      doorLock
+      CCTV
+      pets
+      elevator
+      parking
+      electricHeating
+      cityGasHeating
+      nightElectric
+      wateTax
+      includingElectricity
+      cityGasIncluded
+      numberOfFoors
+      MLSnumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const EDITPOST = gql`
+  mutation editPost(
     $selectType: String
     $deposit: String
     $money: String
@@ -42,7 +97,7 @@ const UPLOAD = gql`
     $cityGasIncluded: Boolean
     $MLSnumber: String
   ) {
-    upload(
+    editPost(
       selectType: $selectType
       deposit: $deposit
       money: $money
@@ -150,109 +205,39 @@ const OptionCheckBox = styled.div`
   }
 `;
 
-const InputFilesContainer = styled.div`
-  position: relative;
-  &:after {
-    pointer-events: none;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 50px;
-    right: 0;
-    height: 56px;
-    content: "";
-    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
-    display: block;
-    margin: 0 auto;
-    background-size: 100%;
-    background-repeat: no-repeat;
-  }
-`;
-const InputFiles = styled.input`
-  outline: 2px dashed #92b0b3;
-  outline-offset: -10px;
-  -webkit-transition: outline-offset 0.15s ease-in-out,
-    background-color 0.15s linear;
-  transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
-  padding: 120px 0px 85px 35%;
-  text-align: center !important;
-  margin: 0;
-  width: 100% !important;
-  &:focus {
-    outline: 2px dashed #92b0b3;
-    outline-offset: -10px;
-    -webkit-transition: outline-offset 0.15s ease-in-out,
-      background-color 0.15s linear;
-    transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
-    border: 1px solid #92b0b3;
-  }
-  &::before {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    pointer-events: none;
-    width: 100%;
-    right: 0;
-    height: 57px;
-    content: " 파일을 선택하거나 드랍 하세요 :) ";
-    display: block;
-    margin: 0 auto;
-    color: #2ea591;
-    font-weight: 600;
-    text-transform: capitalize;
-    text-align: center;
-  }
-`;
-
-const ImgPreView = styled.img`
-  border-radius: 5px;
-  height: 150px;
-  width: 150px;
-  position: relative;
-  top: 0;
-  background-image: url(${props => props.src}});
-  background-position: center;
-  background-size: cover;
-`;
-
-const Div = styled.div`
-  margin-top: 10px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-const Divs = styled.div`
-  width: 100%;
-`;
-
-export default props => {
+export default (props, { data }) => {
+  console.log(data, "data");
   const [select, setSelect] = useState("");
-
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
   useEffect(
     () =>
       console.log("The value after update 이미지가 들어감", imageUploadMulter),
     [imageUploadMulter]
   );
-
   const [files, setFiles] = useState([]);
-  console.log(files, "files");
   const [testt, setOnsubmit] = useState(false);
-
   useEffect(() => {
-    console.log("이거 실행되어야함");
     if (testt) {
       if (testt === true) {
         return lastCall();
       }
-      console.log("잘되나봐");
     }
   }, [testt]);
-
   const [fuckAround, setFuckAround] = useState(true);
   useEffect(() => {
     setOnsubmit(false);
   }, [fuckAround]);
+
+  const postId = props && props.match.params && props.match.params.id;
+  console.log(postId, "!!");
+  const getData = useQuery(GETPOST, {
+    variables: { id: postId }
+  });
+
+  const postData = getData && getData.data && getData.data.detailPost;
+  const preCaption = postData && postData.caption;
+  console.log(getData, "?");
+
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
   const [refrigerator, setRefrigerator] = useState(false);
@@ -276,30 +261,19 @@ export default props => {
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
   const [pathArray, setPathArray] = useState([]);
-
-  //console.log(pond, "pond");
-
-  const caption = useInput("");
+  const caption = useInput(preCaption);
+  console.log(caption.value);
   const deposit = useInput("");
   const money = useInput("");
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
-
   const [form, setFormData] = useState("");
 
   let fileData = [];
-  console.log(fileData, "fileData?");
   let arrayOfPath = [];
-  //  const getName = () => {
-  //    if (imageUploadMulter) {
-  //      return imageUploadMulter.name;
-  //    } else {
-  //      return false;
-  //    }
-  //  };
 
-  const test = useMutation(UPLOAD, {
+  const test = useMutation(EDITPOST, {
     variables: {
       selectType: select,
       airConditioner,
@@ -934,4 +908,4 @@ export default props => {
 //                onChange={uploadFileHandle}
 //              />
 //            </label>
-//          </InputFilesContainer>
+//          </InputFilesConta

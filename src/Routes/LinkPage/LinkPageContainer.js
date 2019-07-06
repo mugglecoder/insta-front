@@ -31,7 +31,7 @@ const FEED_QUERY = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 6;
+const LINKS_PER_PAGE = 9;
 
 export default props => {
   const [skip, setSkip] = useState(0);

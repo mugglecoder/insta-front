@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import RoomsDetailPresenter from "./RoomsDetailPresenter";
@@ -127,6 +128,7 @@ export default props => {
 
   let herrrr = props.history;
   const token = localStorage.getItem("token");
+
   const { data: data2 } = useQuery(FEED_QUERY, {
     variables: { first, skip }
   });
@@ -137,6 +139,13 @@ export default props => {
         herrrr &&
         herrrr.push(`/writeboard/${dataOfMe && dataOfMe.me && dataOfMe.me.id}`)
       );
+    } else {
+      return false;
+    }
+  };
+  const onClick2 = props => {
+    if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
+      return herrrr && herrrr.push(`/edit/${data && data.detailPost.id}`);
     } else {
       return false;
     }
@@ -190,9 +199,30 @@ export default props => {
     }
   };
 
+  let posts = [];
+  let getPath = [];
+  const pathData =
+    data.detailPost &&
+    data.detailPost.files &&
+    data.detailPost.files.map(item => console.log(posts.push(item.url)));
+
+  const s = posts.reduce((s, a) => {
+    {
+      for (var i = 0; i < posts.lengsh; i++);
+      let get;
+      get = {
+        original: `http://localhost:4000/${a}`,
+        thumbnail: `http://localhost:4000/${a}`
+      };
+      return getPath.push(get);
+    }
+  }, {});
+  console.log(getPath, "post");
+
   return (
     <RoomsDetailPresenter
       token={token}
+      path={getPath}
       page={page}
       props={props}
       data={data}
@@ -200,6 +230,7 @@ export default props => {
       loading={loading}
       logIn={logIns}
       onClick={onClick}
+      onClick2={onClick2}
       _nextPage={_nextPage}
       _previousPage={_previousPage}
       dataOfMe={dataOfMe}

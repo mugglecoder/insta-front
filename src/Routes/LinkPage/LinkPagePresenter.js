@@ -9,15 +9,23 @@ const Wrapper = styled.div`
 `;
 
 const LogInButtonWrap = styled.div`
+  padding: 20px;
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 `;
 
 const LogInButton = styled.button`
-  margin-bottom: 20px;
-  height: 50px;
-  width: 100px;
+  margin: 10px;
+  width: 100%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 9px 0px;
+  font-size: 14px;
 `;
 
 export default ({
@@ -57,6 +65,7 @@ export default ({
       )}
       {!loading && (
         <NewLinkPage
+          props={props}
           data={data}
           loading={loading}
           page={page}

@@ -34,7 +34,7 @@ const P = styled.p`
   display: flex;
 `;
 
-export default ({ data, page, _previousPage, _nextPage, loading }) => {
+export default ({ props, data, page, _previousPage, _nextPage, loading }) => {
   return (
     <Wrapper>
       {data && data.seeFullPost && (
@@ -44,45 +44,32 @@ export default ({ data, page, _previousPage, _nextPage, loading }) => {
             data.seeFullPost.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
-              let test2 = [];
-
+              let path = [];
               data.seeFullPost &&
                 data.seeFullPost.post[key] &&
                 data.seeFullPost.post[key].files.map(item =>
                   arrayOfPath.push(item.url)
                 );
+              arrayOfPath.map((item, key) => test.push(item));
 
-              arrayOfPath.map(item => test.push([item]));
+              const s = test.reduce((s, a) => {
+                {
+                  for (var i = 0; i < test.lengsh; i++);
+                  let get;
+                  get = {
+                    original: `http://localhost:4000/${a}`,
+                    thumbnail: `http://localhost:4000/${a}`
+                  };
+                  return path.push(get);
+                }
+              }, {});
 
-              const yap = test.reduce(
-                (acc, cur) => ({
-                  original: { acc },
-                  thumbnail: cur
-                }),
-                {}
-              );
-              console.log(yap);
-              for (var i in test) {
-                test2 += test.reduce(
-                  (acc, cur) => ({
-                    original: { acc },
-                    thumbnail: cur
-                  }),
-                  {}
-                );
-              }
-              console.log(test2);
-
-              //              const right = test.reduce(
-              //                (acc, cur) => ({
-              //                  original: acc,
-              //                  thumbnail: cur
-              //                }),
-              //                {}
-              //              );
-
+              const onclick = () =>
+                props.history.push(`/roomsdetail/${item.id}/new/${page}`);
               return (
                 <BoardParts
+                  onclick={onclick}
+                  path={path}
                   id={item.id}
                   page={page}
                   data={data}
