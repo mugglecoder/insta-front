@@ -8,6 +8,7 @@ import FileUploadWithPreview from "file-upload-with-preview";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import useInput from "../../Hooks/useInput";
+import { get } from "https";
 
 const EDITPOST = gql`
   mutation editPost(
@@ -201,9 +202,8 @@ export default ({ props, data }) => {
     () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
     [imageUploadMulter]
   );
+  console.log(imageUploadMulter, "여길 체크해서 고쳐야한다");
 
-  const [newImageUploadMulter, setNewImageUploadMulter] = useState([]);
-  console.log(newImageUploadMulter, "rerere");
   const [files, setFiles] = useState([]);
   console.log(files, "files");
   const [testt, setOnsubmit] = useState(false);
@@ -240,8 +240,7 @@ export default ({ props, data }) => {
   const [wateTax, setWateTax] = useState(false);
   const [includingElectricity, setIncludingElectricity] = useState(false);
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
-  const [filesss, setFilesss] = useState("");
-  const [pathArray, setPathArray] = useState([]);
+
   const caption = useInput(preData && preData.caption);
   const deposit = useInput(preData && preData.deposit);
   const money = useInput(preData && preData.deposit);
@@ -515,21 +514,18 @@ export default ({ props, data }) => {
 
   const uploadFileHandle = async e => {
     let filess = e.target.files;
-
-    return true;
   };
-  console.log(window.previousLocation, "his");
+
   const setter = async () => {
     const {
       data: {
-        upload: { id }
+        editPost: { id }
       }
     } = await editPosts();
     if (id && onSubmit) {
       setFuckAround(false);
-
-      props.history.push(`/roomsdetail/${id}/new/1`);
-      window.location.reload();
+      //props.history.push(`/roomsdetail/${id}/new/1`);
+      //window.location.reload();
       return false;
     }
   };
@@ -553,10 +549,11 @@ export default ({ props, data }) => {
     for (var x = 0; x < imageUploadMulter.length; x++) {
       data.append("file", imageUploadMulter[x]);
     }
-
+    console.log(data.get("file"), "폼데이터");
     const axiosData = await axios
       .post("http://localhost:4000/upload", data)
       .then(res => {
+        console.log(res, "axios res");
         return res.data;
       });
     console.log(axiosData, "axios data");
@@ -566,7 +563,7 @@ export default ({ props, data }) => {
 
     setFiles(fileData);
     setOnsubmit(true);
-    props.history.push({ pathname: "/uploading", state: { id: 123 } });
+    //props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(fileData);
 
     //props.history.push(`/roomsdetail/${id}`);
@@ -578,8 +575,9 @@ export default ({ props, data }) => {
     preData && preData.files.map(item => `http://localhost:4000/${item.url}`);
 
   //파일 업로드 하는 부분
+  console.log(preData, "다시확인");
   useEffect(() => {
-    new FileUploadWithPreview("myUniqueUploadId", {
+    const upload = new FileUploadWithPreview("myUniqueUploadId", {
       showDeleteButtonOnImages: true,
       text: {
         chooseFile: "파일을 선택하세요!",
@@ -588,27 +586,44 @@ export default ({ props, data }) => {
       },
       presetFiles: presetFileImages
     });
-    console.log("1번 실행되었다");
+
+    console.log(upload, "1번 실행되었다");
   }, []);
 
+  //딱 한번 실행 되도록....
+
   window.addEventListener("fileUploadWithPreview:imagesAdded", function(e) {
-    console.log(e, "이건 되나1");
+    let convertFiles = e.detail.cachedFileArray.map(
+      item =>
+        new File([item], item.name, {
+          type: "File",
+          lastModified: Date.now()
+        })
+    );
 
-    setImageUploadMulter(e.detail && e.detail.cachedFileArray);
-    // e.detail.uploadId
-    // e.detail.cachedFileArray
-    // e.detail.addedFilesCount
-    // Use e.detail.uploadId to match up to your specific input
+    console.log(convertFiles, "file add ? ");
+    if (e && e.detail) {
+      console.log("1");
+      setImageUploadMulter(convertFiles);
+    }
+
     if (e.detail.uploadId === "mySecondImage") {
       console.log(e.detail.cachedFileArray);
       console.log(e.detail.addedFilesCount);
     }
   });
+
   window.addEventListener("fileUploadWithPreview:imageDeleted", function(e) {
-    console.log(e, "이건 되나2");
-    console.log(e.detail && e.detail.cachedFileArray, "이게 문제인가");
-    setNewImageUploadMulter(e.detail && e.detail.cachedFileArray);
-    setImageUploadMulter(e.detail && e.detail.cachedFileArray);
+    const convertFilesDelete = e.detail.cachedFileArray.map(
+      item =>
+        new File([item], item.name, {
+          type: "File",
+          lastModified: Date.now()
+        })
+    );
+    console.log(convertFilesDelete, "delteed");
+
+    setImageUploadMulter(convertFilesDelete);
     // e.detail.uploadId
     // e.detail.cachedFileArray
     // e.detail.addedFilesCount
@@ -618,7 +633,6 @@ export default ({ props, data }) => {
       console.log(e.detail.addedFilesCount);
     }
   });
-
   return (
     <Wrapper>
       <form

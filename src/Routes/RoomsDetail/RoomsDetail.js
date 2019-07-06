@@ -204,10 +204,6 @@ export default props => {
 
   let posts = [];
   let getPath = [];
-  const pathData =
-    data.detailPost &&
-    data.detailPost.files &&
-    data.detailPost.files.map(item => console.log(posts.push(item.url)));
 
   const s = posts.reduce((s, a) => {
     {
