@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import ReactDOM from "react-dom";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import RoomsDetailPresenter from "./RoomsDetailPresenter";
+import ModifyPresenter from "./ModifyPresenter";
 import { ME } from "../../SharedQueries";
 
 const FEED_QUERY = gql`
@@ -11,7 +13,6 @@ const FEED_QUERY = gql`
       post {
         id
         caption
-        selectType
         deposit
         money
         count
@@ -66,7 +67,7 @@ const GETPOST = gql`
       wateTax
       includingElectricity
       cityGasIncluded
-
+      selectType
       comments {
         id
       }
@@ -87,6 +88,8 @@ const LOCAL_LOG_IN = gql`
     logUserIn(token: $token) @client
   }
 `;
+
+const Wrapper = styled.div``;
 
 export default props => {
   const id = props.history.location.pathname.split("/")[2];
@@ -217,23 +220,47 @@ export default props => {
       return getPath.push(get);
     }
   }, {});
-  console.log(getPath, "post");
+
+  //토글 룸스디테일 & 수정하기
+  const checker = props.match.path.includes("roomsdetail");
+
+  ////여기는 modifyPresenter ///////////////////////////////////////////
 
   return (
-    <RoomsDetailPresenter
-      token={token}
-      path={getPath}
-      page={page}
-      props={props}
-      data={data}
-      data2={data2}
-      loading={loading}
-      logIn={logIns}
-      onClick={onClick}
-      onClick2={onClick2}
-      _nextPage={_nextPage}
-      _previousPage={_previousPage}
-      dataOfMe={dataOfMe}
-    />
+    <Wrapper>
+      {checker ? (
+        <RoomsDetailPresenter
+          token={token}
+          path={getPath}
+          page={page}
+          props={props}
+          data={data}
+          data2={data2}
+          loading={loading}
+          logIn={logIns}
+          onClick={onClick}
+          onClick2={onClick2}
+          _nextPage={_nextPage}
+          _previousPage={_previousPage}
+          dataOfMe={dataOfMe}
+        />
+      ) : (
+        <ModifyPresenter
+          token={token}
+          path={getPath}
+          page={page}
+          props={props}
+          data={data}
+          data2={data2}
+          loading={loading}
+          logIn={logIns}
+          onClick={onClick}
+          onClick2={onClick2}
+          _nextPage={_nextPage}
+          _previousPage={_previousPage}
+          dataOfMe={dataOfMe}
+        />
+      )}
+    </Wrapper>
   );
 };

@@ -1,6 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
-
 import styled from "styled-components";
 import Loader from "../../Components/Loader";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
@@ -329,19 +327,17 @@ const RoomsDetailPresenter = ({
         </DetailText>
         <ImageGalleryContainer>
           <FilesA>
-            <div className={`.test ${"menuActive" ? "height:500px" : ""}`}>
-              <ImageGallery
-                additionalClass={`test`}
-                items={path}
-                showFullscreenButton={false}
-                useBrowserFullscreen={false}
-                showThumbnails={true}
-                showPlayButton={false}
-                showBullets={true}
-                lazyLoad={true}
-                showIndex={false}
-              />
-            </div>
+            <ImageGallery
+              additionalClass={`test`}
+              items={path}
+              showFullscreenButton={false}
+              useBrowserFullscreen={false}
+              showThumbnails={true}
+              showPlayButton={false}
+              showBullets={true}
+              lazyLoad={true}
+              showIndex={false}
+            />
           </FilesA>
         </ImageGalleryContainer>
       </ContentWrap>

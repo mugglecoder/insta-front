@@ -16,7 +16,7 @@ const LoggedInRoutes = ({ match }) => (
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new/:page" component={LinkPage} />
-    <Route exact path="/edit/:id" component={EditPost} />
+    <Route exact path="/edit/:id" component={RoomsDetail} />
     <Route path="/roomsdetail/:id/new/:page" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
     <Route path="/upload" component={Explore} />
