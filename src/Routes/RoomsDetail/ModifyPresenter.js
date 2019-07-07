@@ -10,6 +10,14 @@ import Input from "../../Components/Input";
 import useInput from "../../Hooks/useInput";
 import { get } from "https";
 
+const DELETEFILE = gql`
+  mutation deleteFile($id: String, $url: String) {
+    deleteFile(id: $id, url: $url) {
+      id
+    }
+  }
+`;
+
 const EDITPOST = gql`
   mutation editPost(
     $id: String!
@@ -219,27 +227,41 @@ export default ({ props, data }) => {
     setOnsubmit(false);
   }, [fuckAround]);
   const [action, setAction] = useState("EDIT");
-  const [airConditioner, setAirConditioner] = useState(false);
-  const [washer, setWasher] = useState(false);
-  const [refrigerator, setRefrigerator] = useState(false);
-  const [internet, setInternet] = useState(false);
-  const [microwave, setMicrowave] = useState(false);
-  const [wifi, setWifi] = useState(false);
-  const [bed, setBed] = useState(false);
-  const [desk, setDesk] = useState(false);
-  const [induction, setInduction] = useState(false);
-  const [gasRange, setGasRange] = useState(false);
-  const [doorLock, setDoorLock] = useState(false);
-  const [CCTV, setCCTV] = useState(false);
-  const [pets, setPets] = useState(false);
-  const [elevator, setElevator] = useState(false);
-  const [parking, setParking] = useState(false);
-  const [electricHeating, setElectricHeating] = useState(false);
-  const [cityGasHeating, setCityGasHeating] = useState(false);
-  const [nightElectric, setNightElectric] = useState(false);
-  const [wateTax, setWateTax] = useState(false);
-  const [includingElectricity, setIncludingElectricity] = useState(false);
-  const [cityGasIncluded, setCityGasIncluded] = useState(false);
+  const [airConditioner, setAirConditioner] = useState(
+    preData && preData.airConditioner
+  );
+  const [washer, setWasher] = useState(preData && preData.washer);
+  const [refrigerator, setRefrigerator] = useState(
+    preData && preData.refrigerator
+  );
+  const [internet, setInternet] = useState(preData && preData.internet);
+  const [microwave, setMicrowave] = useState(preData && preData.microwave);
+  const [wifi, setWifi] = useState(preData && preData.wifi);
+  const [bed, setBed] = useState(preData && preData.bed);
+  const [desk, setDesk] = useState(preData && preData.desk);
+  const [induction, setInduction] = useState(preData && preData.induction);
+  const [gasRange, setGasRange] = useState(preData && preData.gasRange);
+  const [doorLock, setDoorLock] = useState(preData && preData.doorLock);
+  const [CCTV, setCCTV] = useState(preData && preData.CCTV);
+  const [pets, setPets] = useState(preData && preData.pets);
+  const [elevator, setElevator] = useState(preData && preData.elevator);
+  const [parking, setParking] = useState(preData && preData.parking);
+  const [electricHeating, setElectricHeating] = useState(
+    preData && preData.electricHeating
+  );
+  const [cityGasHeating, setCityGasHeating] = useState(
+    preData && preData.cityGasHeating
+  );
+  const [nightElectric, setNightElectric] = useState(
+    preData && preData.nightElectric
+  );
+  const [wateTax, setWateTax] = useState(preData && preData.wateTax);
+  const [includingElectricity, setIncludingElectricity] = useState(
+    preData && preData.includingElectricity
+  );
+  const [cityGasIncluded, setCityGasIncluded] = useState(
+    preData && preData.cityGasIncluded
+  );
 
   const caption = useInput(preData && preData.caption);
   const deposit = useInput(preData && preData.deposit);
@@ -591,19 +613,13 @@ export default ({ props, data }) => {
   }, []);
 
   //딱 한번 실행 되도록....
+  const goDeleteFile = useMutation(DELETEFILE);
 
   window.addEventListener("fileUploadWithPreview:imagesAdded", function(e) {
-    let convertFiles = e.detail.cachedFileArray.map(
-      item =>
-        new File([item], item.name, {
-          type: "File",
-          lastModified: Date.now()
-        })
-    );
-
+    //  let convertFiles = preData && preData.files;
+    const convertFiles = e.detail.cachedFileArray;
     console.log(convertFiles, "file add ? ");
     if (e && e.detail) {
-      console.log("1");
       setImageUploadMulter(convertFiles);
     }
 
@@ -613,7 +629,7 @@ export default ({ props, data }) => {
     }
   });
 
-  window.addEventListener("fileUploadWithPreview:imageDeleted", function(e) {
+  window.addEventListener("fileUploadWithPreview:imageDeleted", async e => {
     const convertFilesDelete = e.detail.cachedFileArray.map(
       item =>
         new File([item], item.name, {
@@ -621,13 +637,57 @@ export default ({ props, data }) => {
           lastModified: Date.now()
         })
     );
-    console.log(convertFilesDelete, "delteed");
+    // const convertFilesDelete = e.detail.cachedFileArray;
+    const filtered = convertFilesDelete.filter(function(str) {
+      return;
+    });
+    console.log(convertFilesDelete, "convertFilesDelete");
+    const afterUrl = convertFilesDelete.map(item => item.name);
+    const getUrl =
+      preData && preData.files.map(item => item.url.split("/test/")[1]);
+    console.log(getUrl, "getUrl");
+    console.log(afterUrl, "atferurl");
 
     setImageUploadMulter(convertFilesDelete);
-    // e.detail.uploadId
-    // e.detail.cachedFileArray
-    // e.detail.addedFilesCount
-    // Use e.detail.uploadId to match up to your specific input
+
+    let difference =
+      preData &&
+      preData.files
+        .map(item => item.url.split("/test/")[1])
+        .filter(x => !convertFilesDelete.map(item => item.name).includes(x))
+        .concat(
+          convertFilesDelete
+            .map(item => item.name)
+            .filter(
+              x =>
+                !preData &&
+                preData.files
+                  .map(item => item.url.split("/test/")[1])
+                  .includes(x)
+            )
+        )
+        .map(item => `images/test/${item}`)
+        .reduce(function(result, item, index, array) {
+          result[index] = item; //a, b, c
+          return result;
+        }, {});
+    console.log(difference && difference.length);
+    if (difference && difference.length >= 1) {
+      difference = difference.splice(0, 1);
+    }
+
+    console.log(difference, "///");
+
+    //  await goDeleteFile({
+    //   variables: {
+    //      id,
+    //      url: difference
+    //    }
+    //   });
+
+    const againFilterd = filtered.filter(filtered => {
+      return filtered;
+    });
     if (e.detail.uploadId === "mySecondImage") {
       console.log(e.detail.cachedFileArray);
       console.log(e.detail.addedFilesCount);
