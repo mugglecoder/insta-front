@@ -4,6 +4,7 @@ import Loader from "../../Components/Loader";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BoardParts from "../../Components/BoardParts";
 import ImageGallery from "react-image-gallery";
+import Button from "../../Components/Button";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -181,6 +182,22 @@ const ImageGalleryContainer = styled.div`
   align-items: center;
 `;
 
+const ButtonDiv = styled.div``;
+
+const DeleteButton = styled.button`
+  cursor: pointer;
+  margin: 10px;
+  width: 70px;
+  border: 0;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 11px 0px;
+  font-size: 16px;
+`;
+
 const RoomsDetailPresenter = ({
   path,
   props,
@@ -193,7 +210,8 @@ const RoomsDetailPresenter = ({
   token,
   dataOfMe,
   _previousPage,
-  _nextPage
+  _nextPage,
+  onDeletePost
 }) => (
   <Wrapper>
     {loading && <Loader />}
@@ -210,8 +228,10 @@ const RoomsDetailPresenter = ({
             }
           }}
         >
-          수정하기
+          <DeleteButton> 수정하기 </DeleteButton>
         </Link>
+
+        <DeleteButton onClick={onDeletePost}>삭제</DeleteButton>
       </LogInButtonWrap>
     ) : (
       false

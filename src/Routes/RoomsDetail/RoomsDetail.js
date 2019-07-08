@@ -6,6 +6,13 @@ import { useQuery, useMutation } from "react-apollo-hooks";
 import RoomsDetailPresenter from "./RoomsDetailPresenter";
 import ModifyPresenter from "./ModifyPresenter";
 import { ME } from "../../SharedQueries";
+import Axios from "axios";
+
+const DELETEPOST = gql`
+  mutation detelePost($id: String) {
+    detelePost(id: $id)
+  }
+`;
 
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
@@ -223,6 +230,29 @@ export default props => {
 
   //토글 룸스디테일 & 수정하기
   const checker = props.match.path.includes("roomsdetail");
+  const deletePost = useMutation(DELETEPOST);
+
+  const deletePostForData =
+    data2 &&
+    data2.seeFullPost &&
+    data2.seeFullPost.post[0].files.map(item => item.url);
+
+  //딜리트포스트 온 서브밋
+  const onDeletePost = async e => {
+    e.preventDefault();
+    await deletePost({ variables: { id } });
+    props.history.push(`/new/}`);
+
+    const axiosData = await Axios.delete("http://localhost:4000/upload", {
+      data: { deletePostForData }
+    })
+      .then(res => {
+        console.log(res, "axios res");
+        return res.data;
+      })
+      .catch(err => console.log(err));
+    console.log(axiosData, "axios data");
+  };
 
   ////여기는 modifyPresenter ///////////////////////////////////////////
 
@@ -230,6 +260,7 @@ export default props => {
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          onDeletePost={onDeletePost}
           token={token}
           path={getPath}
           page={page}

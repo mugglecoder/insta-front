@@ -86,38 +86,6 @@ const EDITPOST = gql`
       MLSnumber: $MLSnumber
     ) {
       id
-      count
-      numberOfFoors
-      MLSnumber
-      deposit
-      money
-      content
-      caption
-      airConditioner
-      washer
-      refrigerator
-      internet
-      microwave
-      wifi
-      bed
-      desk
-      induction
-      gasRange
-      doorLock
-      CCTV
-      pets
-      elevator
-      parking
-      electricHeating
-      cityGasHeating
-      nightElectric
-      wateTax
-      includingElectricity
-      cityGasIncluded
-      selectType
-      comments {
-        id
-      }
       files {
         id
         url
@@ -548,12 +516,8 @@ export default ({ props, data }) => {
     }
   };
 
-  const lastCall = axiosData => {
-    if (fileData) {
-      setFiles(fileData);
-    } else {
-      setFiles(fileData);
-    }
+  const lastCall = () => {
+    setFiles(fileData);
     setter();
   };
 
