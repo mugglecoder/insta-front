@@ -214,6 +214,14 @@ export default ({ props, data }) => {
 
   const [files, setFiles] = useState([]);
   console.log(files, "files");
+  const [testt, setOnsubmit] = useState(false);
+  useEffect(() => {
+    if (testt) {
+      if (testt === true) {
+        return lastCall();
+      }
+    }
+  }, [testt]);
 
   const [action, setAction] = useState("EDIT");
   const [airConditioner, setAirConditioner] = useState(
@@ -527,16 +535,26 @@ export default ({ props, data }) => {
     let filess = e.target.files;
   };
 
-  const lastCall = async () => {
+  const setter = async () => {
     const {
       data: {
         editPost: { id }
       }
     } = await editPosts();
+    if (id && onSubmit) {
+      props.history.push(`/roomsdetail/${id}/new/1`);
+      window.location.reload();
+      return false;
+    }
+  };
 
-    props.history.push(`/roomsdetail/${id}/new/1`);
-    window.location.reload();
-    return false;
+  const lastCall = axiosData => {
+    if (fileData) {
+      setFiles(fileData);
+    } else {
+      setFiles(fileData);
+    }
+    setter();
   };
 
   const onSubmit = async e => {
@@ -558,8 +576,10 @@ export default ({ props, data }) => {
       fileData.push(element.path);
     });
 
+    setFiles(fileData);
+    setOnsubmit(true);
     props.history.push({ pathname: "/uploading", state: { id: 123 } });
-    return lastCall();
+    return lastCall(fileData);
 
     //props.history.push(`/roomsdetail/${id}`);
 
@@ -930,14 +950,3 @@ export default ({ props, data }) => {
     </Wrapper>
   );
 };
-
-//<InputFilesContainer>
-//            <label>
-//              <InputFiles
-//                type="file"
-//                name="file"
-//                multiple
-//                onChange={uploadFileHandle}
-//              />
-//            </label>
-//          </InputFilesConta
