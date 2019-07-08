@@ -214,18 +214,7 @@ export default ({ props, data }) => {
 
   const [files, setFiles] = useState([]);
   console.log(files, "files");
-  const [testt, setOnsubmit] = useState(false);
-  useEffect(() => {
-    if (testt) {
-      if (testt === true) {
-        return lastCall();
-      }
-    }
-  }, [testt]);
-  const [fuckAround, setFuckAround] = useState(true);
-  useEffect(() => {
-    setOnsubmit(false);
-  }, [fuckAround]);
+
   const [action, setAction] = useState("EDIT");
   const [airConditioner, setAirConditioner] = useState(
     preData && preData.airConditioner
@@ -538,30 +527,16 @@ export default ({ props, data }) => {
     let filess = e.target.files;
   };
 
-  const setter = async () => {
+  const lastCall = async () => {
     const {
       data: {
         editPost: { id }
       }
     } = await editPosts();
-    if (id && onSubmit) {
-      setFuckAround(false);
-      props.history.push(`/roomsdetail/${id}/new/1`);
-      window.location.reload();
-      return false;
-    }
-  };
 
-  const lastCall = axiosData => {
-    if (fileData) {
-      setFiles(fileData);
-    } else {
-      setFiles(fileData);
-    }
-    setFuckAround(false);
-    if (testt) {
-      setter();
-    }
+    props.history.push(`/roomsdetail/${id}/new/1`);
+    window.location.reload();
+    return false;
   };
 
   const onSubmit = async e => {
@@ -583,10 +558,8 @@ export default ({ props, data }) => {
       fileData.push(element.path);
     });
 
-    setFiles(fileData);
-    setOnsubmit(true);
     props.history.push({ pathname: "/uploading", state: { id: 123 } });
-    return lastCall(fileData);
+    return lastCall();
 
     //props.history.push(`/roomsdetail/${id}`);
 
