@@ -206,26 +206,26 @@ export default ({ props, data }) => {
   const [imageUploadMulter, setImageUploadMulter] = useState(
     preData && preData.files
   );
-  //  useEffect(
-  //    () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
-  //    [imageUploadMulter]
-  //  );
+  useEffect(
+    () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
+    [imageUploadMulter]
+  );
   console.log(imageUploadMulter, "여길 체크해서 고쳐야한다");
 
   const [files, setFiles] = useState([]);
   console.log(files, "files");
   const [testt, setOnsubmit] = useState(false);
-  //  useEffect(() => {
-  //    if (testt) {
-  //      if (testt === true) {
-  //        return lastCall();
-  //      }
-  //    }
-  //  }, [testt]);
+  useEffect(() => {
+    if (testt) {
+      if (testt === true) {
+        return lastCall();
+      }
+    }
+  }, [testt]);
   const [fuckAround, setFuckAround] = useState(true);
-  //  useEffect(() => {
-  //    setOnsubmit(false);
-  //  }, [fuckAround]);
+  useEffect(() => {
+    setOnsubmit(false);
+  }, [fuckAround]);
   const [action, setAction] = useState("EDIT");
   const [airConditioner, setAirConditioner] = useState(
     preData && preData.airConditioner
@@ -664,6 +664,8 @@ export default ({ props, data }) => {
         )
         .map(item => `images/test/${item}`);
 
+    const maybe = difference && difference.join();
+
     await setImageUploadMulter(convertFilesDelete);
 
     const axiosData = await axios
@@ -671,7 +673,8 @@ export default ({ props, data }) => {
       .then(res => {
         console.log(res, "axios res");
         return res.data;
-      });
+      })
+      .catch(err => console.log(err));
     console.log(axiosData, "axios data");
 
     await goDeleteFile({
