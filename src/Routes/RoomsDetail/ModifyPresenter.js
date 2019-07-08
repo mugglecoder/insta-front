@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation, useQuery } from "react-apollo-hooks";
+import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
@@ -8,12 +8,12 @@ import FileUploadWithPreview from "file-upload-with-preview";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import useInput from "../../Hooks/useInput";
-import { get } from "https";
 
 const DELETEFILE = gql`
-  mutation deleteFile($id: String, $url: String) {
-    deleteFile(id: $id, url: $url) {
+  mutation deleteManyFiles($id: String, $fileId: [String], $url: [String]) {
+    deleteManyFiles(id: $id, fileId: $fileId, url: $url) {
       id
+      url
     }
   }
 `;
@@ -206,26 +206,26 @@ export default ({ props, data }) => {
   const [imageUploadMulter, setImageUploadMulter] = useState(
     preData && preData.files
   );
-  useEffect(
-    () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
-    [imageUploadMulter]
-  );
+  //  useEffect(
+  //    () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
+  //    [imageUploadMulter]
+  //  );
   console.log(imageUploadMulter, "여길 체크해서 고쳐야한다");
 
   const [files, setFiles] = useState([]);
   console.log(files, "files");
   const [testt, setOnsubmit] = useState(false);
-  useEffect(() => {
-    if (testt) {
-      if (testt === true) {
-        return lastCall();
-      }
-    }
-  }, [testt]);
+  //  useEffect(() => {
+  //    if (testt) {
+  //      if (testt === true) {
+  //        return lastCall();
+  //      }
+  //    }
+  //  }, [testt]);
   const [fuckAround, setFuckAround] = useState(true);
-  useEffect(() => {
-    setOnsubmit(false);
-  }, [fuckAround]);
+  //  useEffect(() => {
+  //    setOnsubmit(false);
+  //  }, [fuckAround]);
   const [action, setAction] = useState("EDIT");
   const [airConditioner, setAirConditioner] = useState(
     preData && preData.airConditioner
@@ -546,8 +546,8 @@ export default ({ props, data }) => {
     } = await editPosts();
     if (id && onSubmit) {
       setFuckAround(false);
-      //props.history.push(`/roomsdetail/${id}/new/1`);
-      //window.location.reload();
+      props.history.push(`/roomsdetail/${id}/new/1`);
+      window.location.reload();
       return false;
     }
   };
@@ -585,7 +585,7 @@ export default ({ props, data }) => {
 
     setFiles(fileData);
     setOnsubmit(true);
-    //props.history.push({ pathname: "/uploading", state: { id: 123 } });
+    props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(fileData);
 
     //props.history.push(`/roomsdetail/${id}`);
@@ -597,7 +597,7 @@ export default ({ props, data }) => {
     preData && preData.files.map(item => `http://localhost:4000/${item.url}`);
 
   //파일 업로드 하는 부분
-  console.log(preData, "다시확인");
+  console.log(preData && preData.files, "다시확인");
   useEffect(() => {
     const upload = new FileUploadWithPreview("myUniqueUploadId", {
       showDeleteButtonOnImages: true,
@@ -615,13 +615,18 @@ export default ({ props, data }) => {
   //딱 한번 실행 되도록....
   const goDeleteFile = useMutation(DELETEFILE);
 
+  //파일 업로드 부분
   window.addEventListener("fileUploadWithPreview:imagesAdded", function(e) {
-    //  let convertFiles = preData && preData.files;
-    const convertFiles = e.detail.cachedFileArray;
-    console.log(convertFiles, "file add ? ");
-    if (e && e.detail) {
-      setImageUploadMulter(convertFiles);
-    }
+    //convertFiles = preData && preData.files;
+    const convertFiles = e.detail.cachedFileArray.map(
+      item =>
+        new File([item], item.name, {
+          type: "File",
+          lastModified: Date.now()
+        })
+    );
+
+    setImageUploadMulter(convertFiles);
 
     if (e.detail.uploadId === "mySecondImage") {
       console.log(e.detail.cachedFileArray);
@@ -629,6 +634,7 @@ export default ({ props, data }) => {
     }
   });
 
+  //////업로드 중에 이미지를 지우는 부분
   window.addEventListener("fileUploadWithPreview:imageDeleted", async e => {
     const convertFilesDelete = e.detail.cachedFileArray.map(
       item =>
@@ -638,18 +644,8 @@ export default ({ props, data }) => {
         })
     );
     // const convertFilesDelete = e.detail.cachedFileArray;
-    const filtered = convertFilesDelete.filter(function(str) {
-      return;
-    });
-    console.log(convertFilesDelete, "convertFilesDelete");
-    const afterUrl = convertFilesDelete.map(item => item.name);
-    const getUrl =
-      preData && preData.files.map(item => item.url.split("/test/")[1]);
-    console.log(getUrl, "getUrl");
-    console.log(afterUrl, "atferurl");
 
-    setImageUploadMulter(convertFilesDelete);
-
+    ///// 지워진 배열 이름을 찾는 부분
     let difference =
       preData &&
       preData.files
@@ -666,28 +662,26 @@ export default ({ props, data }) => {
                   .includes(x)
             )
         )
-        .map(item => `images/test/${item}`)
-        .reduce(function(result, item, index, array) {
-          result[index] = item; //a, b, c
-          return result;
-        }, {});
-    console.log(difference && difference.length);
-    if (difference && difference.length >= 1) {
-      difference = difference.splice(0, 1);
-    }
+        .map(item => `images/test/${item}`);
 
-    console.log(difference, "///");
+    await setImageUploadMulter(convertFilesDelete);
 
-    //  await goDeleteFile({
-    //   variables: {
-    //      id,
-    //      url: difference
-    //    }
-    //   });
+    const axiosData = await axios
+      .delete("http://localhost:4000/upload", { data: { difference } })
+      .then(res => {
+        console.log(res, "axios res");
+        return res.data;
+      });
+    console.log(axiosData, "axios data");
 
-    const againFilterd = filtered.filter(filtered => {
-      return filtered;
+    await goDeleteFile({
+      variables: {
+        id,
+        fileId: preData && preData.files && preData.files.map(item => item.id),
+        url: difference
+      }
     });
+
     if (e.detail.uploadId === "mySecondImage") {
       console.log(e.detail.cachedFileArray);
       console.log(e.detail.addedFilesCount);
