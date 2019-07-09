@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import Loader from "../../Components/Loader";
 import NewLinkPage from "../../Components/NewLinkPage";
 import GoogleMapReact from "google-map-react";
+import Popup from "reactjs-popup";
+import MapPartsImageGall from "../../Components/MapPartsImageGall";
+import "react-image-gallery/styles/css/image-gallery.css";
+import Floater from "react-floater";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -28,8 +32,29 @@ const LogInButton = styled.button`
   padding: 9px 0px;
   font-size: 14px;
 `;
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+const MarkerContainer = styled.div`
+  border-radius: 50%;
+`;
+
+const MarkerIcon = styled.div`
+  cursor: pointer;
+  background-color: #d64f4f;
+  opacity: 0.7;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+`;
+
+const PopUps = styled.div`
+  background-color: red;
+  width: 100px;
+  height: 100px;
+`;
+
 export default ({
+  latAndlng,
+  places,
   zoom,
   center,
   page,
@@ -44,24 +69,60 @@ export default ({
   _previousPage,
   _nextPage
 }) => {
+  /// 마커 아이콘에 대한 로직
+  const passing = props;
+  const AnyReactComponent = ({ item }) => (
+    <MarkerContainer>
+      <Floater content="This is the Floater content">
+        <span>click me</span>
+      </Floater>
+      <Popup
+        children={false}
+        on={["hover", "click"]}
+        trigger={<MarkerIcon />}
+        position="top center"
+        closeOnDocumentClick={true}
+        contentStyle={{
+          backgroundColor: "#f4f4f4",
+          borderRadius: "3px",
+          border: "none",
+          width: "200px",
+          height: "220px",
+          padding: "-3px",
+          overflowX: "auto"
+        }}
+      >
+        <MapPartsImageGall item={item} props={passing} />
+      </Popup>
+    </MarkerContainer>
+  );
+
   return (
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
-        <div style={{ height: "35vh", width: "100%" }}>
+        <div style={{ height: "40vh", width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
             }}
             defaultCenter={center}
             defaultZoom={zoom}
-            yesIWantToUseGoogleMapApiInternals={true}
+            yesIWantToUseGoogleMapApiInternals
+            options={{ maxZoom: 17 }}
           >
-            <AnyReactComponent
-              lat={36.8085342802915}
-              lng={128.6317640802915}
-              text="My Marker"
-            />
+            {latAndlng.map((item, key) =>
+              item.places[0] ? (
+                <AnyReactComponent
+                  key={key}
+                  lat={item.places && item.places[0].lat}
+                  lng={item.places && item.places[0].lng}
+                  item={item}
+                />
+              ) : (
+                false
+              )
+            )}
           </GoogleMapReact>
         </div>
       )}

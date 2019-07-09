@@ -5,6 +5,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BoardParts from "../../Components/BoardParts";
 import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
+import "react-image-gallery/styles/css/image-gallery.css";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -208,7 +209,11 @@ const DeleteButton = styled.button`
 `;
 
 const MarkerIcon = styled.div`
-  font-size: 30px;
+  background-color: red;
+  opacity: 0.5;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 `;
 
 //구글 맵 컨테이너
@@ -394,9 +399,10 @@ const RoomsDetailPresenter = ({
               }}
               defaultCenter={{ lat, lng }}
               defaultZoom={zoom}
+              options={{ maxZoom: 17 }}
               yesIWantToUseGoogleMapApiInternals={true}
             >
-              <AnyReactComponent lat={lat} lng={lng} text="🏠" />
+              <AnyReactComponent lat={lat} lng={lng} text="" />
             </GoogleMapReact>
           </div>
         </MapContainer>

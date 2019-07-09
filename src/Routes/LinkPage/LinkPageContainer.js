@@ -10,6 +10,11 @@ const FEED_QUERY = gql`
       post {
         id
         caption
+        places {
+          id
+          lat
+          lng
+        }
         selectType
         deposit
         money
@@ -39,13 +44,12 @@ export default props => {
   const [first, setFrist] = useState(0);
   //구글지도
   const [center, setCenter] = useState({
-    lat: 36.8085342802915,
-    lng: 128.6317640802915
+    lat: 35.8961565802915,
+    lng: 128.6162214802915
   });
 
   //구글지도 줌 레벨
-  const [zoom, setZoom] = useState(15);
-
+  const [zoom, setZoom] = useState(14);
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );
@@ -134,9 +138,12 @@ export default props => {
       return setSet2(true);
     }
   };
-  console.log(data && data.seeFullPost && data.seeFullPost.post, "dataaaaa");
+  //주소를 가져온다
+  const latAndlng =
+    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
   return (
     <LinkPagePresenter
+      latAndlng={latAndlng}
       center={center}
       zoom={zoom}
       props={props}
