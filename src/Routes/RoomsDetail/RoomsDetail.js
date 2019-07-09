@@ -46,6 +46,10 @@ const GETPOST = gql`
   query detailPost($id: String!) {
     detailPost(id: $id) {
       id
+      places {
+        lat
+        lng
+      }
       count
       numberOfFoors
       MLSnumber
@@ -103,6 +107,22 @@ export default props => {
   const { data, loading } = useQuery(GETPOST, {
     variables: { id }
   });
+  //구글지도
+
+  const [center, setCenter] = useState({});
+
+  //구글지도 줌 레벨
+  const [zoom, setZoom] = useState(15);
+
+  const lat = Number(data && data.detailPost && data.detailPost.places[0].lat);
+  const lng = Number(data && data.detailPost && data.detailPost.places[0].lng);
+  const forCenter = { lat, lng };
+  if (lat === NaN && lng === NaN && lat === undefined && lng === undefined) {
+    console.log("김광석");
+  } else {
+    console.log("eric");
+  }
+
   const localLoginMutation = useMutation(LOCAL_LOG_IN);
 
   const logIns = localLoginMutation({
@@ -260,6 +280,10 @@ export default props => {
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          lng={lng}
+          lat={lat}
+          center={center}
+          zoom={zoom}
           onDeletePost={onDeletePost}
           token={token}
           path={getPath}

@@ -16,6 +16,7 @@
     "file-upload-with-preview": "^4.0.2",
     "filepond": "^4.4.10",
     "filepond-plugin-image-preview": "^4.2.1",
+    "google-map-react": "^1.1.4",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
     "prop-types": "^15.7.2",

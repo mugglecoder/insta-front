@@ -10,6 +10,18 @@ import axios from "axios";
 import ScriptTag from "react-script-tag";
 import FileUploadWithPreview from "file-upload-with-preview";
 import WritePresenter from "./WriteOrModify/WritePresenter";
+
+//주소 저장하는 gql
+const SAVEADDRESS = gql`
+  mutation place($id: String, $lat: String, $lng: String) {
+    place(id: $id, lat: $lat, lng: $lng) {
+      id
+      lng
+      lat
+    }
+  }
+`;
+
 const UPLOAD = gql`
   mutation upload(
     $selectType: String
@@ -100,6 +112,28 @@ const InputMoney = styled(Input)`
 `;
 const InputMLSnumber = styled(Input)`
   width: 20%;
+`;
+
+const AddressContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const AddressGot = styled(Input)`
+  width: 23%;
+`;
+
+const AddressButton = styled.button`
+  width: 75%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: ${props => props.theme.blueColor};
+  text-align: center;
+  padding: 7px 0px;
+  font-size: 14px;
 `;
 const InputFloor = styled(Input)`
   width: 20%;
@@ -226,6 +260,7 @@ const Divs = styled.div`
 `;
 
 export default props => {
+  ///////////////////////////////////////////////////////////////////////
   const [select, setSelect] = useState("");
 
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
@@ -276,6 +311,16 @@ export default props => {
   const [cityGasIncluded, setCityGasIncluded] = useState(false);
   const [filesss, setFilesss] = useState("");
   const [pathArray, setPathArray] = useState([]);
+  //주소 찾는 훅
+  const [addressValue, setAddressValue] = useState("");
+
+  //주소 저장 훅
+  const [lat, setLatS] = useState("");
+  const [lng, setLngS] = useState("");
+  const [place, setPlace] = useState({});
+  console.log(place, "plcae,", lat, "lat", lng, "lng");
+  //버튼 벨유
+  const [buttonValue, setButtonValue] = useState("");
 
   //console.log(pond, "pond");
 
@@ -285,6 +330,7 @@ export default props => {
   const content = useInput("");
   const numberOfFoors = useInput("");
   const MLSnumber = useInput("");
+  const Address = useInput("");
 
   const [form, setFormData] = useState("");
 
@@ -299,8 +345,10 @@ export default props => {
   //    }
   //  };
 
+  // 업로드 뮤테이션
   const test = useMutation(UPLOAD, {
     variables: {
+      place,
       selectType: select,
       airConditioner,
       washer,
@@ -557,7 +605,50 @@ export default props => {
     return false;
   };
 
-  console.log(imageUploadMulter, "이미지물터");
+  /// 주소 찾는 로직 //////////////////////////////////////////////////////
+
+  const saveAddressS = useMutation(SAVEADDRESS);
+  const findAddress = e => {
+    console.log(e.target, "target");
+  };
+  const getAddress = async e => {
+    e.preventDefault();
+    const addressData = await axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${
+          Address.value
+        }&key=AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM`
+      )
+      .then(res => {
+        console.log(res, "아마도 지도 정보가 오겠지");
+        return res;
+      })
+      .catch(err => console.log(err));
+
+    const formattedAddress =
+      addressData &&
+      addressData.data &&
+      addressData.data.results[0].formatted_address;
+    setButtonValue(formattedAddress);
+
+    //lat 값
+    const latS =
+      addressData &&
+      addressData.data &&
+      addressData.data.results[0].formatted_address &&
+      addressData.data.results[0].geometry.location.lat;
+    setLatS(String(latS));
+
+    //lng 값
+    const lngS =
+      addressData &&
+      addressData.data &&
+      addressData.data.results[0].formatted_address &&
+      addressData.data.results[0].geometry.location.lng;
+    setLngS(String(lngS));
+
+    setPlace({ lat: String(latS), lng: String(lngS) });
+  };
 
   const uploadFileHandle = async e => {
     let filess = e.target.files;
@@ -571,6 +662,7 @@ export default props => {
         upload: { id }
       }
     } = await test();
+    await saveAddressS({ variables: { id, lat, lng } });
     if (id && onSubmit) {
       setFuckAround(false);
       props.history.push(`/roomsdetail/${id}/new/1`);
@@ -656,7 +748,7 @@ export default props => {
       console.log(e.detail.addedFilesCount);
     }
   });
-
+  ////////////////////////////////////////////////////////////////////////////////////
   return (
     <Wrapper>
       <form
@@ -702,6 +794,19 @@ export default props => {
               {...MLSnumber}
             />
           </SelectInput>
+          <AddressContainer>
+            <AddressGot
+              onChange={findAddress}
+              placeholder={"주소를 적어주세요 ex)복현동 407-1 or 경진로 22길"}
+              {...Address}
+            />
+
+            <AddressButton onClick={getAddress}>
+              {buttonValue
+                ? `${buttonValue}   /    주소가 틀리다면 재검색!`
+                : "주소찾기"}
+            </AddressButton>
+          </AddressContainer>
           <OptionCheckBox>
             <label>
               에어컨

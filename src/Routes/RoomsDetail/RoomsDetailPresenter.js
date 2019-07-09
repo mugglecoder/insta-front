@@ -4,7 +4,7 @@ import Loader from "../../Components/Loader";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BoardParts from "../../Components/BoardParts";
 import ImageGallery from "react-image-gallery";
-import Button from "../../Components/Button";
+import GoogleMapReact from "google-map-react";
 const Wrapper = styled.div`
   width: 100%;
 `;
@@ -92,6 +92,15 @@ const OptionText = styled.div`
 `;
 
 const DetailText = styled.div`
+  margin: 50px 0px;
+  margin-top: 10px;
+  h1 {
+    font-size: 20px;
+    color: grey;
+  }
+`;
+
+const MapText = styled.div`
   margin: 50px 0px;
   margin-top: 10px;
   h1 {
@@ -198,7 +207,20 @@ const DeleteButton = styled.button`
   font-size: 16px;
 `;
 
+const MarkerIcon = styled.div`
+  font-size: 30px;
+`;
+
+//구글 맵 컨테이너
+
+const MapContainer = styled.div``;
+const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
+
 const RoomsDetailPresenter = ({
+  lat,
+  lng,
+  center,
+  zoom,
   path,
   props,
   data,
@@ -360,6 +382,24 @@ const RoomsDetailPresenter = ({
             />
           </FilesA>
         </ImageGalleryContainer>
+        <MapText>
+          <h1>위치</h1>
+          <hr />
+        </MapText>
+        <MapContainer>
+          <div style={{ height: "35vh", width: "100%" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
+              }}
+              defaultCenter={{ lat, lng }}
+              defaultZoom={zoom}
+              yesIWantToUseGoogleMapApiInternals={true}
+            >
+              <AnyReactComponent lat={lat} lng={lng} text="🏠" />
+            </GoogleMapReact>
+          </div>
+        </MapContainer>
       </ContentWrap>
     )}
     {loading ? (

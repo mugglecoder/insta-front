@@ -34,9 +34,17 @@ const FEED_QUERY = gql`
 const LINKS_PER_PAGE = 9;
 
 export default props => {
+  //페이지네이션
   const [skip, setSkip] = useState(0);
   const [first, setFrist] = useState(0);
-  console.log(skip, first, "skip과  //  frist");
+  //구글지도
+  const [center, setCenter] = useState({
+    lat: 36.8085342802915,
+    lng: 128.6317640802915
+  });
+
+  //구글지도 줌 레벨
+  const [zoom, setZoom] = useState(15);
 
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
@@ -49,6 +57,7 @@ export default props => {
       props.location.pathname &&
       props.location.pathname.includes("new");
 
+    //페이지네이션
     const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
     const first = isNewPage || props ? LINKS_PER_PAGE : 100;
     setFrist(first);
@@ -93,6 +102,7 @@ export default props => {
     _getQueryVariables();
   }, [set2]);
 
+  //페이지네이션
   const _nextPage = e => {
     e.preventDefault();
     const page = parseInt(
@@ -111,6 +121,7 @@ export default props => {
     }
   };
 
+  //페이지네이션
   const _previousPage = async e => {
     e.preventDefault();
     const page = parseInt(
@@ -126,6 +137,8 @@ export default props => {
   console.log(data && data.seeFullPost && data.seeFullPost.post, "dataaaaa");
   return (
     <LinkPagePresenter
+      center={center}
+      zoom={zoom}
       props={props}
       page={page}
       loading={loading}
