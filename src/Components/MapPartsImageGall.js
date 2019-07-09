@@ -108,6 +108,7 @@ export default item => {
         <Cancle onClick={deleteClassS}>
           <span />
         </Cancle>
+        <hr />
         <SmallSub>
           <SelectType>{item.item.selectType}</SelectType>
           <Deposit>보증금 {item.item.deposit}</Deposit>

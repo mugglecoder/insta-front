@@ -4600,6 +4600,11 @@ google-map-react@^1.1.4:
     eventemitter3 "^1.1.0"
     scriptjs "^2.5.7"
 
+google-maps@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/google-maps/-/google-maps-3.3.0.tgz#4432b4715406bc15268ad35b1dd1b04d974956a6"
+  integrity sha512-pj4En0cWKG+lcBvC7qrzu5ItiMsYNTgjG2capsPzAbAM/O8ftugGpUUftTTwdGL8KlNvB4CEZ6IBWwpWYzUEpw==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.0.tgz#8d8fdc73977cb04104721cb53666c1ca64cd328b"
@@ -8427,7 +8432,7 @@ react-dev-utils@^9.0.1:
     strip-ansi "5.2.0"
     text-table "0.2.0"
 
-react-dom@^16.8.6:
+react-dom@^16.8, react-dom@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
@@ -8497,6 +8502,13 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-kakao-maps@Musma/react-kakao-maps#0.0.1:
+  version "0.0.1"
+  resolved "https://codeload.github.com/Musma/react-kakao-maps/tar.gz/d52605d1f391671c2bf2983bf118a57dd9bb3940"
+  dependencies:
+    react "^16.8"
+    react-dom "^16.8"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -8637,7 +8649,7 @@ react-transition-group@^2.6.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.8.6:
+react@^16.8, react@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==

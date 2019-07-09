@@ -12,7 +12,11 @@ import Floater from "react-floater";
 const Wrapper = styled.div`
   width: 100%;
 `;
-
+const WrapperS = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+  line-height: 1.5;
+`;
 const LogInButtonWrap = styled.div`
   padding: 20px;
   margin-top: 20px;
@@ -46,10 +50,12 @@ const MarkerIcon = styled.div`
   border-radius: 50%;
 `;
 
-const PopUps = styled.div`
-  background-color: red;
-  width: 100px;
-  height: 100px;
+const SelectType = styled.div`
+  margin-right: 7px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgb(169, 193, 232);
 `;
 
 export default ({
@@ -73,35 +79,66 @@ export default ({
   const passing = props;
   const AnyReactComponent = ({ item }) => (
     <MarkerContainer>
-      <Floater content="This is the Floater content">
-        <span>click me</span>
-      </Floater>
-      <Popup
-        children={false}
-        on={["hover", "click"]}
-        trigger={<MarkerIcon />}
-        position="top center"
-        closeOnDocumentClick={true}
-        contentStyle={{
-          backgroundColor: "#f4f4f4",
-          borderRadius: "3px",
-          border: "none",
-          width: "200px",
-          height: "220px",
-          padding: "-3px",
-          overflowX: "auto"
+      <Floater
+        title={<SelectType>{item.selectType}</SelectType>}
+        placement={"top"}
+        disableAnimation={true}
+        showCloseButton={true}
+        offset={30}
+        wrapperOptions={{
+          offset: 0, // The distance between the wrapper and the target. It can be negative.
+          placement: "left", // the same options as above, except center
+          position: true // Set to true to position the wrapper
         }}
+        styles={{
+          tooltip: {
+            filter: "none"
+          },
+          container: {
+            backgroundColor: "#f7f7f7",
+            borderRadius: 5,
+            color: "#fff",
+            filter: "none",
+            height: "240px",
+            width: "100%",
+            padding: "5px",
+            textAlign: "left",
+            overflow: "scroll"
+          }
+        }}
+        hideArrow={true}
+        content={<MapPartsImageGall item={item} props={passing} />}
       >
-        <MapPartsImageGall item={item} props={passing} />
-      </Popup>
+        <WrapperS>
+          <MarkerIcon />
+        </WrapperS>
+      </Floater>
     </MarkerContainer>
   );
+
+  const createMapOptions = maps => {
+    return {
+      panControl: false,
+      mapTypeControl: false,
+      scrollwheel: false,
+      styles: [
+        {
+          stylers: [
+            { saturation: -100 },
+            { gamma: 0.8 },
+            { lightness: 4 },
+            { visibility: "on" }
+          ]
+        }
+      ]
+    };
+  };
 
   return (
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
-        <div style={{ height: "40vh", width: "100%" }}>
+        <div style={{ height: "45vh", width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
@@ -109,7 +146,7 @@ export default ({
             defaultCenter={center}
             defaultZoom={zoom}
             yesIWantToUseGoogleMapApiInternals
-            options={{ maxZoom: 17 }}
+            options={{ maxZoom: 17, createMapOptions }}
           >
             {latAndlng.map((item, key) =>
               item.places[0] ? (
