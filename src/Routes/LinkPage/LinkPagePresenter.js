@@ -9,6 +9,7 @@ import MapPartsImageGall from "../../Components/MapPartsImageGall";
 import "../../css/image-gallery.css";
 import Floater from "react-floater";
 import Marker from "../../Components/Marker";
+import GoogleMaps from "../../Components/GoogleMaps";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -81,6 +82,7 @@ const SelectType = styled.div`
 `;
 
 export default ({
+  setCenter,
   latAndlng,
   places,
   zoom,
@@ -167,30 +169,13 @@ export default ({
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
-        <Mapdiv style={{ height: "45vh", width: "100%" }}>
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
-            }}
-            defaultCenter={center}
-            defaultZoom={zoom}
-            yesIWantToUseGoogleMapApiInternals
-            options={{ maxZoom: 18, createMapOptions }}
-          >
-            {latAndlng.map((item, key) =>
-              item.places[0] ? (
-                <AnyReactComponent
-                  key={key}
-                  lat={item.places && item.places[0].lat}
-                  lng={item.places && item.places[0].lng}
-                  item={item}
-                />
-              ) : (
-                false
-              )
-            )}
-          </GoogleMapReact>
-        </Mapdiv>
+        <GoogleMaps
+          latAndlng={latAndlng}
+          props={props}
+          center={center}
+          zoom={zoom}
+          setCenter={setCenter}
+        />
       )}
       {!loading && token && data.seeFullPost ? (
         <LogInButtonWrap>

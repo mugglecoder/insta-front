@@ -89,7 +89,6 @@ export default item => {
   const onclick = () =>
     props.history.push(`/roomsdetail/${item.item.id}/new/${page}`);
 
-  console.log(item, "item");
   const deleteClassS = () => {};
   return (
     <Files>
