@@ -192,7 +192,7 @@
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   color: #fff;
-  font-size: 5em;
+  font-size: 3em;
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
@@ -250,8 +250,24 @@
   position: relative;
 }
 .image-gallery-slide img {
+  height: 230px;
   width: 100%;
+  border-radius: 5px;
 }
+
+.test .image-gallery-slide img {
+  height: 600px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.inTheMap .image-gallery-slide img {
+  background-position: center;
+  height: 130px;
+  width: 100%;
+  border-radius: 0px;
+}
+
 .image-gallery-slide .image-gallery-description {
   background: rgba(0, 0, 0, 0.4);
   bottom: 70px;
@@ -294,7 +310,7 @@
   display: inline-block;
   margin: 0 5px;
   outline: none;
-  padding: 5px;
+  padding: 4px;
 }
 @media (max-width: 768px) {
   .image-gallery-bullets .image-gallery-bullet {

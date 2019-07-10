@@ -5,7 +5,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BoardParts from "../../Components/BoardParts";
 import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
-import "react-image-gallery/styles/css/image-gallery.css";
+import "../../css/image-gallery.css";
 const Wrapper = styled.div`
   width: 100%;
 `;

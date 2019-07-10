@@ -7,9 +7,7 @@ import Button from "../Components/Button";
 import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
-import ScriptTag from "react-script-tag";
 import FileUploadWithPreview from "file-upload-with-preview";
-import WritePresenter from "./WriteOrModify/WritePresenter";
 
 //주소 저장하는 gql
 const SAVEADDRESS = gql`

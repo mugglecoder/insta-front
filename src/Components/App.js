@@ -39,7 +39,6 @@ export default () => {
           <Router>
             <>
               {isLoggedIn && <Header />}
-              <ScriptTag src="//dapi.kakao.com/v2/maps/sdk.js?appkey=v&libraries=services,clusterer" />
 
               <Wrapper>
                 <Routes isLoggedIn={isLoggedIn} />

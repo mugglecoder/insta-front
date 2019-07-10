@@ -6,8 +6,9 @@ import NewLinkPage from "../../Components/NewLinkPage";
 import GoogleMapReact from "google-map-react";
 import Popup from "reactjs-popup";
 import MapPartsImageGall from "../../Components/MapPartsImageGall";
-import "react-image-gallery/styles/css/image-gallery.css";
+import "../../css/image-gallery.css";
 import Floater from "react-floater";
+import Marker from "../../Components/Marker";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -37,21 +38,42 @@ const LogInButton = styled.button`
   font-size: 14px;
 `;
 
+const Mapdiv = styled.div`
+  border: 1px solid #e0e0e0;
+`;
+
 const MarkerContainer = styled.div`
   border-radius: 50%;
 `;
 
 const MarkerIcon = styled.div`
   cursor: pointer;
-  background-color: #d64f4f;
-  opacity: 0.7;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
+`;
+
+const Deposit = styled.span`
+  display: inline-block;
+  margin-right: 4px;
+  margin-top: 7px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #c87777;
+`;
+
+const Dash = styled.span`
+  color: #000;
+  display: inline-block;
+  margin-right: 8px;
+`;
+
+const Money = styled.span`
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  color: #c87777;
 `;
 
 const SelectType = styled.div`
-  margin-right: 7px;
+  margin: 0px 7px;
   display: inline-block;
   font-weight: 600;
   font-size: 14px;
@@ -80,16 +102,20 @@ export default ({
   const AnyReactComponent = ({ item }) => (
     <MarkerContainer>
       <Floater
-        title={<SelectType>{item.selectType}</SelectType>}
+        callback={(action, props) => (action === "open" ? true : false)}
+        title={
+          <>
+            <SelectType>{item.selectType}</SelectType>
+            <Deposit>보증금 {item.deposit}</Deposit>
+            <Dash>/</Dash>
+            <Money> 월세 {item.money}</Money>
+          </>
+        }
         placement={"top"}
         disableAnimation={true}
         showCloseButton={true}
-        offset={30}
-        wrapperOptions={{
-          offset: 0, // The distance between the wrapper and the target. It can be negative.
-          placement: "left", // the same options as above, except center
-          position: true // Set to true to position the wrapper
-        }}
+        offset={15}
+        wrapperOptions={{}}
         styles={{
           tooltip: {
             filter: "none"
@@ -99,9 +125,10 @@ export default ({
             borderRadius: 5,
             color: "#fff",
             filter: "none",
-            height: "240px",
+            minHeight: "230px",
+            height: "100%",
             width: "100%",
-            padding: "5px",
+            padding: "7px",
             textAlign: "left",
             overflow: "scroll"
           }
@@ -110,7 +137,9 @@ export default ({
         content={<MapPartsImageGall item={item} props={passing} />}
       >
         <WrapperS>
-          <MarkerIcon />
+          <MarkerIcon>
+            <Marker value={item.money} />
+          </MarkerIcon>
         </WrapperS>
       </Floater>
     </MarkerContainer>
@@ -138,7 +167,7 @@ export default ({
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
-        <div style={{ height: "45vh", width: "100%" }}>
+        <Mapdiv style={{ height: "45vh", width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
@@ -146,7 +175,7 @@ export default ({
             defaultCenter={center}
             defaultZoom={zoom}
             yesIWantToUseGoogleMapApiInternals
-            options={{ maxZoom: 17, createMapOptions }}
+            options={{ maxZoom: 18, createMapOptions }}
           >
             {latAndlng.map((item, key) =>
               item.places[0] ? (
@@ -161,7 +190,7 @@ export default ({
               )
             )}
           </GoogleMapReact>
-        </div>
+        </Mapdiv>
       )}
       {!loading && token && data.seeFullPost ? (
         <LogInButtonWrap>

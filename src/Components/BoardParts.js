@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import className from "classnames";
 import _JSXStyle from "styled-jsx/style";
-import "react-image-gallery/styles/css/image-gallery.css";
+import "../css/image-gallery.css";
 
 const Container = styled.div`
   max-width: 386px;

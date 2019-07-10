@@ -57,6 +57,7 @@ const Money = styled.span`
 
 const Subject = styled.div`
   overflow-wrap: break-word;
+  line-height: 1.4;
   font-size: 14px;
   margin-top: 5px;
   color: #747474;
@@ -109,12 +110,6 @@ export default item => {
           <span />
         </Cancle>
         <hr />
-        <SmallSub>
-          <SelectType>{item.item.selectType}</SelectType>
-          <Deposit>보증금 {item.item.deposit}</Deposit>
-          {" / "}
-          <Money> 월세 {item.item.money}</Money>
-        </SmallSub>
         <Subject>{item.item.caption}</Subject>
       </SubColumn>
     </Files>

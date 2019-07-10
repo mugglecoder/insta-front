@@ -49,7 +49,7 @@ export default props => {
   });
 
   //구글지도 줌 레벨
-  const [zoom, setZoom] = useState(14);
+  const [zoom, setZoom] = useState(16);
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );
