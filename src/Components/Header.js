@@ -86,7 +86,7 @@ export default withRouter(({ history }) => {
           </form>
         </HeaderColumn>
         <HeaderColumn>
-          <HeaderLink to="/explore">
+          <HeaderLink to="/fullmap">
             <Compass />
           </HeaderLink>
           <HeaderLink to="/notification">

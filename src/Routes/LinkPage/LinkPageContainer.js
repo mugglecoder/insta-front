@@ -47,8 +47,7 @@ export default props => {
     lat: 35.8961565802915,
     lng: 128.6162214802915
   });
-  console.log(center, "center");
-  useEffect(() => {}, [center]);
+
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(16);
   const page = parseInt(

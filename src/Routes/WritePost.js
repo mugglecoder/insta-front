@@ -618,7 +618,6 @@ export default props => {
         }&key=AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM`
       )
       .then(res => {
-        console.log(res, "아마도 지도 정보가 오겠지");
         return res;
       })
       .catch(err => console.log(err));

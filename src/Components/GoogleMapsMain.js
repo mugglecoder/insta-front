@@ -6,7 +6,6 @@ import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
 
 import Popup from "reactjs-popup";
-import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -62,7 +61,7 @@ const Wrapper = styled.div`
   background-color: #fcfcfc;
   border-radius: 10px;
   width: 300px;
-  height: 228px;
+  height: 200px;
   text-align: right;
 `;
 
@@ -84,21 +83,6 @@ const Button = styled.button`
   }
 `;
 
-const ButtonBottom = styled.div`
-  border: none;
-  background-color: #aecdec;
-  color: #fff;
-  width: 50;
-  display: block;
-  padding: 7px 0px;
-  border-radius: 4px;
-  text-align: center;
-  z-index: 100;
-  :focus {
-    border: none;
-  }
-`;
-
 export default ({
   zoom,
   center,
@@ -111,27 +95,10 @@ export default ({
 }) => {
   const passing = props;
 
-  //  onClick={() => {
-  //    setDivide(true);
-  //    return passing.history.push(
-  //      `/fullmap/roomsdetail/${item.id}/new/1`
-  //    );
-  //  }}
-
   const AnyReactComponent = ({ item, setDivide }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
         <MapPartsImageGall item={item} props={passing} setDivide={setDivide} />
-        <Link
-          to={{
-            pathname: `/fullmap/roomsdetail/${item.id}/new/1`,
-            data: { item }
-          }}
-        >
-          <ButtonBottom onClick={() => setDivide(true)}>
-            자세히보기
-          </ButtonBottom>
-        </Link>
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
           colse
         </Button>
@@ -199,20 +166,19 @@ export default ({
           yesIWantToUseGoogleMapApiInternals
           options={{ maxZoom: 18, createMapOptions }}
         >
-          {latAndlng &&
-            latAndlng.map((item, key) =>
-              item.places[0] ? (
-                <AnyReactComponent
-                  setDivide={setDivide}
-                  key={key}
-                  lat={item.places && item.places[0].lat}
-                  lng={item.places && item.places[0].lng}
-                  item={item}
-                />
-              ) : (
-                false
-              )
-            )}
+          {latAndlng.map((item, key) =>
+            item.places[0] ? (
+              <AnyReactComponent
+                setDivide={setDivide}
+                key={key}
+                lat={item.places && item.places[0].lat}
+                lng={item.places && item.places[0].lng}
+                item={item}
+              />
+            ) : (
+              false
+            )
+          )}
         </GoogleMapReact>
       </Mapdiv>
     </Container>

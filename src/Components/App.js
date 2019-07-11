@@ -21,7 +21,6 @@ const QUERY = gql`
 
 const Wrapper = styled.div`
   margin: 0 auto;
-  max-width: 1200px;
   width: 100%;
   padding: 0px 20px 20px 20px;
 `;

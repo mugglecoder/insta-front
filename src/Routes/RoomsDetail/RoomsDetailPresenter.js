@@ -7,6 +7,8 @@ import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
 const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1300px;
   width: 100%;
 `;
 

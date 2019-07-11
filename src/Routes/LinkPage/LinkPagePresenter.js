@@ -10,8 +10,11 @@ import "../../css/image-gallery.css";
 import Floater from "react-floater";
 import Marker from "../../Components/Marker";
 import GoogleMaps from "../../Components/GoogleMaps";
+import GoogleMapsMain from "../../Components/GoogleMapsMain";
 
 const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1300px;
   width: 100%;
 `;
 const WrapperS = styled.div`
@@ -169,7 +172,7 @@ export default ({
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
-        <GoogleMaps
+        <GoogleMapsMain
           latAndlng={latAndlng}
           props={props}
           center={center}

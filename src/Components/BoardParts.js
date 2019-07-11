@@ -8,13 +8,13 @@ import "../css/image-gallery.css";
 
 const Container = styled.div`
   max-width: 386px;
-  width: 32vw;
+  width: 25%;
   height: 100%;
 `;
 
 const Column = styled.div`
   margin: 0px 15px;
-  height: 240px;
+  height: 200px;
 `;
 
 const SubColumn = styled.div`

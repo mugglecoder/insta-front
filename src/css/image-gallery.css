@@ -197,6 +197,14 @@
   top: 50%;
   transform: translateY(-50%);
 }
+.inTheMap .image-gallery-left-nav,
+.image-gallery-right-nav {
+  color: #fff;
+  font-size: 2em;
+  padding: 50px 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .image-gallery-left-nav[disabled],
 .image-gallery-right-nav[disabled] {
   cursor: disabled;
@@ -250,7 +258,8 @@
   position: relative;
 }
 .image-gallery-slide img {
-  height: 230px;
+  cursor: pointer;
+  height: 200px;
   width: 100%;
   border-radius: 5px;
 }
@@ -262,6 +271,7 @@
 }
 
 .inTheMap .image-gallery-slide img {
+  cursor: pointer;
   background-position: center;
   height: 130px;
   width: 100%;

@@ -103,7 +103,13 @@ const LOCAL_LOG_IN = gql`
 const Wrapper = styled.div``;
 
 export default props => {
-  const id = props.history.location.pathname.split("/")[2];
+  console.log(props, "inthe props");
+  let id = props.history && props.history.location.pathname.split("/")[2];
+  if (props.data) {
+    id =
+      props.props.history &&
+      props.props.history.location.pathname.split("/")[3];
+  }
   const { data, loading } = useQuery(GETPOST, {
     variables: { id }
   });
@@ -249,7 +255,11 @@ export default props => {
   }, {});
 
   //토글 룸스디테일 & 수정하기
-  const checker = props.match.path.includes("roomsdetail");
+  let checker = props.match && props.match.path.includes("roomsdetail");
+  if (props.data) {
+    checker = props.props.match && props.props.match.path;
+  }
+  console.log(checker, "??checker");
   const deletePost = useMutation(DELETEPOST);
 
   const deletePostForData =

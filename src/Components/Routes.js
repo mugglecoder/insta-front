@@ -10,16 +10,22 @@ import Loading from "../Routes/Loading";
 import LinkPage from "../Routes/LinkPage";
 import EditPost from "../Routes/EditPost";
 import WritePost from "../Routes/WritePost";
+import Fullmap from "../Routes/Fullmap";
+import FullmapDivide from "../Routes/FullmapDivide";
 
 const LoggedInRoutes = ({ match }) => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new/:page" component={LinkPage} />
-    <Route exact path="/edit/:id" component={RoomsDetail} />
+    <Route path="/fullmap" component={Fullmap} />
+    <Route
+      path="/fullmap/roomsdetail/:id/new/:page"
+      component={FullmapDivide}
+    />
     <Route path="/roomsdetail/:id/new/:page" component={RoomsDetail} />
+    <Route exact path="/edit/:id" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
-    <Route path="/upload" component={Explore} />
     <Route path="/board" component={Feed} />
     <Route path="/uploading" component={Loading} />
     <Route path="/search" component={Search} />
