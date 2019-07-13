@@ -23,8 +23,8 @@ const SAVEADDRESS = gql`
 const UPLOAD = gql`
   mutation upload(
     $selectType: String
-    $deposit: String
-    $money: String
+    $deposit: Int
+    $money: Int
     $caption: String
     $files: [String]
     $content: String
@@ -87,6 +87,9 @@ const UPLOAD = gql`
       files {
         id
         url
+      }
+      places {
+        id
       }
     }
   }
@@ -593,40 +596,44 @@ export default props => {
   };
   const getAddress = async e => {
     e.preventDefault();
-    const addressData = await axios
-      .get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${
-          Address.value
-        }&key=AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM`
-      )
-      .then(res => {
-        return res;
-      })
-      .catch(err => console.log(err));
+    try {
+      const addressData = await axios
+        .get(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${
+            Address.value
+          }&key=AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM`
+        )
+        .then(res => {
+          return res;
+        })
+        .catch(err => console.log(err));
+      const formattedAddress =
+        addressData &&
+        addressData.data &&
+        addressData.data.results[0].formatted_address;
 
-    const formattedAddress =
-      addressData &&
-      addressData.data &&
-      addressData.data.results[0].formatted_address;
-    setButtonValue(formattedAddress);
+      setButtonValue(formattedAddress);
+      //lat 값
+      const latS =
+        addressData &&
+        addressData.data &&
+        addressData.data.results[0].formatted_address &&
+        addressData.data.results[0].geometry.location.lat;
+      setLatS(String(latS));
 
-    //lat 값
-    const latS =
-      addressData &&
-      addressData.data &&
-      addressData.data.results[0].formatted_address &&
-      addressData.data.results[0].geometry.location.lat;
-    setLatS(String(latS));
+      //lng 값
+      const lngS =
+        addressData &&
+        addressData.data &&
+        addressData.data.results[0].formatted_address &&
+        addressData.data.results[0].geometry.location.lng;
+      setLngS(String(lngS));
 
-    //lng 값
-    const lngS =
-      addressData &&
-      addressData.data &&
-      addressData.data.results[0].formatted_address &&
-      addressData.data.results[0].geometry.location.lng;
-    setLngS(String(lngS));
-
-    setPlace({ lat: String(latS), lng: String(lngS) });
+      setPlace({ lat: String(latS), lng: String(lngS) });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
 
   const uploadFileHandle = async e => {
@@ -667,8 +674,8 @@ export default props => {
         includingElectricity,
         cityGasIncluded,
         caption: caption.value,
-        deposit: deposit.value,
-        money: money.value,
+        deposit: parseInt(deposit.value),
+        money: parseInt(money.value),
         content: content.value,
         numberOfFoors: numberOfFoors.value,
         MLSnumber: MLSnumber.value

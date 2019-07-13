@@ -23,8 +23,8 @@ const EDITPOST = gql`
     $id: String!
     $action: ACTIONS
     $selectType: String
-    $deposit: String
-    $money: String
+    $deposit: Int
+    $money: Int
     $caption: String
     $files: [String]
     $content: String
@@ -267,8 +267,8 @@ export default ({ props, data }) => {
       includingElectricity,
       cityGasIncluded,
       caption: caption.value,
-      deposit: deposit.value,
-      money: money.value,
+      deposit: parseInt(deposit.value),
+      money: parseInt(money.value),
       content: content.value,
       numberOfFoors: numberOfFoors.value,
       MLSnumber: MLSnumber.value
