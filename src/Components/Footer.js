@@ -2,13 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 const Footer = styled.footer`
+  margin: 0 auto;
+  padding: 37px 0px;
+  max-width: 1300px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-transform: uppercase;
   font-weight: 600;
   font-size: 12px;
-  margin: 50px 0px;
 `;
 
 const List = styled.ul`

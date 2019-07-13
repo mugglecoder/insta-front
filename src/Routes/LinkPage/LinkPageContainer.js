@@ -3,6 +3,8 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
+import Slider, { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
@@ -42,6 +44,63 @@ export default props => {
   //페이지네이션
   const [skip, setSkip] = useState(0);
   const [first, setFrist] = useState(0);
+
+  //셀렉트 박스
+  const [select, setSelect] = useState("");
+  const [selectValue1, setSelectValue1] = useState("");
+  useEffect(() => {
+    setSelect(String(`${selectValue1} ${selectValue2}`));
+  }, [selectValue1]);
+  const [selectValue2, setSelectValue2] = useState("");
+  useEffect(() => {
+    setSelect(String(`${selectValue1} ${selectValue2}`));
+  }, [selectValue2]);
+
+  const handleChange = async e => {
+    console.log(e.target.value);
+    if (e.target.value === "원룸" || "투룸") {
+      setDefault([100, 3000]);
+      setDefaultMax(10000);
+    }
+    if (e.target.value === "쓰리룸") {
+      setDefault([2000, 5000]);
+      setDefaultMax(30000);
+    }
+    if (e.target.value === "포룸") {
+      setDefault([2000, 5000]);
+      setDefaultMax(30000);
+    }
+    if (e.target.value === "상가") {
+      setDefault([2000, 5000]);
+      setDefaultMax(30000);
+    }
+    if (e.target.value === "주인세대") {
+      setDefault([5000, 10000]);
+      setDefaultMax(30000);
+    }
+    if (e.target.value === "빌라") {
+      setDefault([8000, 20000]);
+      setDefaultMax(30000);
+    }
+    if (e.target.value === "아파트") {
+      setDefault([8000, 20000]);
+      setDefaultMax(1000000);
+    }
+
+    setSelectValue1(e.target.value);
+  };
+  const handleChange2 = async e => {
+    setSelectValue2(e.target.value);
+  };
+
+  //슬라이더에 대한 로직
+  const [defaultS, setDefault] = useState([100, 1000]);
+  const [defaultMax, setDefaultMax] = useState(100);
+  console.log(defaultS, defaultMax, "dafaultS");
+  const createSliderWithTooltip = Slider.createSliderWithTooltip;
+  const Range = createSliderWithTooltip(Slider.Range);
+  const setDefaultS = () => setDefault([100, 3000]);
+
   //구글지도
   const [center, setCenter] = useState({
     lat: 35.8961565802915,
@@ -143,6 +202,13 @@ export default props => {
     data && data.seeFullPost && data.seeFullPost.post.map(item => item);
   return (
     <LinkPagePresenter
+      defaultS={defaultS}
+      handleChange={handleChange}
+      handleChange2={handleChange2}
+      selectValue1={selectValue1}
+      selectValue2={selectValue2}
+      select={select}
+      setSelect={setSelect}
       setCenter={setCenter}
       latAndlng={latAndlng}
       center={center}

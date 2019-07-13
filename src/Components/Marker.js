@@ -45,30 +45,50 @@ const MarkerInner = styled.button`
 
 const types = type => {
   let color = "";
-  if (type === "1r") {
+  if (type === "원룸 월세") {
     color = "ff9b9a";
-  } else if (type === "2r") {
+  } else if (type === "투룸 월세") {
     color = "84c0d8";
-  } else if (type === "3r") {
+  } else if (type === "쓰리룸 월세") {
+    color = "84c0d8";
+  } else if (type === "포룸 월세") {
+    color = "84c0d8";
+  } else if (type === "원룸 전세") {
+    color = "84c0d8";
+  } else if (type === "투룸 전세") {
     color = "8584d8";
-  } else if (type === "4r") {
+  } else if (type === "쓰리룸 전세") {
     color = "b284d8";
-  } else if (type === "4r") {
+  } else if (type === "포룸 전세") {
     color = "e8e484";
-  } else if (type === "주인세대") {
+  } else if (type === "주인세대 전세") {
     color = "d89084";
-  } else if (type === "lease") {
-    color = "4572d3";
-  } else if (type === "apt") {
+  } else if (type === "아파트 월세") {
     color = "9782b5";
-  } else if (type === "villa") {
+  } else if (type === "아파트 전세") {
+    color = "9782b5";
+  } else if (type === "아파트 매매") {
+    color = "9782b5";
+  } else if (type === "원룸 매매") {
+    color = "9782b5";
+  } else if (type === "빌라 월세") {
+    color = "9782b5";
+  } else if (type === "빌라 전세") {
+    color = "ba80b4";
+  } else if (type === "빌라 매매") {
+    color = "ba80b4";
+  } else if (type === "상가 매매") {
+    color = "ba80b4";
+  } else if (type === "상가 월세") {
+    color = "ba80b4";
+  } else if (type === "상가 전세") {
     color = "ba80b4";
   }
   return `#${color};
   `;
 };
 
-const Marker = ({ type = "1r", value }) => {
+const Marker = ({ type = "원룸 월세", value }) => {
   return (
     <Wrapper>
       <MarkerInner type={type}>{value}</MarkerInner>

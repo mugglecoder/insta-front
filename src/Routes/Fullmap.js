@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
@@ -20,9 +20,31 @@ const FEED_QUERY = gql`
         }
         selectType
         deposit
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        numberOfFoors
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        MLSnumber
         money
         count
-        selectType
         content
         createdAt
         user {
@@ -62,8 +84,10 @@ export default props => {
   });
 
   //구글지도 줌 레벨
+
   const [zoom, setZoom] = useState(16);
   const [divide, setDivide] = useState(false);
+  console.log(divide, "divide");
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );
@@ -99,7 +123,7 @@ export default props => {
               width={"100%"}
               setDivide={setDivide}
             />
-            <FullmapDivide data={data} props={props} />
+            <FullmapDivide data={data} props={props} setDivide={setDivide} />
           </DividerWrap>
         )
       )}

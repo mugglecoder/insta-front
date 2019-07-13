@@ -55,7 +55,8 @@ const SearchInput = styled(Input)`
   }
 `;
 
-const HeaderLink = styled(Link)`
+const HeaderLink = styled.a`
+  display: inline-block;
   &:not(:last-child) {
     margin-right: 30px;
   }
@@ -73,7 +74,7 @@ export default withRouter(({ history }) => {
       <HeaderWrapper>
         <HeaderColumn>
           <Link to="/">
-            <Logo />
+            <h1>this is mark-1</h1>
           </Link>
         </HeaderColumn>
         <HeaderColumn>
@@ -86,7 +87,7 @@ export default withRouter(({ history }) => {
           </form>
         </HeaderColumn>
         <HeaderColumn>
-          <HeaderLink to="/fullmap">
+          <HeaderLink href="/fullmap">
             <Compass />
           </HeaderLink>
           <HeaderLink to="/notification">

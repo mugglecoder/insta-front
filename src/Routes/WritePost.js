@@ -92,7 +92,10 @@ const UPLOAD = gql`
   }
 `;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1300px;
+`;
 
 const Inputs = styled.div`
   display: flex;
@@ -133,6 +136,7 @@ const AddressButton = styled.button`
   padding: 7px 0px;
   font-size: 14px;
 `;
+
 const InputFloor = styled(Input)`
   width: 20%;
 `;
@@ -260,7 +264,15 @@ const Divs = styled.div`
 export default props => {
   ///////////////////////////////////////////////////////////////////////
   const [select, setSelect] = useState("");
-
+  console.log(select, "select!!!!!");
+  const [selectValue1, setSelectValue1] = useState("");
+  useEffect(() => {
+    setSelect(String(`${selectValue1} ${selectValue2}`));
+  }, [selectValue1]);
+  const [selectValue2, setSelectValue2] = useState("");
+  useEffect(() => {
+    setSelect(String(`${selectValue1} ${selectValue2}`));
+  }, [selectValue2]);
   const [imageUploadMulter, setImageUploadMulter] = useState(null);
   useEffect(
     () =>
@@ -344,47 +356,17 @@ export default props => {
   //  };
 
   // 업로드 뮤테이션
-  const test = useMutation(UPLOAD, {
-    variables: {
-      place,
-      selectType: select,
-      airConditioner,
-      washer,
-      refrigerator,
-      files,
-      internet,
-      microwave,
-      wifi,
-      bed,
-      desk,
-      induction,
-      gasRange,
-      doorLock,
-      CCTV,
-      pets,
-      elevator,
-      parking,
-      electricHeating,
-      cityGasHeating,
-      nightElectric,
-      wateTax,
-      includingElectricity,
-      cityGasIncluded,
-      caption: caption.value,
-      deposit: deposit.value,
-      money: money.value,
-      content: content.value,
-      numberOfFoors: numberOfFoors.value,
-      MLSnumber: MLSnumber.value
-    }
-  });
+  const test = useMutation(UPLOAD);
 
   const noClick = e => {
     e.preventDefault();
   };
 
-  const handleChange = e => {
-    setSelect(e.target.value);
+  const handleChange = async e => {
+    setSelectValue1(e.target.value);
+  };
+  const handleChange2 = async e => {
+    setSelectValue2(e.target.value);
   };
 
   const airConditionerS = e => {
@@ -652,13 +634,47 @@ export default props => {
 
     return true;
   };
-
+  console.log(select, "select");
   const setter = async () => {
     const {
       data: {
         upload: { id }
       }
-    } = await test();
+    } = await test({
+      variables: {
+        place,
+        selectType: select,
+        airConditioner,
+        washer,
+        refrigerator,
+        files,
+        internet,
+        microwave,
+        wifi,
+        bed,
+        desk,
+        induction,
+        gasRange,
+        doorLock,
+        CCTV,
+        pets,
+        elevator,
+        parking,
+        electricHeating,
+        cityGasHeating,
+        nightElectric,
+        wateTax,
+        includingElectricity,
+        cityGasIncluded,
+        caption: caption.value,
+        deposit: deposit.value,
+        money: money.value,
+        content: content.value,
+        numberOfFoors: numberOfFoors.value,
+        MLSnumber: MLSnumber.value
+      }
+    });
+
     await saveAddressS({ variables: { id, lat, lng } });
     if (id && onSubmit) {
       setFuckAround(false);
@@ -765,12 +781,46 @@ export default props => {
               {...deposit}
             />
             <SelectBox namevalue={select} onChange={handleChange}>
-              <option value="">유형선택</option>
+              <option value="원룸" required>
+                필수
+              </option>
+              <option value="원룸" required>
+                원룸
+              </option>
+              <option value="투룸" required>
+                투룸
+              </option>
+              <option value="쓰리룸" required>
+                쓰리룸
+              </option>
+              <option value="포룸" required>
+                포룸
+              </option>
+              <option value="주인세대" required>
+                주인세대
+              </option>
+              <option value="아파트" required>
+                아파트
+              </option>
+              <option value="빌라" required>
+                빌라
+              </option>
+              <option value="상가" required>
+                상가
+              </option>
+            </SelectBox>
+            <SelectBox namevalue={select} onChange={handleChange2}>
+              <option value="월세" required>
+                필수
+              </option>
               <option value="월세" required>
                 월세
               </option>
               <option value="전세" required>
                 전세
+              </option>
+              <option value="매매" required>
+                매매
               </option>
             </SelectBox>
             <InputMoney

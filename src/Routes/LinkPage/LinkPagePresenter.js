@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Loader from "../../Components/Loader";
@@ -11,6 +11,8 @@ import Floater from "react-floater";
 import Marker from "../../Components/Marker";
 import GoogleMaps from "../../Components/GoogleMaps";
 import GoogleMapsMain from "../../Components/GoogleMapsMain";
+import Slider, { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -30,6 +32,7 @@ const LogInButtonWrap = styled.div`
 `;
 
 const LogInButton = styled.button`
+  cursor: pointer;
   margin: 10px;
   width: 100%;
   border: 0;
@@ -84,7 +87,36 @@ const SelectType = styled.div`
   color: rgb(169, 193, 232);
 `;
 
+const SearchBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+`;
+const SelectBox = styled.select`
+  height: 35px;
+  width: 80px;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SliderDiv = styled.div`
+  display: flex;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 30%;
+`;
+
 export default ({
+  defaultS,
+  defaultMax,
+  handleChange,
+  handleChange2,
+  selectValue1,
+  selectValue2,
+  select,
+  setSelect,
   setCenter,
   latAndlng,
   places,
@@ -143,30 +175,13 @@ export default ({
       >
         <WrapperS>
           <MarkerIcon>
-            <Marker value={item.money} />
+            <Marker type={item.selectType} value={item.money} />
           </MarkerIcon>
         </WrapperS>
       </Floater>
+      {console.log(item, "link presenter")}
     </MarkerContainer>
   );
-
-  const createMapOptions = maps => {
-    return {
-      panControl: false,
-      mapTypeControl: false,
-      scrollwheel: false,
-      styles: [
-        {
-          stylers: [
-            { saturation: -100 },
-            { gamma: 0.8 },
-            { lightness: 4 },
-            { visibility: "on" }
-          ]
-        }
-      ]
-    };
-  };
 
   return (
     <Wrapper>
@@ -199,6 +214,68 @@ export default ({
       ) : (
         false
       )}
+      <SearchBox>
+        <SelectBox namevalue={select} onChange={handleChange}>
+          <option value="원룸" required>
+            필수
+          </option>
+          <option value="원룸" required>
+            원룸
+          </option>
+          <option value="투룸" required>
+            투룸
+          </option>
+          <option value="쓰리룸" required>
+            쓰리룸
+          </option>
+          <option value="포룸" required>
+            포룸
+          </option>
+          <option value="주인세대" required>
+            주인세대
+          </option>
+          <option value="아파트" required>
+            아파트
+          </option>
+          <option value="빌라" required>
+            빌라
+          </option>
+          <option value="상가" required>
+            상가
+          </option>
+        </SelectBox>
+        <SelectBox namevalue={select} onChange={handleChange2}>
+          <option value="월세" required>
+            필수
+          </option>
+          <option value="월세" required>
+            월세
+          </option>
+          <option value="전세" required>
+            전세
+          </option>
+          <option value="매매" required>
+            매매
+          </option>
+        </SelectBox>
+        <SliderDiv>
+          <Range
+            min={0}
+            max={defaultMax}
+            defaultValue={defaultS}
+            tipFormatter={value => `${value}만원`}
+            marks={{ 20: 20, 40: 40, 1000: `${defaultMax}원` }}
+            step={100}
+          />
+          <Range
+            min={0}
+            max={100}
+            defaultValue={[20, 30]}
+            tipFormatter={value => `${value}만원`}
+            step={5}
+          />
+        </SliderDiv>
+      </SearchBox>
       {!loading && (
         <NewLinkPage
           props={props}

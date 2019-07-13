@@ -198,7 +198,7 @@
   transform: translateY(-50%);
 }
 .inTheMap .image-gallery-left-nav,
-.image-gallery-right-nav {
+.inTheMap .image-gallery-right-nav {
   color: #fff;
   font-size: 2em;
   padding: 50px 15px;
@@ -274,6 +274,13 @@
   cursor: pointer;
   background-position: center;
   height: 130px;
+  width: 100%;
+  border-radius: 0px;
+}
+.inTheMapDetail .image-gallery-slide img {
+  cursor: pointer;
+  background-position: center;
+  height: 230px;
   width: 100%;
   border-radius: 0px;
 }

@@ -60,8 +60,8 @@ const Wrapper = styled.div`
   padding-left: 15px;
   position: relative;
   background-color: #fcfcfc;
-  border-radius: 10px;
-  width: 300px;
+  border-radius: 5px;
+  width: 303px;
   height: 228px;
   text-align: right;
 `;
@@ -88,7 +88,7 @@ const ButtonBottom = styled.div`
   border: none;
   background-color: #aecdec;
   color: #fff;
-  width: 50;
+  width: 98%;
   display: block;
   padding: 7px 0px;
   border-radius: 4px;
@@ -161,7 +161,7 @@ export default ({
         >
           <WrapperS>
             <MarkerIcon>
-              <Marker value={item.money} />
+              <Marker value={item.money} type={item.selectType} />
             </MarkerIcon>
           </WrapperS>
         </Floater>

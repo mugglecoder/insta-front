@@ -23,7 +23,7 @@ const Files = styled.div`
 
 const Subject = styled.div`
   background-color: #ffe4d740;
-  padding: 8px;
+  padding: 5px;
   width: 80px;
   height: 130px;
   overflow-wrap: break-word;
@@ -31,6 +31,7 @@ const Subject = styled.div`
   font-weight: 600;
   font-size: 12px;
   color: #836c80;
+  overflow: scroll;
   text-align: start;
 `;
 const SubColumn = styled.div`
@@ -65,6 +66,10 @@ const Money = styled.span`
   font-size: 14px;
   color: #c87777;
 `;
+
+const Hr = styled.hr`
+  margin-top: 10px;
+`;
 const Content = styled.div`
   padding: 7px;
   width: 100%;
@@ -77,6 +82,7 @@ const Content = styled.div`
 export default (item, setDivide) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
+  console.log(page, "page in parts");
 
   const urls = item.item.files && item.item.files.map(item => item);
   let arrayOfPath = [];
@@ -98,7 +104,7 @@ export default (item, setDivide) => {
   }, {});
 
   const onclick = () => {
-    return props.history.push(`/roomsdetail/${item.item.id}/new/${page}`);
+    return props.history.push(`/roomsdetail/${item.item.id}/new/1`);
   };
 
   const deleteClassS = () => {};
@@ -127,7 +133,7 @@ export default (item, setDivide) => {
           <Deposit>보증금 {item.item.deposit}</Deposit>
           <Money> 월세 {item.item.money}</Money>
         </ContentMain>
-        <hr />
+        <Hr />
         <Content>{item.item.content}</Content>
       </Files>
     </Container>

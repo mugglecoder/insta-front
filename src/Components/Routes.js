@@ -12,13 +12,19 @@ import EditPost from "../Routes/EditPost";
 import WritePost from "../Routes/WritePost";
 import Fullmap from "../Routes/Fullmap";
 import FullmapDivide from "../Routes/FullmapDivide";
+import { withRouter } from "react-router-dom";
 
-const LoggedInRoutes = ({ match }) => (
+const LoggedInRoutes = withRouter((props, { match }) => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new/:page" component={LinkPage} />
-    <Route path="/fullmap" component={Fullmap} />
+    {console.log(props, "in router")}
+    <Route
+      path="/fullmap"
+      render={() => <Redirect to="/fullmap" />}
+      component={Fullmap}
+    />
     <Route
       path="/fullmap/roomsdetail/:id/new/:page"
       component={FullmapDivide}
@@ -30,11 +36,10 @@ const LoggedInRoutes = ({ match }) => (
     <Route path="/uploading" component={Loading} />
     <Route path="/search" component={Search} />
   </Switch>
-);
+));
 
 const LoggedOutRoutes = ({ history }) => (
   <Switch>
-    {console.log(history)}
     <Route exact path="/" component={Auth} />
   </Switch>
 );

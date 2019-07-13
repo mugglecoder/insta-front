@@ -128,7 +128,7 @@ export default ({
         >
           <WrapperS>
             <MarkerIcon>
-              <Marker value={item.money} />
+              <Marker value={item.money} type={item.selectType} />
             </MarkerIcon>
           </WrapperS>
         </Floater>
