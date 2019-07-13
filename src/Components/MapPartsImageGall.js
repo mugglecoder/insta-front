@@ -82,7 +82,6 @@ const Content = styled.div`
 export default (item, setDivide) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
-  console.log(page, "page in parts");
 
   const urls = item.item.files && item.item.files.map(item => item);
   let arrayOfPath = [];

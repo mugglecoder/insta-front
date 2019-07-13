@@ -41,6 +41,7 @@
     "react-script-tag": "^1.1.2",
     "react-scripts": "3.0.1",
     "react-toastify": "^5.1.1",
+    "react-toggle": "^4.0.2",
     "reactjs-popup": "^1.4.1",
     "styled-components": "^4.2.0",
     "styled-jsx": "^3.2.1",

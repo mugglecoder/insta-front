@@ -11,8 +11,8 @@ import Floater from "react-floater";
 import Marker from "../../Components/Marker";
 import GoogleMaps from "../../Components/GoogleMaps";
 import GoogleMapsMain from "../../Components/GoogleMapsMain";
-import Slider, { Range } from "rc-slider";
-import "rc-slider/assets/index.css";
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -89,12 +89,14 @@ const SelectType = styled.div`
 
 const SearchBox = styled.div`
   display: flex;
+  justify-content: flex-start;
+  align-items: center;
   flex-direction: row;
   width: 100%;
 `;
 const SelectBox = styled.select`
   height: 35px;
-  width: 80px;
+  width: 150px;
   font-size: 14px;
   &:focus {
     outline: none;
@@ -102,15 +104,62 @@ const SelectBox = styled.select`
 `;
 
 const SliderDiv = styled.div`
-  display: flex;
-  margin-right: 10px;
   margin-left: 10px;
   width: 30%;
 `;
 
+const ButtonSearch = styled.button`
+  cursor: pointer;
+  margin: 10px;
+  width: 20%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 9px 0px;
+  font-size: 14px;
+`;
+const ButtonSearchB = styled.button`
+  cursor: pointer;
+  margin: 10px;
+  width: 10%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 9px 0px;
+  font-size: 14px;
+`;
+
+const ToggleDetail = styled.div`
+  height: 200px;
+  width: 100%;
+`;
+
+const OptionCheckBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  label {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+`;
+
+const InTheDetailOption = styled.img`
+  width: 80px;
+  height: 80px;
+`;
 export default ({
-  defaultS,
-  defaultMax,
+  isOpen,
+  setActiveClass,
   handleChange,
   handleChange2,
   selectValue1,
@@ -132,7 +181,49 @@ export default ({
   token,
   onClick,
   _previousPage,
-  _nextPage
+  _nextPage,
+  airConditioner,
+  washer,
+  refrigerator,
+  internet,
+  microwave,
+  wifi,
+  bed,
+  desk,
+  induction,
+  gasRange,
+  doorLock,
+  CCTV,
+  pets,
+  elevator,
+  parking,
+  electricHeating,
+  cityGasHeating,
+  nightElectric,
+  wateTax,
+  includingElectricity,
+  cityGasIncluded,
+  airConditionerS,
+  washerS,
+  refrigeratorS,
+  internetS,
+  microwaveS,
+  wifiS,
+  bedS,
+  deskS,
+  inductionS,
+  gasRangeS,
+  doorLockS,
+  CCTVS,
+  petsS,
+  elevatorS,
+  parkingS,
+  electricHeatingS,
+  cityGasHeatingS,
+  nightElectricS,
+  wateTaxS,
+  includingElectricityS,
+  cityGasIncludedS
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -179,7 +270,6 @@ export default ({
           </MarkerIcon>
         </WrapperS>
       </Floater>
-      {console.log(item, "link presenter")}
     </MarkerContainer>
   );
 
@@ -246,7 +336,7 @@ export default ({
         </SelectBox>
         <SelectBox namevalue={select} onChange={handleChange2}>
           <option value="월세" required>
-            필수
+            필수(종류)
           </option>
           <option value="월세" required>
             월세
@@ -258,24 +348,369 @@ export default ({
             매매
           </option>
         </SelectBox>
-        <SliderDiv>
-          <Range
-            min={0}
-            max={defaultMax}
-            defaultValue={defaultS}
-            tipFormatter={value => `${value}만원`}
-            marks={{ 20: 20, 40: 40, 1000: `${defaultMax}원` }}
-            step={100}
-          />
-          <Range
-            min={0}
-            max={100}
-            defaultValue={[20, 30]}
-            tipFormatter={value => `${value}만원`}
-            step={5}
-          />
-        </SliderDiv>
+        {selectValue1 === "default" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="보증금" required>
+              보증금(필수항목 선택하세요)
+            </option>
+          </SelectBox>
+        )}
+        {selectValue1 === "default" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              월세(필수항목 선택하세요)
+            </option>
+          </SelectBox>
+        )}
+        {select === "원룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="보증금" required>
+              보증금(필수항목 선택하세요)
+            </option>
+            <option value="보증금" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "원룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              월세(필수항목 선택하세요)
+            </option>
+            <option value="월세" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "투룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="보증금" required>
+              보증금(필수항목 선택하세요)
+            </option>
+            <option value="보증금" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "투룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              월세(필수항목 선택하세요)
+            </option>
+            <option value="월세" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "쓰리룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="보증금" required>
+              보증금(필수항목 선택하세요)
+            </option>
+            <option value="보증금" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "쓰리룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              월세(필수항목 선택하세요)
+            </option>
+            <option value="월세" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "포룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="보증금" required>
+              보증금(필수항목 선택하세요)
+            </option>
+            <option value="보증금" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "포룸 default2" && (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              월세(필수항목 선택하세요)
+            </option>
+            <option value="월세" required>
+              필수항목 선택하세요
+            </option>
+          </SelectBox>
+        )}
+        {select === "원룸 월세" && (
+          <SelectBox namevalue={select} onChange={"handleChange2"}>
+            <option value="보증금" required>
+              보증금(월세)
+            </option>
+            <option value="상관없음" required>
+              모두보기
+            </option>
+            <option value="100" required>
+              100만원 이하
+            </option>
+            <option value="300" required>
+              100 ~ 300
+            </option>
+            <option value="500" required>
+              300~500
+            </option>
+            <option value="1000" required>
+              500~1000
+            </option>
+            <option value="2000" required>
+              1000~2000
+            </option>
+            <option value="5000" required>
+              2000~5000
+            </option>
+            <option value="5000이상" required>
+              5000이상
+            </option>
+          </SelectBox>
+        )}
+        {select === "원룸 월세" && (
+          <SelectBox namevalue={select} onChange={"handleChange2"}>
+            <option value="월세" required>
+              월새
+            </option>
+            <option value="20" required>
+              20이하
+            </option>
+            <option value="25" required>
+              20~25
+            </option>
+            <option value="30" required>
+              26~30
+            </option>
+            <option value="35" required>
+              31~35
+            </option>
+            <option value="40" required>
+              36~40
+            </option>
+            <option value="50" required>
+              41~50
+            </option>
+            <option value="50이상" required>
+              50만원 이상
+            </option>
+          </SelectBox>
+        )}
+        {select === "원룸 전세" && (
+          <SelectBox namevalue={select} onChange={"handleChange2"}>
+            <option value="보증금" required>
+              전세금
+            </option>
+            <option value="3000만원 이하" required>
+              3000만원 이하
+            </option>
+            <option value="3000~5000" required>
+              3000~5000
+            </option>
+            <option value="매매" required>
+              5000만원 이상
+            </option>
+          </SelectBox>
+        )}
+        <ButtonSearch>검색</ButtonSearch>
+        <ButtonSearchB onClick={setActiveClass}>세부옵션검색</ButtonSearchB>
       </SearchBox>
+      {isOpen ? (
+        <ToggleDetail>
+          <OptionCheckBox>
+            <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
+              <div>
+                에어컨
+                <input
+                  type="checkbox"
+                  name="airConditioner"
+                  checked={airConditioner}
+                  onChange={airConditionerS}
+                />
+              </div>
+            </label>
+            <label>
+              세탁기
+              <input
+                type="checkbox"
+                name="washer"
+                checked={washer}
+                onChange={washerS}
+              />
+            </label>
+            <label>
+              냉장고
+              <input
+                type="checkbox"
+                name="refrigerator"
+                checked={refrigerator}
+                onChange={refrigeratorS}
+              />
+            </label>
+            <label>
+              인터넷
+              <input
+                type="checkbox"
+                name="internet"
+                checked={internet}
+                onChange={internetS}
+              />
+            </label>
+            <label>
+              전자레인지
+              <input
+                type="checkbox"
+                name="microwave"
+                checked={microwave}
+                onChange={microwaveS}
+              />
+            </label>
+
+            <label>
+              wifi
+              <input
+                type="checkbox"
+                name="wifi"
+                checked={wifi}
+                onChange={wifiS}
+              />
+            </label>
+            <label>
+              침대
+              <input type="checkbox" name="bed" checked={bed} onChange={bedS} />
+            </label>
+            <label>
+              책상
+              <input
+                type="checkbox"
+                name="desk"
+                checked={desk}
+                onChange={deskS}
+              />
+            </label>
+            <label>
+              인덕션
+              <input
+                type="checkbox"
+                name="induction"
+                checked={induction}
+                onChange={inductionS}
+              />
+            </label>
+            <label>
+              가스레인지
+              <input
+                type="checkbox"
+                name="gasRange"
+                checked={gasRange}
+                onChange={gasRangeS}
+              />
+            </label>
+            <label>
+              도어락
+              <input
+                type="checkbox"
+                name="doorLock"
+                checked={doorLock}
+                onChange={doorLockS}
+              />
+            </label>
+            <label>
+              CCTV
+              <input
+                type="checkbox"
+                name="CCTV"
+                checked={CCTV}
+                onChange={CCTVS}
+              />
+            </label>
+            <label>
+              애완동물
+              <input
+                type="checkbox"
+                name="pets"
+                checked={pets}
+                onChange={petsS}
+              />
+            </label>
+            <label>
+              엘리베이터
+              <input
+                type="checkbox"
+                name="elevator"
+                checked={elevator}
+                onChange={elevatorS}
+              />
+            </label>
+            <label>
+              주차
+              <input
+                type="checkbox"
+                name="parking"
+                checked={parking}
+                onChange={parkingS}
+              />
+            </label>
+            <label>
+              전기난방
+              <input
+                type="checkbox"
+                name="electricHeating"
+                checked={electricHeating}
+                onChange={electricHeatingS}
+              />
+            </label>
+            <label>
+              도시가스
+              <input
+                type="checkbox"
+                name="cityGasHeating"
+                checked={cityGasHeating}
+                onChange={cityGasHeatingS}
+              />
+            </label>
+            <label>
+              심야전기
+              <input
+                type="checkbox"
+                name="nightElectric"
+                checked={nightElectric}
+                onChange={nightElectricS}
+              />
+            </label>
+
+            <label>
+              전기세포함
+              <input
+                type="checkbox"
+                name="includingElectricity"
+                checked={includingElectricity}
+                onChange={includingElectricityS}
+              />
+            </label>
+            <label>
+              도시가스포함
+              <input
+                type="checkbox"
+                name="cityGasIncluded"
+                checked={cityGasIncluded}
+                onChange={cityGasIncludedS}
+              />
+            </label>
+          </OptionCheckBox>
+        </ToggleDetail>
+      ) : (
+        false
+      )}
       {!loading && (
         <NewLinkPage
           props={props}
