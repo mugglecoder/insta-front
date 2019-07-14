@@ -276,7 +276,12 @@ export default props => {
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue2]);
-  const [imageUploadMulter, setImageUploadMulter] = useState(null);
+  const [imageUploadMulter, setImageUploadMulter] = useState([
+    {
+      original: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`,
+      thumbnail: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`
+    }
+  ]);
   useEffect(
     () =>
       console.log("The value after update 이미지가 들어감", imageUploadMulter),
@@ -632,6 +637,7 @@ export default props => {
       setPlace({ lat: String(latS), lng: String(lngS) });
     } catch (error) {
       console.log(error);
+      setButtonValue("없는 주소입니다");
       return false;
     }
   };
@@ -705,6 +711,7 @@ export default props => {
 
   const onSubmit = async e => {
     e.preventDefault();
+
     const data = new FormData();
 
     for (var x = 0; x < imageUploadMulter.length; x++) {

@@ -40,7 +40,7 @@ const FEED_QUERY = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 6;
+const LINKS_PER_PAGE = 12;
 
 const GETPOST = gql`
   query detailPost($id: String!) {
@@ -117,11 +117,6 @@ export default props => {
   const lat = Number(data && data.detailPost && data.detailPost.places[0].lat);
   const lng = Number(data && data.detailPost && data.detailPost.places[0].lng);
   const forCenter = { lat, lng };
-  if (lat === NaN && lng === NaN && lat === undefined && lng === undefined) {
-    console.log("김광석");
-  } else {
-    console.log("eric");
-  }
 
   const localLoginMutation = useMutation(LOCAL_LOG_IN);
 

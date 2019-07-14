@@ -83,30 +83,58 @@ export default (item, setDivide) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
 
+  ///////////
   const urls = item.item.files && item.item.files.map(item => item);
   let arrayOfPath = [];
   let test = [];
   let path = [];
-  urls.map(item => arrayOfPath.push(item.url));
-  arrayOfPath.map((item, key) => test.push(item));
+  console.log(path, test, "path");
 
-  const s = test.reduce((s, a) => {
-    {
-      for (var i = 0; i < test.lengsh; i++);
-      let get;
-      get = {
-        original: `http://localhost:4000/${a}`,
-        thumbnail: `http://localhost:4000/${a}`
-      };
-      return path.push(get);
-    }
-  }, {});
+  if (item.item.files && item.item.files.length === 0) {
+    /// 임시로 메인에 보일 이미지 주소
+    arrayOfPath.push(`http://localhost:4000/images/preImage/no-image.jpg`);
+    arrayOfPath.map((item, key) => {
+      console.log(item, "inthe arrayofMap");
+      return test.push(item);
+    });
+    const s = test.reduce((s, a) => {
+      {
+        for (var i = 0; i < test.length; i++);
+        let get;
+        get = {
+          original: `${a}`,
+          thumbnail: `${a}`
+        };
+        return path.push(get);
+      }
+    }, {});
+  } else {
+    /////// 이미지 있을때
+
+    item.item.files &&
+      item.item.files.map(item => {
+        return arrayOfPath.push(item.url);
+      });
+    arrayOfPath.map((item, key) => test.push(item));
+
+    const s = test.reduce((s, a) => {
+      {
+        for (var i = 0; i < test.length; i++);
+        let get;
+        get = {
+          original: `http://localhost:4000/${a}`,
+          thumbnail: `http://localhost:4000/${a}`
+        };
+        return path.push(get);
+      }
+    }, {});
+  }
+  //////////
 
   const onclick = () => {
     return props.history.push(`/roomsdetail/${item.item.id}/new/1`);
   };
 
-  const deleteClassS = () => {};
   return (
     <Container>
       <Files>

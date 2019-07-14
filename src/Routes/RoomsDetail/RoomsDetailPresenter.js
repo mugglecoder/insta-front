@@ -154,9 +154,17 @@ const LogInButtonWrap = styled.div`
 `;
 
 const LogInButton = styled.button`
-  margin-bottom: 20px;
-  height: 50px;
-  width: 100px;
+  cursor: pointer;
+  margin: 10px;
+  width: 100%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 9px 0px;
+  font-size: 14px;
 `;
 
 const Container = styled.div`
@@ -244,7 +252,6 @@ const RoomsDetailPresenter = ({
 }) => (
   <Wrapper>
     {loading && <Loader />}
-    {console.log(data.detailPost)}
     {!loading && token && data.detailPost ? (
       <LogInButtonWrap>
         <Link
@@ -284,7 +291,7 @@ const RoomsDetailPresenter = ({
                 data.detailPost.files[0] &&
                 data.detailPost.files[0].url
                   ? `http://localhost:4000/${data.detailPost.files[0].url}`
-                  : "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
+                  : "http://localhost:4000/images/preImage/no-image.jpg"
               }
             />
           </ColumnR>
@@ -370,25 +377,33 @@ const RoomsDetailPresenter = ({
           )}
         </Options>
 
-        <DetailText>
-          <h1>디테일</h1>
-          <hr />
-        </DetailText>
-        <ImageGalleryContainer>
-          <FilesA>
-            <ImageGallery
-              additionalClass={`test`}
-              items={path}
-              showFullscreenButton={false}
-              useBrowserFullscreen={false}
-              showThumbnails={true}
-              showPlayButton={false}
-              showBullets={true}
-              lazyLoad={true}
-              showIndex={false}
-            />
-          </FilesA>
-        </ImageGalleryContainer>
+        {data.detailPost &&
+          data.detailPost.files &&
+          data.detailPost.files[0] &&
+          data.detailPost.files[0] && (
+            <>
+              <DetailText>
+                <h1>디테일</h1>
+                <hr />
+              </DetailText>
+
+              <ImageGalleryContainer>
+                <FilesA>
+                  <ImageGallery
+                    additionalClass={`test`}
+                    items={path}
+                    showFullscreenButton={false}
+                    useBrowserFullscreen={false}
+                    showThumbnails={true}
+                    showPlayButton={false}
+                    showBullets={true}
+                    lazyLoad={true}
+                    showIndex={false}
+                  />
+                </FilesA>
+              </ImageGalleryContainer>
+            </>
+          )}
         <MapText>
           <h1>위치</h1>
           <hr />
@@ -441,24 +456,54 @@ const RoomsDetailPresenter = ({
                 let arrayOfPath = [];
                 let test = [];
                 let path = [];
-                data2.seeFullPost &&
-                  data2.seeFullPost.post[key] &&
-                  data2.seeFullPost.post[key].files.map(item =>
-                    arrayOfPath.push(item.url)
-                  );
-                arrayOfPath.map((item, key) => test.push(item));
+                console.log(path, test, "path");
 
-                const s = test.reduce((s, a) => {
-                  {
-                    for (var i = 0; i < test.lengsh; i++);
-                    let get;
-                    get = {
-                      original: `http://localhost:4000/${a}`,
-                      thumbnail: `http://localhost:4000/${a}`
-                    };
-                    return path.push(get);
-                  }
-                }, {});
+                if (
+                  data2.seeFullPost &&
+                  data2.seeFullPost.post[key] &&
+                  data2.seeFullPost.post[key].files.length === 0
+                ) {
+                  /// 임시로 메인에 보일 이미지 주소
+                  arrayOfPath.push(
+                    `http://localhost:4000/images/preImage/no-image.jpg`
+                  );
+                  arrayOfPath.map((item, key) => {
+                    console.log(item, "inthe arrayofMap");
+                    return test.push(item);
+                  });
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `${a}`,
+                        thumbnail: `${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                } else {
+                  /////// 이미지 있을때
+
+                  data2.seeFullPost &&
+                    data2.seeFullPost.post[key] &&
+                    data2.seeFullPost.post[key].files.map(item => {
+                      return arrayOfPath.push(item.url);
+                    });
+                  arrayOfPath.map((item, key) => test.push(item));
+
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `http://localhost:4000/${a}`,
+                        thumbnail: `http://localhost:4000/${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                }
 
                 const onclick = () =>
                   props.history.push(`/roomsdetail/${item.id}/new/${page}`);

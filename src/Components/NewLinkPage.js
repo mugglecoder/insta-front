@@ -39,30 +39,64 @@ export default ({ props, data, page, _previousPage, _nextPage, loading }) => {
     <Wrapper>
       {data && data.seeFullPost && (
         <Container>
+          {console.log(
+            data && data.seeFullPost && data.seeFullPost.post,
+            "씨풀포스트"
+          )}
           {data &&
             data.seeFullPost &&
             data.seeFullPost.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
-              data.seeFullPost &&
-                data.seeFullPost.post[key] &&
-                data.seeFullPost.post[key].files.map(item =>
-                  arrayOfPath.push(item.url)
-                );
-              arrayOfPath.map((item, key) => test.push(item));
+              console.log(path, test, "path");
 
-              const s = test.reduce((s, a) => {
-                {
-                  for (var i = 0; i < test.lengsh; i++);
-                  let get;
-                  get = {
-                    original: `http://localhost:4000/${a}`,
-                    thumbnail: `http://localhost:4000/${a}`
-                  };
-                  return path.push(get);
-                }
-              }, {});
+              if (
+                data.seeFullPost &&
+                data.seeFullPost.post[key] &&
+                data.seeFullPost.post[key].files.length === 0
+              ) {
+                /// 임시로 메인에 보일 이미지 주소
+                arrayOfPath.push(
+                  `http://localhost:4000/images/preImage/no-image.jpg`
+                );
+                arrayOfPath.map((item, key) => {
+                  console.log(item, "inthe arrayofMap");
+                  return test.push(item);
+                });
+                const s = test.reduce((s, a) => {
+                  {
+                    for (var i = 0; i < test.length; i++);
+                    let get;
+                    get = {
+                      original: `${a}`,
+                      thumbnail: `${a}`
+                    };
+                    return path.push(get);
+                  }
+                }, {});
+              } else {
+                /////// 이미지 있을때
+
+                data.seeFullPost &&
+                  data.seeFullPost.post[key] &&
+                  data.seeFullPost.post[key].files.map(item => {
+                    return arrayOfPath.push(item.url);
+                  });
+                arrayOfPath.map((item, key) => test.push(item));
+
+                const s = test.reduce((s, a) => {
+                  {
+                    for (var i = 0; i < test.length; i++);
+                    let get;
+                    get = {
+                      original: `http://localhost:4000/${a}`,
+                      thumbnail: `http://localhost:4000/${a}`
+                    };
+                    return path.push(get);
+                  }
+                }, {});
+              }
 
               const onclick = () =>
                 props.history.push(`/roomsdetail/${item.id}/new/${page}`);

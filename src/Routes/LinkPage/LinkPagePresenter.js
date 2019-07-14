@@ -95,6 +95,8 @@ const SearchBox = styled.div`
   width: 100%;
 `;
 const SelectBox = styled.select`
+  border: 1px solid #ffbfbf;
+  margin-right: 10px;
   height: 35px;
   width: 150px;
   font-size: 14px;
@@ -111,7 +113,7 @@ const SliderDiv = styled.div`
 const ButtonSearch = styled.button`
   cursor: pointer;
   margin: 10px;
-  width: 20%;
+  width: 10%;
   border: 0;
   border-radius: ${props => props.theme.borderRadius};
   color: white;
@@ -135,8 +137,22 @@ const ButtonSearchB = styled.button`
   font-size: 14px;
 `;
 
+const ButtonSearchInside = styled.button`
+  cursor: pointer;
+  margin: 10px;
+  width: 10%;
+  border: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  color: white;
+  font-weight: 600;
+  background-color: #bae7e2;
+  text-align: center;
+  padding: 9px 0px;
+  font-size: 14px;
+`;
+
 const ToggleDetail = styled.div`
-  height: 200px;
+  height: 100%;
   width: 100%;
 `;
 
@@ -334,20 +350,24 @@ export default ({
             상가
           </option>
         </SelectBox>
-        <SelectBox namevalue={select} onChange={handleChange2}>
-          <option value="월세" required>
-            필수(종류)
-          </option>
-          <option value="월세" required>
-            월세
-          </option>
-          <option value="전세" required>
-            전세
-          </option>
-          <option value="매매" required>
-            매매
-          </option>
-        </SelectBox>
+        {select === "주인세대 default2" ? (
+          false
+        ) : (
+          <SelectBox namevalue={select} onChange={handleChange2}>
+            <option value="월세" required>
+              필수(종류)
+            </option>
+            <option value="월세" required>
+              월세
+            </option>
+            <option value="전세" required>
+              전세
+            </option>
+            <option value="매매" required>
+              매매
+            </option>
+          </SelectBox>
+        )}
         {selectValue1 === "default" && (
           <SelectBox namevalue={select} onChange={handleChange2}>
             <option value="보증금" required>
@@ -518,7 +538,7 @@ export default ({
           </SelectBox>
         )}
         <ButtonSearch>검색</ButtonSearch>
-        <ButtonSearchB onClick={setActiveClass}>세부옵션검색</ButtonSearchB>
+        <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
       </SearchBox>
       {isOpen ? (
         <ToggleDetail>
@@ -539,6 +559,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 세탁기
                 <input
@@ -550,6 +574,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 냉장고
                 <input
@@ -561,6 +589,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 인터넷
                 <input
@@ -571,7 +603,12 @@ export default ({
                 />
               </div>
             </label>
+
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 전자레인지
                 <input
@@ -583,6 +620,11 @@ export default ({
               </div>
             </label>
             <label>
+              {" "}
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 wifi
                 <input
@@ -593,7 +635,12 @@ export default ({
                 />
               </div>
             </label>
+
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 침대
                 <input
@@ -605,6 +652,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 책상
                 <input
@@ -616,6 +667,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 인덕션
                 <input
@@ -627,6 +682,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 가스레인지
                 <input
@@ -638,6 +697,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 도어락
                 <input
@@ -649,6 +712,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 CCTV
                 <input
@@ -660,6 +727,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 애완동물
                 <input
@@ -671,6 +742,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 엘리베이터
                 <input
@@ -682,6 +757,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 주차
                 <input
@@ -693,6 +772,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 전기난방
                 <input
@@ -704,6 +787,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 도시가스
                 <input
@@ -715,6 +802,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 심야전기
                 <input
@@ -727,6 +818,10 @@ export default ({
             </label>
 
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 전기세포함
                 <input
@@ -738,6 +833,10 @@ export default ({
               </div>
             </label>
             <label>
+              <InTheDetailOption
+                src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                alt="air"
+              />
               <div>
                 도시가스포함
                 <input
@@ -749,6 +848,7 @@ export default ({
               </div>
             </label>
           </OptionCheckBox>
+          <ButtonSearchInside onClick={setActiveClass}>찾기</ButtonSearchInside>
         </ToggleDetail>
       ) : (
         false

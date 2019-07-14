@@ -19,7 +19,6 @@ const LoggedInRoutes = withRouter((props, { match }) => (
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new/:page" component={LinkPage} />
-    {console.log(props, "in router")}
     <Route
       path="/fullmap"
       render={() => <Redirect to="/fullmap" />}

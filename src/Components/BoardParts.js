@@ -69,12 +69,10 @@ const Money = styled.span`
   font-size: 16px;
   color: #c87777;
 `;
-const images = [
+const image = [
   {
-    original:
-      "http:/localhost:4000/images/test/1562238886106-경북대원룸_DSC09909.jpg",
-    thumbnail:
-      "http:/localhost:4000/images/test/1562238886106-경북대원룸_DSC09909.jpg"
+    original: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`,
+    thumbnail: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`
   }
 ];
 
