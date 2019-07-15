@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { gql } from "apollo-boost";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
@@ -36,79 +36,7 @@ const FEED_QUERY = gql`
   }
 `;
 
-const SEARCH = gql`
-  query searchRoom(
-    $deposit: Int
-    $deposit2: Int
-    $money: Int
-    $money2: Int
-    $caption: String
-    $content: String
-    $files: [String]
-    $selectType: String
-    $airConditioner: Boolean
-    $washer: Boolean
-    $refrigerator: Boolean
-    $internet: Boolean
-    $microwave: Boolean
-    $wifi: Boolean
-    $bed: Boolean
-    $desk: Boolean
-    $induction: Boolean
-    $gasRange: Boolean
-    $doorLock: Boolean
-    $CCTV: Boolean
-    $pets: Boolean
-    $elevator: Boolean
-    $parking: Boolean
-    $electricHeating: Boolean
-    $cityGasHeating: Boolean
-    $nightElectric: Boolean
-    $wateTax: Boolean
-    $includingElectricity: Boolean
-    $cityGasIncluded: Boolean
-    $numberOfFoors: String
-    $MLSnumber: String
-  ) {
-    searchRoom(
-      deposit: $deposit
-      deposit2: $deposit2
-      money: $money
-      money2: $money2
-      caption: $caption
-      content: $content
-      files: $files
-      selectType: $selectType
-      airConditioner: $airConditioner
-      washer: $washer
-      refrigerator: $refrigerator
-      internet: $internet
-      microwave: $microwave
-      wifi: $wifi
-      bed: $bed
-      desk: $desk
-      induction: $induction
-      gasRange: $gasRange
-      doorLock: $doorLock
-      CCTV: $CCTV
-      pets: $pets
-      elevator: $elevator
-      parking: $parking
-      electricHeating: $electricHeating
-      cityGasHeating: $cityGasHeating
-      nightElectric: $nightElectric
-      wateTax: $wateTax
-      includingElectricity: $includingElectricity
-      cityGasIncluded: $cityGasIncluded
-      numberOfFoors: $numberOfFoors
-      MLSnumber: $MLSnumber
-    ) {
-      id
-    }
-  }
-`;
-
-const LINKS_PER_PAGE = 9;
+const LINKS_PER_PAGE = 12;
 
 export default props => {
   ///체크박스 스테이트
@@ -503,45 +431,11 @@ export default props => {
 
   const searching = e => {
     e.preventDefault();
-    props.history.push(`new/search?deposit=${deposit}&deposit2=${deposit2}
-    &money=${money}&money2=${money2}&selectType=${select}&`);
   };
 
   ////////////////////
   //검색하는 데이터 쿼리
-  const { data: searchData } = useQuery(SEARCH, {
-    variables: {
-      deposit,
-      deposit2,
-      money,
-      money2,
-      selectType: select,
-      airConditioner,
-      washer,
-      refrigerator,
-      internet,
-      microwave,
-      wifi,
-      bed,
-      desk,
-      induction,
-      gasRange,
-      doorLock,
-      CCTV,
-      pets,
-      elevator,
-      parking,
-      electricHeating,
-      cityGasHeating,
-      nightElectric,
-      wateTax,
-      includingElectricity,
-      cityGasIncluded
-      // numberOfFoors,
-      //  MLSnumber
-    }
-  });
-  console.log(searchData, "서치드데이터");
+
   //주소를 가져온다
   const latAndlng =
     data && data.seeFullPost && data.seeFullPost.post.map(item => item);
@@ -617,6 +511,10 @@ export default props => {
       setSelectValue3={setSelectValue3}
       setSelectValue4={setSelectValue4}
       searching={searching}
+      deposit={deposit}
+      deposit2={deposit2}
+      money={money}
+      money2={money2}
     />
   );
 };

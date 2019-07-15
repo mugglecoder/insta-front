@@ -39,10 +39,6 @@ export default ({ props, data, page, _previousPage, _nextPage, loading }) => {
     <Wrapper>
       {data && data.seeFullPost && (
         <Container>
-          {console.log(
-            data && data.seeFullPost && data.seeFullPost.post,
-            "씨풀포스트"
-          )}
           {data &&
             data.seeFullPost &&
             data.seeFullPost.post.map((item, key) => {

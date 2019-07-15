@@ -253,7 +253,11 @@ export default ({
   setInputValue,
   setSelectValue3,
   setSelectValue4,
-  searching
+  searching,
+  deposit,
+  deposit2,
+  money,
+  money2
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -350,14 +354,6 @@ export default ({
       return { ...provided, opacity, transition, top };
     }
   };
-  const options = [
-    {
-      value: "choㄴㅇㄹㄴㅇㅁㄹㅇㄴcolate",
-      label: "Chocㄴㅁㅇㄹㄴㅇㅁㄹolate"
-    },
-    { value: "straㄴㅇㄹㄴㅁㅇㄹwberry", label: "Strawbㄴㅇㅁㄹㄴㅇㄹerry" },
-    { value: "vanㄴㅇㄹㅁㅇㄹilla", label: "Vanilㄴㅇㄹㅁㄴㅇㄹㄴㅇla" }
-  ];
 
   const menuOption = [
     {
@@ -657,7 +653,41 @@ export default ({
         )}
 
         <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
-        <ButtonSearch onClick={searching}>검색</ButtonSearch>
+        <Link
+          to={{
+            pathname: "/new/search",
+            state: {
+              depositS: deposit,
+              deposit2S: deposit2,
+              moneyS: money,
+              money2S: money2,
+              selectTypeS: select,
+              airConditionerS: airConditioner,
+              washerS: washer,
+              refrigeratorS: refrigerator,
+              internetS: internet,
+              microwaveS: microwave,
+              wifiS: wifi,
+              bedS: bed,
+              deskS: desk,
+              inductionS: induction,
+              gasRangeS: gasRange,
+              doorLockS: doorLock,
+              CCTVS: CCTV,
+              petsS: pets,
+              elevatorS: elevator,
+              parkingS: parking,
+              electricHeatingS: electricHeating,
+              cityGasHeatingS: cityGasHeating,
+              nightElectricS: nightElectric,
+              wateTaxS: wateTax,
+              includingElectricityS: includingElectricity,
+              cityGasIncludedS: cityGasIncluded
+            }
+          }}
+        >
+          <ButtonSearch>검색</ButtonSearch>
+        </Link>
       </SearchBox>
       {isOpen ? (
         <ToggleDetail>
