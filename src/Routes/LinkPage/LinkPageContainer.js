@@ -285,12 +285,12 @@ export default props => {
   //셀렉트 박스
   const [select, setSelect] = useState("");
   console.log(select, "select");
-  const [selectValue1, setSelectValue1] = useState("default");
+  const [selectValue1, setSelectValue1] = useState("");
   console.log(selectValue1, "selectValue1");
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue1]);
-  const [selectValue2, setSelectValue2] = useState("default2");
+  const [selectValue2, setSelectValue2] = useState("");
   console.log(selectValue2, " selectValue2");
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
@@ -300,14 +300,14 @@ export default props => {
   console.log(select2, "select2");
 
   //보증금 선택사항
-  const [selectValue3, setSelectValue3] = useState("default");
+  const [selectValue3, setSelectValue3] = useState("");
   console.log(selectValue3, "selectValue3");
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
   }, [selectValue3]);
 
   //월세선택사항
-  const [selectValue4, setSelectValue4] = useState("default2");
+  const [selectValue4, setSelectValue4] = useState("");
   console.log(selectValue4, " selectValue4");
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);

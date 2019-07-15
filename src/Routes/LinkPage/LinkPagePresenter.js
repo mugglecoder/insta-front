@@ -597,7 +597,7 @@ export default ({
           options={menuOption2}
           onChange={getValue2}
         />
-        {selectValue1 === "default" && (
+        {selectValue1 === "" && (
           <CreatableSelect
             defaultValue={menuOption3[0]}
             styles={customStyles}
@@ -605,7 +605,7 @@ export default ({
             onChange={getValue1}
           />
         )}
-        {selectValue1 === "default" && (
+        {selectValue1 === "" && (
           <CreatableSelect
             defaultValue={menuOption4[0]}
             styles={customStyles}
@@ -613,14 +613,14 @@ export default ({
             onChange={getValue1}
           />
         )}
-        {select === "원룸 default2" && (
+        {select === "원룸 " && (
           <CreatableSelect
             defaultValue={monthDeposit[0]}
             styles={customStyles}
             options={monthDeposit}
           />
         )}
-        {select === "원룸 default2" && (
+        {select === "원룸 " && (
           <CreatableSelect
             defaultValue={monthMoney[0]}
             styles={customStyles}
@@ -657,32 +657,32 @@ export default ({
           to={{
             pathname: "/new/search",
             state: {
-              depositS: deposit,
-              deposit2S: deposit2,
-              moneyS: money,
-              money2S: money2,
-              selectTypeS: select,
-              airConditionerS: airConditioner,
-              washerS: washer,
-              refrigeratorS: refrigerator,
-              internetS: internet,
-              microwaveS: microwave,
-              wifiS: wifi,
-              bedS: bed,
-              deskS: desk,
-              inductionS: induction,
-              gasRangeS: gasRange,
-              doorLockS: doorLock,
-              CCTVS: CCTV,
-              petsS: pets,
-              elevatorS: elevator,
-              parkingS: parking,
-              electricHeatingS: electricHeating,
-              cityGasHeatingS: cityGasHeating,
-              nightElectricS: nightElectric,
-              wateTaxS: wateTax,
-              includingElectricityS: includingElectricity,
-              cityGasIncludedS: cityGasIncluded
+              depositSS: deposit,
+              deposit2SS: deposit2,
+              moneySS: money,
+              money2SS: money2,
+              selectTypeSS: select,
+              airConditionerSS: airConditioner,
+              washerSS: washer,
+              refrigeratorSS: refrigerator,
+              internetSS: internet,
+              microwaveSS: microwave,
+              wifiSS: wifi,
+              bedSS: bed,
+              deskSS: desk,
+              inductionSS: induction,
+              gasRangeSS: gasRange,
+              doorLockSS: doorLock,
+              CCTVSS: CCTV,
+              petsSS: pets,
+              elevatorSS: elevator,
+              parkingSS: parking,
+              electricHeatingSS: electricHeating,
+              cityGasHeatingSS: cityGasHeating,
+              nightElectricSS: nightElectric,
+              wateTaxSS: wateTax,
+              includingElectricitySS: includingElectricity,
+              cityGasIncludedSS: cityGasIncluded
             }
           }}
         >
