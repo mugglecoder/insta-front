@@ -36,6 +36,78 @@ const FEED_QUERY = gql`
   }
 `;
 
+const SEARCH = gql`
+  query searchRoom(
+    $deposit: Int
+    $deposit2: Int
+    $money: Int
+    $money2: Int
+    $caption: String
+    $content: String
+    $files: [String]
+    $selectType: String
+    $airConditioner: Boolean
+    $washer: Boolean
+    $refrigerator: Boolean
+    $internet: Boolean
+    $microwave: Boolean
+    $wifi: Boolean
+    $bed: Boolean
+    $desk: Boolean
+    $induction: Boolean
+    $gasRange: Boolean
+    $doorLock: Boolean
+    $CCTV: Boolean
+    $pets: Boolean
+    $elevator: Boolean
+    $parking: Boolean
+    $electricHeating: Boolean
+    $cityGasHeating: Boolean
+    $nightElectric: Boolean
+    $wateTax: Boolean
+    $includingElectricity: Boolean
+    $cityGasIncluded: Boolean
+    $numberOfFoors: String
+    $MLSnumber: String
+  ) {
+    searchRoom(
+      deposit: $deposit
+      deposit2: $deposit2
+      money: $money
+      money2: $money2
+      caption: $caption
+      content: $content
+      files: $files
+      selectType: $selectType
+      airConditioner: $airConditioner
+      washer: $washer
+      refrigerator: $refrigerator
+      internet: $internet
+      microwave: $microwave
+      wifi: $wifi
+      bed: $bed
+      desk: $desk
+      induction: $induction
+      gasRange: $gasRange
+      doorLock: $doorLock
+      CCTV: $CCTV
+      pets: $pets
+      elevator: $elevator
+      parking: $parking
+      electricHeating: $electricHeating
+      cityGasHeating: $cityGasHeating
+      nightElectric: $nightElectric
+      wateTax: $wateTax
+      includingElectricity: $includingElectricity
+      cityGasIncluded: $cityGasIncluded
+      numberOfFoors: $numberOfFoors
+      MLSnumber: $MLSnumber
+    ) {
+      id
+    }
+  }
+`;
+
 const LINKS_PER_PAGE = 9;
 
 export default props => {
@@ -286,13 +358,32 @@ export default props => {
   const [select, setSelect] = useState("");
   console.log(select, "select");
   const [selectValue1, setSelectValue1] = useState("default");
+  console.log(selectValue1, "selectValue1");
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue1]);
   const [selectValue2, setSelectValue2] = useState("default2");
+  console.log(selectValue2, " selectValue2");
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue2]);
+  //보증금과 월세에 대한 저장
+  const [select2, setSelect2] = useState([]);
+  console.log(select2, "select2");
+
+  //보증금 선택사항
+  const [selectValue3, setSelectValue3] = useState("default");
+  console.log(selectValue3, "selectValue3");
+  useEffect(() => {
+    setSelect2(`${selectValue3} ${selectValue4}`);
+  }, [selectValue3]);
+
+  //월세선택사항
+  const [selectValue4, setSelectValue4] = useState("default2");
+  console.log(selectValue4, " selectValue4");
+  useEffect(() => {
+    setSelect2(`${selectValue3} ${selectValue4}`);
+  }, [selectValue4]);
 
   const handleChange = async e => {
     setSelectValue1(e.target.value);
@@ -401,6 +492,56 @@ export default props => {
       return setSet2(true);
     }
   };
+
+  const deposit = selectValue3[0];
+  const deposit2 = selectValue3[1];
+
+  const money = selectValue4[0];
+  const money2 = selectValue4[1];
+
+  console.log(deposit, deposit2, money, money2, "잘 넘어오는지 확인하기");
+
+  const searching = e => {
+    e.preventDefault();
+    props.history.push(`new/search?deposit=${deposit}&deposit2=${deposit2}
+    &money=${money}&money2=${money2}&selectType=${select}&`);
+  };
+
+  ////////////////////
+  //검색하는 데이터 쿼리
+  const { data: searchData } = useQuery(SEARCH, {
+    variables: {
+      deposit,
+      deposit2,
+      money,
+      money2,
+      selectType: select,
+      airConditioner,
+      washer,
+      refrigerator,
+      internet,
+      microwave,
+      wifi,
+      bed,
+      desk,
+      induction,
+      gasRange,
+      doorLock,
+      CCTV,
+      pets,
+      elevator,
+      parking,
+      electricHeating,
+      cityGasHeating,
+      nightElectric,
+      wateTax,
+      includingElectricity,
+      cityGasIncluded
+      // numberOfFoors,
+      //  MLSnumber
+    }
+  });
+  console.log(searchData, "서치드데이터");
   //주소를 가져온다
   const latAndlng =
     data && data.seeFullPost && data.seeFullPost.post.map(item => item);
@@ -412,6 +553,8 @@ export default props => {
       handleChange2={handleChange2}
       selectValue1={selectValue1}
       selectValue2={selectValue2}
+      setSelectValue1={setSelectValue1}
+      setSelectValue2={setSelectValue2}
       select={select}
       setSelect={setSelect}
       setCenter={setCenter}
@@ -471,6 +614,9 @@ export default props => {
       wateTaxS={wateTaxS}
       includingElectricityS={includingElectricityS}
       cityGasIncludedS={cityGasIncludedS}
+      setSelectValue3={setSelectValue3}
+      setSelectValue4={setSelectValue4}
+      searching={searching}
     />
   );
 };

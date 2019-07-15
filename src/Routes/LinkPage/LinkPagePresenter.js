@@ -13,6 +13,8 @@ import GoogleMaps from "../../Components/GoogleMaps";
 import GoogleMapsMain from "../../Components/GoogleMapsMain";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -169,6 +171,12 @@ const OptionCheckBox = styled.div`
   }
 `;
 
+const DivSeparator = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const InTheDetailOption = styled.img`
   width: 80px;
   height: 80px;
@@ -178,6 +186,8 @@ export default ({
   setActiveClass,
   handleChange,
   handleChange2,
+  setSelectValue1,
+  setSelectValue2,
   selectValue1,
   selectValue2,
   select,
@@ -239,7 +249,11 @@ export default ({
   nightElectricS,
   wateTaxS,
   includingElectricityS,
-  cityGasIncludedS
+  cityGasIncludedS,
+  setInputValue,
+  setSelectValue3,
+  setSelectValue4,
+  searching
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -289,7 +303,259 @@ export default ({
     </MarkerContainer>
   );
 
+  //인풋박스 로직 시작
+
+  //매물 종류에 대한 저장
+  const getValue1 = a => setSelectValue1(a.value);
+  const getValue2 = a => setSelectValue2(a.value);
+
+  /////// 보증금과 월세 입력 저장소
+  const getValue3 = a => setSelectValue3(a.value);
+  const getValue4 = a => setSelectValue4(a.value);
+
+  //인풋박스 커스텀 스타일
+  const customStyles = {
+    indicatorSeparator: base => ({
+      ...base,
+      display: "none"
+    }),
+    dropdownIndicator: base => {
+      return { ...base, display: "none" };
+    },
+    container: (base, state) => ({
+      ...base,
+      opacity: state.isDisabled ? ".5" : "1",
+      backgroundColor: "transparent",
+      zIndex: "999",
+      marginLeft: "10px;"
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: "1px dotted pink",
+      zIndex: 5
+    }),
+    control: () => ({
+      borderRadius: "5px",
+      border: "1px solid pink",
+      zIndex: 5,
+      height: "35px;",
+      // none of react-select's styles are passed to <Control />
+      width: "160px;"
+    }),
+    singleValue: (provided, state) => {
+      const top = "60%";
+      const opacity = state.theme ? 0.5 : 1;
+      const transition = "opacity 300ms";
+
+      return { ...provided, opacity, transition, top };
+    }
+  };
+  const options = [
+    {
+      value: "choㄴㅇㄹㄴㅇㅁㄹㅇㄴcolate",
+      label: "Chocㄴㅁㅇㄹㄴㅇㅁㄹolate"
+    },
+    { value: "straㄴㅇㄹㄴㅁㅇㄹwberry", label: "Strawbㄴㅇㅁㄹㄴㅇㄹerry" },
+    { value: "vanㄴㅇㄹㅁㅇㄹilla", label: "Vanilㄴㅇㄹㅁㄴㅇㄹㄴㅇla" }
+  ];
+
+  const menuOption = [
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div>종류(필수)</div>
+          <div> ▼</div>
+        </DivSeparator>
+      )
+    },
+    {
+      value: "원룸",
+      label: "원룸"
+    },
+    {
+      value: "투룸",
+      label: "투룸"
+    },
+    {
+      value: "쓰리룸",
+      label: "쓰리룸"
+    },
+    {
+      value: "포룸",
+      label: "포룸"
+    },
+    {
+      value: "주인세대",
+      label: "주인세대"
+    },
+    {
+      value: "아파트",
+      label: "아파트"
+    },
+    {
+      value: "빌라",
+      label: "빌라"
+    }
+  ];
+
+  const menuOption2 = [
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div>선택(필수)</div>
+          <div> ▼</div>
+        </DivSeparator>
+      )
+    },
+    {
+      value: "월세",
+      label: "월세"
+    },
+    {
+      value: "전세",
+      label: "전세"
+    },
+    {
+      value: "매매",
+      label: "매매"
+    }
+  ];
+  const menuOption3 = [
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div>보증금 입력</div>
+        </DivSeparator>
+      )
+    }
+  ];
+  const menuOption4 = [
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div>월세 입력</div>
+        </DivSeparator>
+      )
+    }
+  ];
+
+  //원룸 보증금
+  const monthDeposit = [
+    {
+      value: "보증금",
+      label: "보증금(월세)"
+    },
+    {
+      value: [0, 100],
+      label: "100만원 이하"
+    },
+    {
+      value: [100, 300],
+      label: "100 - 300"
+    },
+    {
+      value: [300, 500],
+      label: "300 - 500"
+    },
+    {
+      value: [500, 1000],
+      label: "500 - 1000"
+    },
+    {
+      value: [500, 1000],
+      label: "500 - 1000"
+    },
+    {
+      value: [1000, 2000],
+      label: "1000 - 2000"
+    },
+    {
+      value: [2000, 5000],
+      label: "2000 - 5000"
+    },
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div onClick={setActiveClass}>보증금 직접입력</div>
+        </DivSeparator>
+      )
+    }
+  ];
+  //원룸 월세
+  const monthMoney = [
+    {
+      value: "월세",
+      label: "월세(월세)"
+    },
+    {
+      value: [0, 20],
+      label: "20만원 이하"
+    },
+    {
+      value: [21, 25],
+      label: "21 - 25"
+    },
+    {
+      value: [26, 30],
+      label: "26 - 30"
+    },
+    {
+      value: [31, 35],
+      label: "31 - 35"
+    },
+    {
+      value: [36, 40],
+      label: "36 - 40"
+    },
+    {
+      value: [41, 45],
+      label: "41 - 45"
+    },
+    {
+      value: [46, 50],
+      label: "46 - 50"
+    },
+    {
+      value: [51, 55],
+      label: "51 - 55"
+    },
+    {
+      value: [56, 60],
+      label: "56 - 60"
+    },
+    {
+      value: "직접입력",
+      label: (
+        <DivSeparator>
+          <div onClick={setActiveClass}>월세 직접입력</div>
+        </DivSeparator>
+      )
+    }
+  ];
+
+  //원룸 전세
+  const leaseMoney = [
+    {
+      value: "전세",
+      label: "전세금"
+    },
+    {
+      value: "매물종류",
+      label: (
+        <DivSeparator>
+          <div onClick={setActiveClass}>전세금 직접입력</div>
+        </DivSeparator>
+      )
+    }
+  ];
+
   return (
+    ////////////////////////////////////////////////////////////////////
     <Wrapper>
       {loading && <Loader />}
       {!loading && (
@@ -321,224 +587,77 @@ export default ({
         false
       )}
       <SearchBox>
-        <SelectBox namevalue={select} onChange={handleChange}>
-          <option value="원룸" required>
-            필수
-          </option>
-          <option value="원룸" required>
-            원룸
-          </option>
-          <option value="투룸" required>
-            투룸
-          </option>
-          <option value="쓰리룸" required>
-            쓰리룸
-          </option>
-          <option value="포룸" required>
-            포룸
-          </option>
-          <option value="주인세대" required>
-            주인세대
-          </option>
-          <option value="아파트" required>
-            아파트
-          </option>
-          <option value="빌라" required>
-            빌라
-          </option>
-          <option value="상가" required>
-            상가
-          </option>
-        </SelectBox>
-        {select === "주인세대 default2" ? (
-          false
-        ) : (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              필수(종류)
-            </option>
-            <option value="월세" required>
-              월세
-            </option>
-            <option value="전세" required>
-              전세
-            </option>
-            <option value="매매" required>
-              매매
-            </option>
-          </SelectBox>
+        <CreatableSelect
+          arrowRenderer={false}
+          defaultValue={menuOption[0]}
+          styles={customStyles}
+          options={menuOption}
+          onChange={getValue1}
+        />
+        <CreatableSelect
+          arrowRenderer={false}
+          defaultValue={menuOption2[0]}
+          styles={customStyles}
+          options={menuOption2}
+          onChange={getValue2}
+        />
+        {selectValue1 === "default" && (
+          <CreatableSelect
+            defaultValue={menuOption3[0]}
+            styles={customStyles}
+            options={menuOption3}
+            onChange={getValue1}
+          />
         )}
         {selectValue1 === "default" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="보증금" required>
-              보증금(필수항목 선택하세요)
-            </option>
-          </SelectBox>
-        )}
-        {selectValue1 === "default" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              월세(필수항목 선택하세요)
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={menuOption4[0]}
+            styles={customStyles}
+            options={menuOption4}
+            onChange={getValue1}
+          />
         )}
         {select === "원룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="보증금" required>
-              보증금(필수항목 선택하세요)
-            </option>
-            <option value="보증금" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={monthDeposit[0]}
+            styles={customStyles}
+            options={monthDeposit}
+          />
         )}
         {select === "원룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              월세(필수항목 선택하세요)
-            </option>
-            <option value="월세" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "투룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="보증금" required>
-              보증금(필수항목 선택하세요)
-            </option>
-            <option value="보증금" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "투룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              월세(필수항목 선택하세요)
-            </option>
-            <option value="월세" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "쓰리룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="보증금" required>
-              보증금(필수항목 선택하세요)
-            </option>
-            <option value="보증금" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "쓰리룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              월세(필수항목 선택하세요)
-            </option>
-            <option value="월세" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "포룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="보증금" required>
-              보증금(필수항목 선택하세요)
-            </option>
-            <option value="보증금" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
-        )}
-        {select === "포룸 default2" && (
-          <SelectBox namevalue={select} onChange={handleChange2}>
-            <option value="월세" required>
-              월세(필수항목 선택하세요)
-            </option>
-            <option value="월세" required>
-              필수항목 선택하세요
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={monthMoney[0]}
+            styles={customStyles}
+            options={monthMoney}
+          />
         )}
         {select === "원룸 월세" && (
-          <SelectBox namevalue={select} onChange={"handleChange2"}>
-            <option value="보증금" required>
-              보증금(월세)
-            </option>
-            <option value="상관없음" required>
-              모두보기
-            </option>
-            <option value="100" required>
-              100만원 이하
-            </option>
-            <option value="300" required>
-              100 ~ 300
-            </option>
-            <option value="500" required>
-              300~500
-            </option>
-            <option value="1000" required>
-              500~1000
-            </option>
-            <option value="2000" required>
-              1000~2000
-            </option>
-            <option value="5000" required>
-              2000~5000
-            </option>
-            <option value="5000이상" required>
-              5000이상
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={monthDeposit[0]}
+            styles={customStyles}
+            options={monthDeposit}
+            onChange={getValue3}
+          />
         )}
         {select === "원룸 월세" && (
-          <SelectBox namevalue={select} onChange={"handleChange2"}>
-            <option value="월세" required>
-              월새
-            </option>
-            <option value="20" required>
-              20이하
-            </option>
-            <option value="25" required>
-              20~25
-            </option>
-            <option value="30" required>
-              26~30
-            </option>
-            <option value="35" required>
-              31~35
-            </option>
-            <option value="40" required>
-              36~40
-            </option>
-            <option value="50" required>
-              41~50
-            </option>
-            <option value="50이상" required>
-              50만원 이상
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={monthMoney[0]}
+            styles={customStyles}
+            options={monthMoney}
+            onChange={getValue4}
+          />
         )}
         {select === "원룸 전세" && (
-          <SelectBox namevalue={select} onChange={"handleChange2"}>
-            <option value="보증금" required>
-              전세금
-            </option>
-            <option value="3000만원 이하" required>
-              3000만원 이하
-            </option>
-            <option value="3000~5000" required>
-              3000~5000
-            </option>
-            <option value="매매" required>
-              5000만원 이상
-            </option>
-          </SelectBox>
+          <CreatableSelect
+            defaultValue={leaseMoney[0]}
+            styles={customStyles}
+            options={leaseMoney}
+            onChange={getValue3}
+          />
         )}
-        <ButtonSearch>검색</ButtonSearch>
+
         <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
+        <ButtonSearch onClick={searching}>검색</ButtonSearch>
       </SearchBox>
       {isOpen ? (
         <ToggleDetail>

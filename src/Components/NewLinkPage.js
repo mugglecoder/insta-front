@@ -49,7 +49,6 @@ export default ({ props, data, page, _previousPage, _nextPage, loading }) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
-              console.log(path, test, "path");
 
               if (
                 data.seeFullPost &&
@@ -61,7 +60,6 @@ export default ({ props, data, page, _previousPage, _nextPage, loading }) => {
                   `http://localhost:4000/images/preImage/no-image.jpg`
                 );
                 arrayOfPath.map((item, key) => {
-                  console.log(item, "inthe arrayofMap");
                   return test.push(item);
                 });
                 const s = test.reduce((s, a) => {

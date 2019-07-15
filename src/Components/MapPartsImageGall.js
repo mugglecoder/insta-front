@@ -88,13 +88,11 @@ export default (item, setDivide) => {
   let arrayOfPath = [];
   let test = [];
   let path = [];
-  console.log(path, test, "path");
 
   if (item.item.files && item.item.files.length === 0) {
     /// 임시로 메인에 보일 이미지 주소
     arrayOfPath.push(`http://localhost:4000/images/preImage/no-image.jpg`);
     arrayOfPath.map((item, key) => {
-      console.log(item, "inthe arrayofMap");
       return test.push(item);
     });
     const s = test.reduce((s, a) => {
