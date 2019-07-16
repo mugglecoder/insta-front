@@ -112,18 +112,20 @@ const SliderDiv = styled.div`
   width: 30%;
 `;
 
-const ButtonSearch = styled.button`
+const ButtonSearch = styled.div`
   cursor: pointer;
   margin: 10px;
-  width: 10%;
+  width: 72px;
   border: 0;
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: 5px;
   color: white;
+  height: 36px;
   font-weight: 600;
   background-color: #bae7e2;
   text-align: center;
-  padding: 9px 0px;
+  padding: 11px 6px;
   font-size: 14px;
+  border-radius: ${props => props.theme.borderRadius};
 `;
 const ButtonSearchB = styled.button`
   cursor: pointer;
@@ -257,7 +259,8 @@ export default ({
   deposit,
   deposit2,
   money,
-  money2
+  money2,
+  allData
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;

@@ -112,18 +112,21 @@ const SliderDiv = styled.div`
   width: 30%;
 `;
 
-const ButtonSearch = styled.button`
+const ButtonSearch = styled.div`
   cursor: pointer;
   margin: 10px;
-  width: 10%;
+  width: 72px;
   border: 0;
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: 5px;
   color: white;
+  height: 36px;
   font-weight: 600;
   background-color: #bae7e2;
   text-align: center;
-  padding: 9px 0px;
+  padding: 11px 6px;
   font-size: 14px;
+  border-radius: 4px;
+  border-radius: ${props => props.theme.borderRadius};
 `;
 const ButtonSearchB = styled.button`
   cursor: pointer;
@@ -257,7 +260,8 @@ export default ({
   deposit,
   deposit2,
   money,
-  money2
+  money2,
+  searchData
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -563,10 +567,10 @@ export default ({
           setCenter={setCenter}
         />
       )}
-      {!loading && token && data.seeFullPost ? (
+      {!loading && token && data.searchRoom ? (
         <LogInButtonWrap>
           <Link
-            key={data.seeFullPost.id}
+            key={data.searchRoom.id}
             to={{
               pathname: `/writeboard/${dataOfMe &&
                 dataOfMe.me &&
@@ -1002,15 +1006,17 @@ export default ({
       ) : (
         false
       )}
-      {!loading && (
+      {!loading && searchData.searchRoom ? (
         <NewLinkPage
           props={props}
-          data={data}
+          searchData={searchData}
           loading={loading}
           page={page}
           _previousPage={_previousPage}
           _nextPage={_nextPage}
         />
+      ) : (
+        false
       )}
     </Wrapper>
   );

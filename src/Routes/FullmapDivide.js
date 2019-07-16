@@ -196,7 +196,6 @@ export default props => {
 
   const lat = parseFloat(data && data.places && data.places[0].lat);
   const lng = parseFloat(data && data.places && data.places[0].lng);
-  console.log(window, "windowssss");
   return (
     <DetailContainer>
       <ContentWrap>
@@ -216,7 +215,7 @@ export default props => {
               src={
                 data && data.files && data.files[0] && data.files[0].url
                   ? `http://localhost:4000/${data.files[0].url}`
-                  : "http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg"
+                  : "http://localhost:4000/images/preImage/no-image.jpg"
               }
             />
           </ColumnR>
@@ -233,7 +232,6 @@ export default props => {
           <hr />
         </OptionText>
         <Options>
-          {console.log(data, "datacheck")}
           {data && data.airConditioner === true && (
             <Option>airConditioner</Option>
           )}

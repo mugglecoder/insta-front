@@ -5,38 +5,6 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
-const FEED_QUERY = gql`
-  query seeFullPost($first: Int, $skip: Int) {
-    seeFullPost(first: $first, skip: $skip) {
-      post {
-        id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        selectType
-        deposit
-        money
-        count
-        selectType
-        content
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-      }
-      count
-    }
-  }
-`;
-
 const SEARCH = gql`
   query searchRoom(
     $deposit: Int
@@ -105,6 +73,49 @@ const SEARCH = gql`
       MLSnumber: $MLSnumber
     ) {
       id
+      caption
+      places {
+        id
+        lat
+        lng
+      }
+      count
+      content
+      airConditioner
+      washer
+      refrigerator
+      internet
+      microwave
+      wifi
+      bed
+      desk
+      induction
+      gasRange
+      doorLock
+      CCTV
+      pets
+      elevator
+      parking
+      electricHeating
+      cityGasHeating
+      nightElectric
+      wateTax
+      includingElectricity
+      cityGasIncluded
+      numberOfFoors
+      MLSnumber
+      deposit
+      money
+      selectType
+      createdAt
+      user {
+        id
+        username
+      }
+      files {
+        id
+        url
+      }
     }
   }
 `;
@@ -146,7 +157,7 @@ export default withRouter(props => {
   } = props;
   console.log(props, "re match");
 
-  const { data: searchData } = useQuery(SEARCH, {
+  const { data: searchData, loading } = useQuery(SEARCH, {
     variables: {
       deposit: depositSS,
       deposit2: deposit2SS,
@@ -178,6 +189,7 @@ export default withRouter(props => {
       //  MLSnumber
     }
   });
+  console.log(searchData, "써치드 데이터");
   ///체크박스 스테이트
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
@@ -495,9 +507,6 @@ export default withRouter(props => {
 
   let herrrr = props.history;
   const token = localStorage.getItem("token");
-  const { data, loading } = useQuery(FEED_QUERY, {
-    variables: { first, skip }
-  });
 
   const onClick = props => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
@@ -536,7 +545,9 @@ export default withRouter(props => {
 
     if (
       page <=
-      (data && data.seeFullPost && data.seeFullPost.count / LINKS_PER_PAGE)
+      (searchData &&
+        searchData.searchRoom &&
+        searchData.searchRoom.count / LINKS_PER_PAGE)
     ) {
       const nextPage = page + 1;
 
@@ -577,7 +588,12 @@ export default withRouter(props => {
 
   //주소를 가져온다
   const latAndlng =
-    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
+    searchData &&
+    searchData.searchRoom &&
+    searchData.searchRoom.map(item => item);
+
+  console.log(searchData, "searchData");
+
   return (
     <SearchPresenter
       isOpen={isOpen}
@@ -597,7 +613,8 @@ export default withRouter(props => {
       props={props}
       page={page}
       loading={loading}
-      data={data}
+      data={searchData}
+      searchData={searchData}
       token={token}
       dataOfMe={dataOfMe}
       skip={skip}

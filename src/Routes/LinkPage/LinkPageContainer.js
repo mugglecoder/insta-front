@@ -359,6 +359,7 @@ export default props => {
   const { data, loading } = useQuery(FEED_QUERY, {
     variables: { first, skip }
   });
+  const { data: allData } = useQuery(FEED_QUERY);
 
   const onClick = props => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
@@ -438,7 +439,9 @@ export default props => {
 
   //주소를 가져온다
   const latAndlng =
-    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
+    allData &&
+    allData.seeFullPost &&
+    allData.seeFullPost.post.map(item => item);
   return (
     <LinkPagePresenter
       isOpen={isOpen}
@@ -515,6 +518,7 @@ export default props => {
       deposit2={deposit2}
       money={money}
       money2={money2}
+      allData={allData}
     />
   );
 };

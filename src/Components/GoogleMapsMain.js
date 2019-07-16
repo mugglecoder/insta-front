@@ -166,19 +166,20 @@ export default ({
           yesIWantToUseGoogleMapApiInternals
           options={{ maxZoom: 18, createMapOptions }}
         >
-          {latAndlng.map((item, key) =>
-            item.places[0] ? (
-              <AnyReactComponent
-                setDivide={setDivide}
-                key={key}
-                lat={item.places && item.places[0].lat}
-                lng={item.places && item.places[0].lng}
-                item={item}
-              />
-            ) : (
-              false
-            )
-          )}
+          {latAndlng &&
+            latAndlng.map((item, key) =>
+              item.places[0] ? (
+                <AnyReactComponent
+                  setDivide={setDivide}
+                  key={key}
+                  lat={item.places && item.places[0].lat}
+                  lng={item.places && item.places[0].lng}
+                  item={item}
+                />
+              ) : (
+                false
+              )
+            )}
         </GoogleMapReact>
       </Mapdiv>
     </Container>

@@ -506,7 +506,7 @@ const RoomsDetailPresenter = ({
                 }
 
                 const onclick = () =>
-                  props.history.push(`/roomsdetail/${item.id}/new/${page}`);
+                  props.history.push(`/roomsdetail/${item.id}`);
                 return (
                   <BoardParts
                     onclick={onclick}
