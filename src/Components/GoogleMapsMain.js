@@ -5,7 +5,7 @@ import Marker from "./Marker";
 import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
 
-import Popup from "reactjs-popup";
+// 메인 맵
 
 const Container = styled.div`
   width: 100%;
@@ -138,8 +138,8 @@ export default ({
 
   const createMapOptions = maps => console.log(maps, "createMapOptions");
 
-  const onBoundsChange = (center, zoom) => {
-    console.log("onBoundsChange");
+  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
+    console.log(bounds.splice(","), "ㅇ아아아아아");
     setCenter(center);
   };
 

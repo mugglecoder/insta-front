@@ -73,28 +73,28 @@ const EDITPOST = gql`
     $caption: String
     $files: [String]
     $content: String
-    $airConditioner: Boolean
     $washer: Boolean
-    $refrigerator: Boolean
-    $internet: Boolean
-    $microwave: Boolean
-    $wifi: Boolean
-    $bed: Boolean
-    $desk: Boolean
-    $induction: Boolean
-    $gasRange: Boolean
-    $doorLock: Boolean
-    $CCTV: Boolean
-    $pets: Boolean
-    $elevator: Boolean
-    $parking: Boolean
+    $airConditioner: String
+    $refrigerator: String
+    $internet: String
+    $microwave: String
+    $wifi: String
+    $bed: String
+    $desk: String
+    $induction: String
+    $gasRange: String
+    $doorLock: String
+    $CCTV: String
+    $pets: String
+    $elevator: String
+    $parking: String
     $numberOfFoors: String
-    $electricHeating: Boolean
-    $cityGasHeating: Boolean
-    $nightElectric: Boolean
-    $wateTax: Boolean
-    $includingElectricity: Boolean
-    $cityGasIncluded: Boolean
+    $electricHeating: String
+    $cityGasHeating: String
+    $nightElectric: String
+    $wateTax: String
+    $includingElectricity: String
+    $cityGasIncluded: String
     $MLSnumber: String
   ) {
     editPost(
@@ -236,29 +236,29 @@ export default (props, { data }) => {
 
   const postData = getData && getData.data && getData.data.detailPost;
   const preCaption = postData && postData.caption;
-  console.log(getData, "?");
+  console.log(getData, "getdata");
 
-  const [airConditioner, setAirConditioner] = useState(false);
-  const [washer, setWasher] = useState(false);
-  const [refrigerator, setRefrigerator] = useState(false);
-  const [internet, setInternet] = useState(false);
-  const [microwave, setMicrowave] = useState(false);
-  const [wifi, setWifi] = useState(false);
-  const [bed, setBed] = useState(false);
-  const [desk, setDesk] = useState(false);
-  const [induction, setInduction] = useState(false);
-  const [gasRange, setGasRange] = useState(false);
-  const [doorLock, setDoorLock] = useState(false);
-  const [CCTV, setCCTV] = useState(false);
-  const [pets, setPets] = useState(false);
-  const [elevator, setElevator] = useState(false);
-  const [parking, setParking] = useState(false);
-  const [electricHeating, setElectricHeating] = useState(false);
-  const [cityGasHeating, setCityGasHeating] = useState(false);
-  const [nightElectric, setNightElectric] = useState(false);
-  const [wateTax, setWateTax] = useState(false);
-  const [includingElectricity, setIncludingElectricity] = useState(false);
-  const [cityGasIncluded, setCityGasIncluded] = useState(false);
+  const [airConditioner, setAirConditioner] = useState("");
+  const [washer, setWasher] = useState("");
+  const [refrigerator, setRefrigerator] = useState("");
+  const [internet, setInternet] = useState("");
+  const [microwave, setMicrowave] = useState("");
+  const [wifi, setWifi] = useState("");
+  const [bed, setBed] = useState("");
+  const [desk, setDesk] = useState("");
+  const [induction, setInduction] = useState("");
+  const [gasRange, setGasRange] = useState("");
+  const [doorLock, setDoorLock] = useState("");
+  const [CCTV, setCCTV] = useState("");
+  const [pets, setPets] = useState("");
+  const [elevator, setElevator] = useState("");
+  const [parking, setParking] = useState("");
+  const [electricHeating, setElectricHeating] = useState("");
+  const [cityGasHeating, setCityGasHeating] = useState("");
+  const [nightElectric, setNightElectric] = useState("");
+  const [wateTax, setWateTax] = useState("");
+  const [includingElectricity, setIncludingElectricity] = useState("");
+  const [cityGasIncluded, setCityGasIncluded] = useState("");
   const [filesss, setFilesss] = useState("");
   const [pathArray, setPathArray] = useState([]);
   const caption = useInput(preCaption);
@@ -319,9 +319,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setAirConditioner(true);
+      setAirConditioner("에어컨");
     } else if (target === false) {
-      setAirConditioner(false);
+      setAirConditioner("");
     }
     return false;
   };
@@ -330,9 +330,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setWasher(true);
+      setWasher("세탁기");
     } else if (target === false) {
-      setWasher(false);
+      setWasher("");
     }
     return false;
   };
@@ -341,9 +341,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setRefrigerator(true);
+      setRefrigerator("냉장고");
     } else if (target === false) {
-      setRefrigerator(false);
+      setRefrigerator("");
     }
     return false;
   };
@@ -352,9 +352,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setInternet(true);
+      setInternet("인터넷");
     } else if (target === false) {
-      setInternet(false);
+      setInternet("");
     }
     return false;
   };
@@ -363,9 +363,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setMicrowave(true);
+      setMicrowave("전자렌지");
     } else if (target === false) {
-      setMicrowave(false);
+      setMicrowave("");
     }
     return false;
   };
@@ -373,9 +373,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setWifi(true);
+      setWifi("wifi");
     } else if (target === false) {
-      setWifi(false);
+      setWifi("");
     }
     return false;
   };
@@ -383,9 +383,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setBed(true);
+      setBed("침대");
     } else if (target === false) {
-      setBed(false);
+      setBed("");
     }
     return false;
   };
@@ -393,9 +393,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setDesk(true);
+      setDesk("책상");
     } else if (target === false) {
-      setDesk(false);
+      setDesk("");
     }
     return false;
   };
@@ -403,9 +403,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setInduction(true);
+      setInduction("인덕션");
     } else if (target === false) {
-      setInduction(false);
+      setInduction("");
     }
     return false;
   };
@@ -413,9 +413,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setGasRange(true);
+      setGasRange("가스레인지");
     } else if (target === false) {
-      setGasRange(false);
+      setGasRange("");
     }
     return false;
   };
@@ -423,9 +423,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setDoorLock(true);
+      setDoorLock("도어락");
     } else if (target === false) {
-      setDoorLock(false);
+      setDoorLock("");
     }
     return false;
   };
@@ -433,9 +433,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setCCTV(true);
+      setCCTV("CCTV");
     } else if (target === false) {
-      setCCTV(false);
+      setCCTV("");
     }
     return false;
   };
@@ -443,9 +443,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setPets(true);
+      setPets("애완동물");
     } else if (target === false) {
-      setPets(false);
+      setPets("");
     }
     return false;
   };
@@ -453,9 +453,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setElevator(true);
+      setElevator("엘리베이터");
     } else if (target === false) {
-      setElevator(false);
+      setElevator("");
     }
     return false;
   };
@@ -463,9 +463,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setParking(true);
+      setParking("주차");
     } else if (target === false) {
-      setParking(false);
+      setParking("");
     }
     return false;
   };
@@ -473,9 +473,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setElectricHeating(true);
+      setElectricHeating("전기난방");
     } else if (target === false) {
-      setElectricHeating(false);
+      setElectricHeating("");
     }
     return false;
   };
@@ -483,9 +483,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setCityGasHeating(true);
+      setCityGasHeating("도시가스난방");
     } else if (target === false) {
-      setCityGasHeating(false);
+      setCityGasHeating("");
     }
     return false;
   };
@@ -493,9 +493,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setNightElectric(true);
+      setNightElectric("심야전기");
     } else if (target === false) {
-      setNightElectric(false);
+      setNightElectric("");
     }
     return false;
   };
@@ -504,9 +504,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setWateTax(true);
+      setWateTax("수도세");
     } else if (target === false) {
-      setWateTax(false);
+      setWateTax("");
     }
     return false;
   };
@@ -514,9 +514,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setIncludingElectricity(true);
+      setIncludingElectricity("전기세포함");
     } else if (target === false) {
-      setIncludingElectricity(false);
+      setIncludingElectricity("");
     }
     return false;
   };
@@ -524,9 +524,9 @@ export default (props, { data }) => {
     const target = e.target.checked;
     console.log(target);
     if (target === true) {
-      setCityGasIncluded(true);
+      setCityGasIncluded("도시가스포함");
     } else if (target === false) {
-      setCityGasIncluded(false);
+      setCityGasIncluded("");
     }
     return false;
   };

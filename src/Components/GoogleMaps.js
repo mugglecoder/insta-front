@@ -5,8 +5,9 @@ import Marker from "./Marker";
 import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
 
-import Popup from "reactjs-popup";
 import { Link } from "react-router-dom";
+
+//풀맵
 
 const Container = styled.div`
   width: 100%;

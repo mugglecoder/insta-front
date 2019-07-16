@@ -43,12 +43,10 @@ export default ({
   _nextPage,
   loading
 }) => {
-  console.log(props, "뉴링크페이지 프롭스");
   return (
     <Wrapper>
       {data && data.seeFullPost ? (
         <Container>
-          {console.log(searchData, "인사이드 시풀포스트")}
           {data &&
             data.seeFullPost &&
             data.seeFullPost.post.map((item, key) => {
@@ -140,7 +138,6 @@ export default ({
         </Container>
       ) : (
         <Container>
-          {console.log(searchData, "인사이드 뉴링크페이지")}
           {searchData &&
             searchData.searchRoom &&
             searchData.searchRoom.map((item, key) => {
