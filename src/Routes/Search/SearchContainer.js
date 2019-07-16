@@ -157,39 +157,6 @@ export default withRouter(props => {
   } = props;
   console.log(props, "re match");
 
-  const { data: searchData, loading } = useQuery(SEARCH, {
-    variables: {
-      deposit: depositSS,
-      deposit2: deposit2SS,
-      money: moneySS,
-      money2: money2SS,
-      selectType: selectTypeSS,
-      airConditioner: airConditionerSS,
-      washer: washerSS,
-      refrigerator: refrigeratorSS,
-      internet: internetSS,
-      microwave: microwaveSS,
-      wifi: wifiSS,
-      bed: bedSS,
-      desk: deskSS,
-      induction: inductionSS,
-      gasRange: gasRangeSS,
-      doorLock: doorLockSS,
-      CCTV: CCTVSS,
-      pets: petsSS,
-      elevator: elevatorSS,
-      parking: parkingSS,
-      electricHeating: electricHeatingSS,
-      cityGasHeating: cityGasHeatingSS,
-      nightElectric: nightElectricSS,
-      wateTax: wateTaxSS,
-      includingElectricity: includingElectricitySS,
-      cityGasIncluded: cityGasIncludedSS
-      // numberOfFoors,
-      //  MLSnumber
-    }
-  });
-  console.log(searchData, "써치드 데이터");
   ///체크박스 스테이트
   const [airConditioner, setAirConditioner] = useState(false);
   const [washer, setWasher] = useState(false);
@@ -451,14 +418,14 @@ export default withRouter(props => {
   console.log(select2, "select2");
 
   //보증금 선택사항
-  const [selectValue3, setSelectValue3] = useState("");
+  const [selectValue3, setSelectValue3] = useState([0, 100000000]);
   console.log(selectValue3, "selectValue3");
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
   }, [selectValue3]);
 
   //월세선택사항
-  const [selectValue4, setSelectValue4] = useState("");
+  const [selectValue4, setSelectValue4] = useState([0, 100000000]);
   console.log(selectValue4, " selectValue4");
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
@@ -470,6 +437,41 @@ export default withRouter(props => {
   const handleChange2 = async e => {
     setSelectValue2(e.target.value);
   };
+
+  //서치
+  const { data: searchData, loading } = useQuery(SEARCH, {
+    variables: {
+      deposit: depositSS,
+      deposit2: deposit2SS,
+      money: moneySS,
+      money2: money2SS,
+      selectType: selectTypeSS,
+      airConditioner: airConditionerSS,
+      washer: washerSS,
+      refrigerator: refrigeratorSS,
+      internet: internetSS,
+      microwave: microwaveSS,
+      wifi: wifiSS,
+      bed: bedSS,
+      desk: deskSS,
+      induction: inductionSS,
+      gasRange: gasRangeSS,
+      doorLock: doorLockSS,
+      CCTV: CCTVSS,
+      pets: petsSS,
+      elevator: elevatorSS,
+      parking: parkingSS,
+      electricHeating: electricHeatingSS,
+      cityGasHeating: cityGasHeatingSS,
+      nightElectric: nightElectricSS,
+      wateTax: wateTaxSS,
+      includingElectricity: includingElectricitySS,
+      cityGasIncluded: cityGasIncludedSS
+      // numberOfFoors,
+      //  MLSnumber
+    }
+  });
+  console.log(searchData, "써치드 데이터");
 
   // 토글 팝업 에드 클래스
   const [isOpen, setIsOpen] = useState(false);

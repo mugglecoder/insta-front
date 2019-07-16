@@ -87,7 +87,6 @@ export default props => {
 
   const [zoom, setZoom] = useState(16);
   const [divide, setDivide] = useState(false);
-  console.log(divide, "divide");
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );

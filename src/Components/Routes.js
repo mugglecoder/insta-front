@@ -18,8 +18,8 @@ const LoggedInRoutes = withRouter((props, { match }) => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
-    <Route exact path="/new/:page" component={LinkPage} />
     <Route exact path="/new/search" component={Search} />
+    <Route exact path="/new/:page" component={LinkPage} />
     <Route
       path="/fullmap"
       render={() => <Redirect to="/fullmap" />}

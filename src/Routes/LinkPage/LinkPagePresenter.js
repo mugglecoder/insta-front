@@ -259,8 +259,7 @@ export default ({
   deposit,
   deposit2,
   money,
-  money2,
-  allData
+  money2
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
