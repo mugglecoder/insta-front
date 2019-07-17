@@ -35,40 +35,6 @@ const CURRENTDATA = gql`
   }
 `;
 
-const FEED_QUERY = gql`
-  query seeFullPost($first: Int, $skip: Int) {
-    seeFullPost(first: $first, skip: $skip) {
-      post {
-        id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        lat
-        lng
-        selectType
-        deposit
-        money
-        count
-        selectType
-        content
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-      }
-      count
-    }
-  }
-`;
-
 const LINKS_PER_PAGE = 12;
 
 export default props => {
@@ -351,12 +317,14 @@ export default props => {
   const [isOpen, setIsOpen] = useState(false);
   const setActiveClass = () => (isOpen ? setIsOpen(false) : setIsOpen(true));
 
-  //구글지도
-  const [center, setCenter] = useState({
-    lat: 35.8961565802915,
-    lng: 128.6162214802915
-  });
+  //로컬스토리지 이용
 
+  useEffect(() => {
+    localStorage.setItem(
+      "map",
+      JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
+    );
+  }, []);
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(16);
   const page = parseInt(
@@ -380,6 +348,8 @@ export default props => {
 
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
+
+  //
 
   //온 바운드 체인지
   const [latS, setLatS] = useState(0);
@@ -407,7 +377,12 @@ export default props => {
     variables: { lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
   });
   console.log(data, "data");
-  const { data: allData } = useQuery(FEED_QUERY);
+
+  //구글지도
+  const [center, setCenter] = useState({
+    lat: 35.8961565802915,
+    lng: 128.6162214802915
+  });
 
   const onClick = props => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
@@ -485,9 +460,7 @@ export default props => {
 
   //주소를 가져온다
   const latAndlng =
-    allData &&
-    allData.seeFullPost &&
-    allData.seeFullPost.post.map(item => item);
+    data && data.currentData && data.currentData.map(item => item);
   return (
     <LinkPagePresenter
       onBoundsChange={onBoundsChange}
@@ -565,7 +538,6 @@ export default props => {
       deposit2={deposit2}
       money={money}
       money2={money2}
-      allData={allData}
     />
   );
 };

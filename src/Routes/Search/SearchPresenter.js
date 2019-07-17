@@ -28,7 +28,6 @@ const WrapperS = styled.div`
 `;
 const LogInButtonWrap = styled.div`
   padding: 20px;
-  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 `;
@@ -262,7 +261,8 @@ export default ({
   deposit2,
   money,
   money2,
-  searchData
+  searchData,
+  setFixCenter
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -566,25 +566,7 @@ export default ({
         zoom={zoom}
         setCenter={setCenter}
       />
-      {!loading && token && data.searchRoom ? (
-        <LogInButtonWrap>
-          <Link
-            key={data.searchRoom.id}
-            to={{
-              pathname: `/writeboard/${dataOfMe &&
-                dataOfMe.me &&
-                dataOfMe.me.id}`,
-              state: {
-                fromNotifications: true
-              }
-            }}
-          >
-            <LogInButton onClick={onClick}>글쓰기</LogInButton>
-          </Link>
-        </LogInButtonWrap>
-      ) : (
-        false
-      )}
+
       <SearchBox>
         <CreatableSelect
           arrowRenderer={false}
@@ -1006,7 +988,25 @@ export default ({
         false
       )}
       {loading && <Loader />}
-
+      {!loading && token && data.searchRoom ? (
+        <LogInButtonWrap>
+          <Link
+            key={data.searchRoom.id}
+            to={{
+              pathname: `/writeboard/${dataOfMe &&
+                dataOfMe.me &&
+                dataOfMe.me.id}`,
+              state: {
+                fromNotifications: true
+              }
+            }}
+          >
+            <LogInButton onClick={onClick}>글쓰기</LogInButton>
+          </Link>
+        </LogInButtonWrap>
+      ) : (
+        false
+      )}
       {!loading && data.currentData ? (
         <NewLinkPage
           props={props}

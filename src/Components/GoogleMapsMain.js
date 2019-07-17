@@ -140,7 +140,7 @@ export default ({
   const createMapOptions = maps => console.log(maps, "createMapOptions");
 
   const onChildClick = (a, b) => {
-    console.log(a, "onChildClick");
+    console.log(a, b, "onChildClick");
   };
 
   const onChildMouseEnter = () => {

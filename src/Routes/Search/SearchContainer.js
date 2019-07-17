@@ -5,37 +5,6 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
-const CURRENTDATA = gql`
-  query currentData($lat: Float, $lng: Float, $lat2: Float, $lng2: Float) {
-    currentData(lat: $lat, lng: $lng, lat2: $lat2, lng2: $lng2) {
-      id
-      caption
-      places {
-        id
-        lat
-        lng
-      }
-      lat
-      lng
-      selectType
-      deposit
-      money
-      count
-      selectType
-      content
-      createdAt
-      user {
-        id
-        username
-      }
-      files {
-        id
-        url
-      }
-    }
-  }
-`;
-
 const SEARCH = gql`
   query searchRoom(
     $lat: Float
@@ -428,12 +397,27 @@ export default withRouter(props => {
   // 토글 팝업 에드 클래스
   const [isOpen, setIsOpen] = useState(false);
   const setActiveClass = () => (isOpen ? setIsOpen(false) : setIsOpen(true));
-
+  let lat;
+  let lng;
   //구글지도
-  const [center, setCenter] = useState({
-    lat: 35.8961565802915,
-    lng: 128.6162214802915
-  });
+  const getInitialState = () => {
+    const value = { lat: 35.8898463607061, lng: 128.61687976455687 };
+
+    return {
+      key: value
+    };
+  };
+  const [center, setCenter] = useState(JSON.parse(localStorage.getItem("map")));
+  console.log(center, "center");
+
+  //이지역 검색할래요
+  const setFixCenter = e => {
+    e.preventDefault();
+    lat = center.lat;
+    lng = center.lng;
+    const centers = { lat, lng };
+    localStorage.setItem("map", JSON.stringify(centers));
+  };
 
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(16);
@@ -498,27 +482,23 @@ export default withRouter(props => {
   const [lng2S, seLng2S] = useState(0);
 
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
-    console.log("온 바운드 췌인쥐");
     const centerS = center;
-    const latS = bounds[0];
-    const lat2S = bounds[4];
-    const lngS = bounds[1];
-    const lng2S = bounds[3];
+    const latS = bounds && bounds[0];
+    const lat2S = bounds && bounds[4];
+    const lngS = bounds && bounds[1];
+    const lng2S = bounds && bounds[3];
     setLatS(latS);
     setLat2S(lat2S);
     setLngS(lngS);
     seLng2S(lng2S);
     setCenter(centerS);
-    return true;
+    localStorage.setItem("map", JSON.stringify(centerS));
+
+    return centerS;
   };
   ////////////////////
 
-  const { data } = useQuery(CURRENTDATA, {
-    variables: { lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
-  });
-  console.log(data, "data");
   //검색하는 데이터 쿼리
-
   /////
 
   const { data: searchData, loading } = useQuery(SEARCH, {
@@ -558,6 +538,7 @@ export default withRouter(props => {
     }
   });
   console.log(searchData, "searchData");
+  console.log(props, "props");
   //페이지네이션
   const _nextPage = e => {
     e.preventDefault();
@@ -605,6 +586,7 @@ export default withRouter(props => {
 
   return (
     <SearchPresenter
+      setFixCenter={setFixCenter}
       onBoundsChange={onBoundsChange}
       isOpen={isOpen}
       setActiveClass={setActiveClass}

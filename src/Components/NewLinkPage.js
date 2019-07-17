@@ -101,7 +101,7 @@ export default ({
               }
 
               const onclick = () =>
-                props.history.push(`/new/search/roomsdetail/${item.id}`);
+                props.history.push(`/roomsdetail/${item.id}`);
               return (
                 <BoardParts
                   onclick={onclick}

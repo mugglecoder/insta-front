@@ -24,6 +24,7 @@
     "immutable": "^4.0.0-rc.12",
     "prop-types": "^15.7.2",
     "rc-slider": "^8.6.13",
+    "re-reselect": "^3.3.0",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",
     "react-apollo-hooks": "^0.4.5",

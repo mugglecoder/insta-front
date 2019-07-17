@@ -7,6 +7,7 @@ import RoomsDetailPresenter from "./RoomsDetailPresenter";
 import ModifyPresenter from "./ModifyPresenter";
 import { ME } from "../../SharedQueries";
 import Axios from "axios";
+import { withRouter } from "react-router-dom";
 
 const DELETEPOST = gql`
   mutation detelePost($id: String) {
@@ -102,7 +103,8 @@ const LOCAL_LOG_IN = gql`
 
 const Wrapper = styled.div``;
 
-export default props => {
+export default withRouter(props => {
+  console.log(props, "여기에서 백 할때 정보를 보내주자");
   const id = props.history.location.pathname.split("/")[2];
   const { data, loading } = useQuery(GETPOST, {
     variables: { id }
@@ -313,4 +315,4 @@ export default props => {
       )}
     </Wrapper>
   );
-};
+});
