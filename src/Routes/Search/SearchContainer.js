@@ -5,8 +5,43 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
+const CURRENTDATA = gql`
+  query currentData($lat: Float, $lng: Float, $lat2: Float, $lng2: Float) {
+    currentData(lat: $lat, lng: $lng, lat2: $lat2, lng2: $lng2) {
+      id
+      caption
+      places {
+        id
+        lat
+        lng
+      }
+      lat
+      lng
+      selectType
+      deposit
+      money
+      count
+      selectType
+      content
+      createdAt
+      user {
+        id
+        username
+      }
+      files {
+        id
+        url
+      }
+    }
+  }
+`;
+
 const SEARCH = gql`
   query searchRoom(
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
     $deposit: Int
     $deposit2: Int
     $money: Int
@@ -40,6 +75,10 @@ const SEARCH = gql`
     $MLSnumber: String
   ) {
     searchRoom(
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
       deposit: $deposit
       deposit2: $deposit2
       money: $money
@@ -79,6 +118,8 @@ const SEARCH = gql`
         lat
         lng
       }
+      lat
+      lng
       count
       content
       airConditioner
@@ -123,39 +164,6 @@ const SEARCH = gql`
 const LINKS_PER_PAGE = 12;
 
 export default withRouter(props => {
-  const {
-    location: {
-      state: {
-        depositSS,
-        deposit2SS,
-        moneySS,
-        money2SS,
-        selectTypeSS,
-        airConditionerSS,
-        washerSS,
-        refrigeratorSS,
-        internetSS,
-        microwaveSS,
-        wifiSS,
-        bedSS,
-        deskSS,
-        inductionSS,
-        gasRangeSS,
-        doorLockSS,
-        CCTVSS,
-        petsSS,
-        elevatorSS,
-        parkingSS,
-        electricHeatingSS,
-        cityGasHeatingSS,
-        nightElectricSS,
-        wateTaxSS,
-        includingElectricitySS,
-        cityGasIncludedSS
-      }
-    }
-  } = props;
-
   ///체크박스 스테이트
   const [airConditioner, setAirConditioner] = useState("");
   const [washer, setWasher] = useState("");
@@ -411,39 +419,11 @@ export default withRouter(props => {
   };
 
   //서치
+  const deposit = selectValue3[0];
+  const deposit2 = selectValue3[1];
 
-  const { data: searchData, loading } = useQuery(SEARCH, {
-    variables: {
-      deposit: depositSS,
-      deposit2: deposit2SS,
-      money: moneySS,
-      money2: money2SS,
-      selectType: selectTypeSS,
-      airConditioner: airConditionerSS,
-      washer: washerSS,
-      refrigerator: refrigeratorSS,
-      internet: internetSS,
-      microwave: microwaveSS,
-      wifi: wifiSS,
-      bed: bedSS,
-      desk: deskSS,
-      induction: inductionSS,
-      gasRange: gasRangeSS,
-      doorLock: doorLockSS,
-      CCTV: CCTVSS,
-      pets: petsSS,
-      elevator: elevatorSS,
-      parking: parkingSS,
-      electricHeating: electricHeatingSS,
-      cityGasHeating: cityGasHeatingSS,
-      nightElectric: nightElectricSS,
-      wateTax: wateTaxSS,
-      includingElectricity: includingElectricitySS,
-      cityGasIncluded: cityGasIncludedSS
-      // numberOfFoors,
-      //  MLSnumber
-    }
-  });
+  const money = selectValue4[0];
+  const money2 = selectValue4[1];
 
   // 토글 팝업 에드 클래스
   const [isOpen, setIsOpen] = useState(false);
@@ -510,6 +490,74 @@ export default withRouter(props => {
     _getQueryVariables();
   }, [set2]);
 
+  ////
+  //온 바운드 체인지
+  const [latS, setLatS] = useState(0);
+  const [lat2S, setLat2S] = useState(0);
+  const [lngS, setLngS] = useState(0);
+  const [lng2S, seLng2S] = useState(0);
+
+  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
+    console.log("온 바운드 췌인쥐");
+    const centerS = center;
+    const latS = bounds[0];
+    const lat2S = bounds[4];
+    const lngS = bounds[1];
+    const lng2S = bounds[3];
+    setLatS(latS);
+    setLat2S(lat2S);
+    setLngS(lngS);
+    seLng2S(lng2S);
+    setCenter(centerS);
+    return true;
+  };
+  ////////////////////
+
+  const { data } = useQuery(CURRENTDATA, {
+    variables: { lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
+  });
+  console.log(data, "data");
+  //검색하는 데이터 쿼리
+
+  /////
+
+  const { data: searchData, loading } = useQuery(SEARCH, {
+    variables: {
+      lat: latS,
+      lat2: lat2S,
+      lng: lngS,
+      lng2: lng2S,
+      deposit,
+      deposit2,
+      money,
+      money2,
+      selectType: select,
+      airConditioner,
+      washer,
+      refrigerator,
+      internet,
+      microwave,
+      wifi,
+      bed,
+      desk,
+      induction,
+      gasRange,
+      doorLock,
+      CCTV,
+      pets,
+      elevator,
+      parking,
+      electricHeating,
+      cityGasHeating,
+      nightElectric,
+      wateTax,
+      includingElectricity,
+      cityGasIncluded
+      // numberOfFoors,
+      //  MLSnumber
+    }
+  });
+  console.log(searchData, "searchData");
   //페이지네이션
   const _nextPage = e => {
     e.preventDefault();
@@ -545,18 +593,9 @@ export default withRouter(props => {
     }
   };
 
-  const deposit = selectValue3[0];
-  const deposit2 = selectValue3[1];
-
-  const money = selectValue4[0];
-  const money2 = selectValue4[1];
-
   const searching = e => {
     e.preventDefault();
   };
-
-  ////////////////////
-  //검색하는 데이터 쿼리
 
   //주소를 가져온다
   const latAndlng =
@@ -566,6 +605,7 @@ export default withRouter(props => {
 
   return (
     <SearchPresenter
+      onBoundsChange={onBoundsChange}
       isOpen={isOpen}
       setActiveClass={setActiveClass}
       handleChange={handleChange}

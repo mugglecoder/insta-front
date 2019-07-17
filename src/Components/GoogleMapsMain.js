@@ -84,6 +84,7 @@ const Button = styled.button`
 `;
 
 export default ({
+  onBoundsChange,
   zoom,
   center,
   latAndlng,
@@ -137,11 +138,6 @@ export default ({
   };
 
   const createMapOptions = maps => console.log(maps, "createMapOptions");
-
-  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
-    console.log(bounds.splice(","), "ㅇ아아아아아");
-    setCenter(center);
-  };
 
   const onChildClick = (a, b) => {
     console.log(a, "onChildClick");

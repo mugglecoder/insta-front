@@ -11,17 +11,17 @@ import FileUploadWithPreview from "file-upload-with-preview";
 
 //주소 저장하는 gql
 const SAVEADDRESS = gql`
-  mutation place($id: String, $lat: String, $lng: String) {
+  mutation place($id: String, $lat: Float, $lng: Float) {
     place(id: $id, lat: $lat, lng: $lng) {
       id
-      lng
-      lat
     }
   }
 `;
 
 const UPLOAD = gql`
   mutation upload(
+    $lat: Float
+    $lng: Float
     $selectType: String
     $deposit: Int
     $money: Int
@@ -53,6 +53,8 @@ const UPLOAD = gql`
     $MLSnumber: String
   ) {
     upload(
+      lat: $lat
+      lng: $lng
       selectType: $selectType
       deposit: $deposit
       money: $money
@@ -624,7 +626,7 @@ export default props => {
         addressData.data &&
         addressData.data.results[0].formatted_address &&
         addressData.data.results[0].geometry.location.lat;
-      setLatS(String(latS));
+      setLatS(parseFloat(latS));
 
       //lng 값
       const lngS =
@@ -632,9 +634,9 @@ export default props => {
         addressData.data &&
         addressData.data.results[0].formatted_address &&
         addressData.data.results[0].geometry.location.lng;
-      setLngS(String(lngS));
+      setLngS(parseFloat(lngS));
 
-      setPlace({ lat: String(latS), lng: String(lngS) });
+      setPlace({ lat: parseFloat(latS), lng: parseFloat(lngS) });
     } catch (error) {
       console.log(error);
       setButtonValue("없는 주소입니다");
@@ -655,6 +657,8 @@ export default props => {
       }
     } = await test({
       variables: {
+        lat,
+        lng,
         place,
         selectType: select,
         airConditioner,

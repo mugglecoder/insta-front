@@ -18,15 +18,17 @@ const LoggedInRoutes = withRouter((props, { match }) => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/new/1" />} />
     <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
-    <Route exact path="/new/search" component={Search} />
     <Route exact path="/new/:page" component={LinkPage} />
+    <Route exact path="/new/search" component={Search} />
+    <Route path="/new/search/roomsdetail/:id" component={RoomsDetail} />
+
     <Route
       path="/fullmap"
       render={() => <Redirect to="/fullmap" />}
       component={Fullmap}
     />
-    <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
     <Route path="/roomsdetail/:id" component={RoomsDetail} />
+    <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
     <Route exact path="/edit/:id" component={RoomsDetail} />
     <Route path="/writeboard/:id" component={WritePost} />
     <Route path="/board" component={Feed} />

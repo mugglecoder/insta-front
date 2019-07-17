@@ -4,6 +4,37 @@ import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
 
+const CURRENTDATA = gql`
+  query currentData($lat: Float, $lng: Float, $lat2: Float, $lng2: Float) {
+    currentData(lat: $lat, lng: $lng, lat2: $lat2, lng2: $lng2) {
+      id
+      caption
+      places {
+        id
+        lat
+        lng
+      }
+      lat
+      lng
+      selectType
+      deposit
+      money
+      count
+      selectType
+      content
+      createdAt
+      user {
+        id
+        username
+      }
+      files {
+        id
+        url
+      }
+    }
+  }
+`;
+
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
     seeFullPost(first: $first, skip: $skip) {
@@ -15,6 +46,8 @@ const FEED_QUERY = gql`
           lat
           lng
         }
+        lat
+        lng
         selectType
         deposit
         money
@@ -348,11 +381,32 @@ export default props => {
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
 
+  //온 바운드 체인지
+  const [latS, setLatS] = useState(0);
+  const [lat2S, setLat2S] = useState(0);
+  const [lngS, setLngS] = useState(0);
+  const [lng2S, seLng2S] = useState(0);
+
+  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
+    console.log(props);
+    const centerS = center;
+    const latS = bounds[0];
+    const lat2S = bounds[4];
+    const lngS = bounds[1];
+    const lng2S = bounds[3];
+    setLatS(latS);
+    setLat2S(lat2S);
+    setLngS(lngS);
+    seLng2S(lng2S);
+    setCenter(centerS);
+    return true;
+  };
   let herrrr = props.history;
   const token = localStorage.getItem("token");
-  const { data, loading } = useQuery(FEED_QUERY, {
-    variables: { first, skip }
+  const { data, loading } = useQuery(CURRENTDATA, {
+    variables: { lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
   });
+  console.log(data, "data");
   const { data: allData } = useQuery(FEED_QUERY);
 
   const onClick = props => {
@@ -436,6 +490,7 @@ export default props => {
     allData.seeFullPost.post.map(item => item);
   return (
     <LinkPagePresenter
+      onBoundsChange={onBoundsChange}
       isOpen={isOpen}
       setActiveClass={setActiveClass}
       handleChange={handleChange}

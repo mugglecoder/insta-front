@@ -184,6 +184,7 @@ const InTheDetailOption = styled.img`
   height: 80px;
 `;
 export default ({
+  onBoundsChange,
   isOpen,
   setActiveClass,
   handleChange,
@@ -555,20 +556,19 @@ export default ({
   return (
     ////////////////////////////////////////////////////////////////////
     <Wrapper>
-      {loading && <Loader />}
-      {!loading && (
-        <GoogleMapsMain
-          latAndlng={latAndlng}
-          props={props}
-          center={center}
-          zoom={zoom}
-          setCenter={setCenter}
-        />
-      )}
-      {!loading && token && data.seeFullPost ? (
+      <GoogleMapsMain
+        onBoundsChange={onBoundsChange}
+        latAndlng={latAndlng}
+        props={props}
+        center={center}
+        zoom={zoom}
+        setCenter={setCenter}
+      />
+
+      {!loading && token && data.currentData ? (
         <LogInButtonWrap>
           <Link
-            key={data.seeFullPost.id}
+            key={data.currentData.id}
             to={{
               pathname: `/writeboard/${dataOfMe &&
                 dataOfMe.me &&
@@ -1004,6 +1004,7 @@ export default ({
       ) : (
         false
       )}
+      {loading && <Loader />}
       {!loading && (
         <NewLinkPage
           props={props}

@@ -185,6 +185,7 @@ const InTheDetailOption = styled.img`
   height: 80px;
 `;
 export default ({
+  onBoundsChange,
   isOpen,
   setActiveClass,
   handleChange,
@@ -557,16 +558,14 @@ export default ({
   return (
     ////////////////////////////////////////////////////////////////////
     <Wrapper>
-      {loading && <Loader />}
-      {!loading && (
-        <GoogleMapsMain
-          latAndlng={latAndlng}
-          props={props}
-          center={center}
-          zoom={zoom}
-          setCenter={setCenter}
-        />
-      )}
+      <GoogleMapsMain
+        onBoundsChange={onBoundsChange}
+        latAndlng={latAndlng}
+        props={props}
+        center={center}
+        zoom={zoom}
+        setCenter={setCenter}
+      />
       {!loading && token && data.searchRoom ? (
         <LogInButtonWrap>
           <Link
@@ -1006,7 +1005,18 @@ export default ({
       ) : (
         false
       )}
-      {!loading && searchData.searchRoom ? (
+      {loading && <Loader />}
+
+      {!loading && data.currentData ? (
+        <NewLinkPage
+          props={props}
+          data={data}
+          loading={loading}
+          page={page}
+          _previousPage={_previousPage}
+          _nextPage={_nextPage}
+        />
+      ) : (
         <NewLinkPage
           props={props}
           searchData={searchData}
@@ -1015,8 +1025,6 @@ export default ({
           _previousPage={_previousPage}
           _nextPage={_nextPage}
         />
-      ) : (
-        false
       )}
     </Wrapper>
   );
