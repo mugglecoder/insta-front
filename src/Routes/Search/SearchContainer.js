@@ -6,80 +6,8 @@ import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
 const SEARCH = gql`
-  query searchRoom(
-    $lat: Float
-    $lng: Float
-    $lat2: Float
-    $lng2: Float
-    $deposit: Int
-    $deposit2: Int
-    $money: Int
-    $money2: Int
-    $caption: String
-    $content: String
-    $files: [String]
-    $selectType: String
-    $airConditioner: String
-    $washer: String
-    $refrigerator: String
-    $internet: String
-    $microwave: String
-    $wifi: String
-    $bed: String
-    $desk: String
-    $induction: String
-    $gasRange: String
-    $doorLock: String
-    $CCTV: String
-    $pets: String
-    $elevator: String
-    $parking: String
-    $electricHeating: String
-    $cityGasHeating: String
-    $nightElectric: String
-    $wateTax: String
-    $includingElectricity: String
-    $cityGasIncluded: String
-    $numberOfFoors: String
-    $MLSnumber: String
-  ) {
-    searchRoom(
-      lat: $lat
-      lng: $lng
-      lat2: $lat2
-      lng2: $lng2
-      deposit: $deposit
-      deposit2: $deposit2
-      money: $money
-      money2: $money2
-      caption: $caption
-      content: $content
-      files: $files
-      selectType: $selectType
-      airConditioner: $airConditioner
-      washer: $washer
-      refrigerator: $refrigerator
-      internet: $internet
-      microwave: $microwave
-      wifi: $wifi
-      bed: $bed
-      desk: $desk
-      induction: $induction
-      gasRange: $gasRange
-      doorLock: $doorLock
-      CCTV: $CCTV
-      pets: $pets
-      elevator: $elevator
-      parking: $parking
-      electricHeating: $electricHeating
-      cityGasHeating: $cityGasHeating
-      nightElectric: $nightElectric
-      wateTax: $wateTax
-      includingElectricity: $includingElectricity
-      cityGasIncluded: $cityGasIncluded
-      numberOfFoors: $numberOfFoors
-      MLSnumber: $MLSnumber
-    ) {
+  query currentData($lat: Float, $lng: Float, $lat2: Float, $lng2: Float) {
+    currentData(lat: $lat, lng: $lng, lat2: $lat2, lng2: $lng2) {
       id
       caption
       places {
@@ -549,8 +477,8 @@ export default withRouter(props => {
     if (
       page <=
       (searchData &&
-        searchData.searchRoom &&
-        searchData.searchRoom.count / LINKS_PER_PAGE)
+        searchData.currentData &&
+        searchData.currentData.count / LINKS_PER_PAGE)
     ) {
       const nextPage = page + 1;
 
@@ -581,8 +509,8 @@ export default withRouter(props => {
   //주소를 가져온다
   const latAndlng =
     searchData &&
-    searchData.searchRoom &&
-    searchData.searchRoom.map(item => item);
+    searchData.currentData &&
+    searchData.currentData.map(item => item);
 
   return (
     <SearchPresenter

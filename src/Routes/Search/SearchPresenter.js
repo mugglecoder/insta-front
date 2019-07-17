@@ -988,10 +988,10 @@ export default ({
         false
       )}
       {loading && <Loader />}
-      {!loading && token && data.searchRoom ? (
+      {!loading && token ? (
         <LogInButtonWrap>
           <Link
-            key={data.searchRoom.id}
+            key={data.searchRoom ? data.searchRoom.id : data.currentData.id}
             to={{
               pathname: `/writeboard/${dataOfMe &&
                 dataOfMe.me &&
