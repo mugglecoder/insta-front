@@ -318,12 +318,15 @@ export default props => {
   const setActiveClass = () => (isOpen ? setIsOpen(false) : setIsOpen(true));
 
   //로컬스토리지 이용
-
   useEffect(() => {
     localStorage.setItem(
       "map",
       JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
     );
+    localStorage.setItem("종류", "원룸 ");
+    localStorage.setItem("종류2", "월세 ");
+    localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
+    localStorage.setItem("월세", JSON.stringify([0, 1000000]));
   }, []);
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(16);
@@ -461,6 +464,8 @@ export default props => {
   //주소를 가져온다
   const latAndlng =
     data && data.currentData && data.currentData.map(item => item);
+
+  props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
       onBoundsChange={onBoundsChange}

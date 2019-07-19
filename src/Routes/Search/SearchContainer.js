@@ -6,8 +6,80 @@ import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
 const SEARCH = gql`
-  query currentData($lat: Float, $lng: Float, $lat2: Float, $lng2: Float) {
-    currentData(lat: $lat, lng: $lng, lat2: $lat2, lng2: $lng2) {
+  query searchRoom(
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
+    $deposit: Int
+    $deposit2: Int
+    $money: Int
+    $money2: Int
+    $caption: String
+    $content: String
+    $files: [String]
+    $selectType: String
+    $airConditioner: String
+    $washer: String
+    $refrigerator: String
+    $internet: String
+    $microwave: String
+    $wifi: String
+    $bed: String
+    $desk: String
+    $induction: String
+    $gasRange: String
+    $doorLock: String
+    $CCTV: String
+    $pets: String
+    $elevator: String
+    $parking: String
+    $electricHeating: String
+    $cityGasHeating: String
+    $nightElectric: String
+    $wateTax: String
+    $includingElectricity: String
+    $cityGasIncluded: String
+    $numberOfFoors: String
+    $MLSnumber: String
+  ) {
+    searchRoom(
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
+      deposit: $deposit
+      deposit2: $deposit2
+      money: $money
+      money2: $money2
+      caption: $caption
+      content: $content
+      files: $files
+      selectType: $selectType
+      airConditioner: $airConditioner
+      washer: $washer
+      refrigerator: $refrigerator
+      internet: $internet
+      microwave: $microwave
+      wifi: $wifi
+      bed: $bed
+      desk: $desk
+      induction: $induction
+      gasRange: $gasRange
+      doorLock: $doorLock
+      CCTV: $CCTV
+      pets: $pets
+      elevator: $elevator
+      parking: $parking
+      electricHeating: $electricHeating
+      cityGasHeating: $cityGasHeating
+      nightElectric: $nightElectric
+      wateTax: $wateTax
+      includingElectricity: $includingElectricity
+      cityGasIncluded: $cityGasIncluded
+      numberOfFoors: $numberOfFoors
+      MLSnumber: $MLSnumber
+    ) {
       id
       caption
       places {
@@ -285,25 +357,34 @@ export default withRouter(props => {
 
   //셀렉트 박스
   const [select, setSelect] = useState("");
-  const [selectValue1, setSelectValue1] = useState("");
+  const [selectValue1, setSelectValue1] = useState(
+    localStorage.getItem("종류")
+  );
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue1]);
-  const [selectValue2, setSelectValue2] = useState("");
+  const [selectValue2, setSelectValue2] = useState(
+    localStorage.getItem("종류2")
+  );
   useEffect(() => {
     setSelect(String(`${selectValue1} ${selectValue2}`));
   }, [selectValue2]);
+
   //보증금과 월세에 대한 저장
   const [select2, setSelect2] = useState([]);
 
   //보증금 선택사항
-  const [selectValue3, setSelectValue3] = useState([0, 100000000]);
+  const [selectValue3, setSelectValue3] = useState(
+    localStorage.getItem("보증금")
+  );
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
   }, [selectValue3]);
 
   //월세선택사항
-  const [selectValue4, setSelectValue4] = useState([0, 100000000]);
+  const [selectValue4, setSelectValue4] = useState(
+    localStorage.getItem("월세")
+  );
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
   }, [selectValue4]);
@@ -316,11 +397,11 @@ export default withRouter(props => {
   };
 
   //서치
-  const deposit = selectValue3[0];
-  const deposit2 = selectValue3[1];
+  const deposit = selectValue3 && selectValue3[0];
+  const deposit2 = selectValue3 && selectValue3[1];
 
-  const money = selectValue4[0];
-  const money2 = selectValue4[1];
+  const money = selectValue4 && selectValue4[0];
+  const money2 = selectValue4 && selectValue4[1];
 
   // 토글 팝업 에드 클래스
   const [isOpen, setIsOpen] = useState(false);
@@ -336,7 +417,6 @@ export default withRouter(props => {
     };
   };
   const [center, setCenter] = useState(JSON.parse(localStorage.getItem("map")));
-  console.log(center, "center");
 
   //이지역 검색할래요
   const setFixCenter = e => {
@@ -424,8 +504,13 @@ export default withRouter(props => {
 
     return centerS;
   };
-  ////////////////////
-
+  ////////////////////메뉴 고정하는 로직
+  useEffect(() => {
+    setSelectValue1(localStorage.getItem("종류"));
+    setSelectValue2(localStorage.getItem("종류2"));
+    setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
+    setSelectValue4(JSON.parse(localStorage.getItem("월세")));
+  }, []);
   //검색하는 데이터 쿼리
   /////
 
@@ -477,8 +562,8 @@ export default withRouter(props => {
     if (
       page <=
       (searchData &&
-        searchData.currentData &&
-        searchData.currentData.count / LINKS_PER_PAGE)
+        searchData.searchRoom &&
+        searchData.searchRoom.count / LINKS_PER_PAGE)
     ) {
       const nextPage = page + 1;
 
@@ -509,8 +594,8 @@ export default withRouter(props => {
   //주소를 가져온다
   const latAndlng =
     searchData &&
-    searchData.currentData &&
-    searchData.currentData.map(item => item);
+    searchData.searchRoom &&
+    searchData.searchRoom.map(item => item);
 
   return (
     <SearchPresenter

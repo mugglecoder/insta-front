@@ -6,6 +6,7 @@ import BoardParts from "../../Components/BoardParts";
 import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
+import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1300px;
@@ -251,7 +252,14 @@ const RoomsDetailPresenter = ({
   onDeletePost
 }) => (
   <Wrapper>
-    {loading && <Loader />}
+    {loading && (
+      <DetailLoader
+        token={token}
+        data={data}
+        onDeletePost={onDeletePost}
+        loading={loading}
+      />
+    )}
     {!loading && token && data.detailPost ? (
       <LogInButtonWrap>
         <Link

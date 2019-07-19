@@ -69,12 +69,6 @@ const Money = styled.span`
   font-size: 16px;
   color: #c87777;
 `;
-const image = [
-  {
-    original: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`,
-    thumbnail: `http://seogunny.com/wp-content/uploads/2018/03/arrival-review-glitter-rebel-1.jpg`
-  }
-];
 
 let url = [];
 
