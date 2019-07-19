@@ -50,15 +50,15 @@ export default ({
         <Container>
           {data &&
             data.currentData &&
-            data.currentData.map((item, key) => {
+            data.currentData.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
 
               if (
                 data.currentData &&
-                data.currentData[key] &&
-                data.currentData[key].files.length === 0
+                data.currentData.post[key] &&
+                data.currentData.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -82,8 +82,8 @@ export default ({
                 /////// 이미지 있을때
 
                 data.currentData &&
-                  data.currentData[key] &&
-                  data.currentData[key].files.map(item => {
+                  data.currentData.post[key] &&
+                  data.currentData.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));

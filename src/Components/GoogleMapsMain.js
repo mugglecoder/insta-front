@@ -193,7 +193,7 @@ export default ({
               )
             )}
         </GoogleMapReact>
-        <Link to="/new/search">
+        <Link to="/news/search">
           <H1 onClick={setItems}>여기에 있는 매물 상세검색!</H1>
         </Link>
       </Mapdiv>

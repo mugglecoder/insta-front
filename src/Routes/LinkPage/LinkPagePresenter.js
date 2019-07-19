@@ -167,29 +167,19 @@ export default ({
       />
       <MarginDiv />
       {loading && <Loading />}
-      <InfiniteScroll
-        pageStart={0}
-        hasMore={true || false}
-        loader={
-          <div className="loader" key={0}>
-            Loading ...
-          </div>
-        }
-      >
-        {!loading && (
-          <WrapNewLinkPage>
-            <NewLinkPage
-              props={props}
-              data={data}
-              loading={loading}
-              page={page}
-              _previousPage={_previousPage}
-              _nextPage={_nextPage}
-            />
-          </WrapNewLinkPage>
-        )}
-      </InfiniteScroll>
-      {}
+
+      {!loading && (
+        <WrapNewLinkPage>
+          <NewLinkPage
+            props={props}
+            data={data}
+            loading={loading}
+            page={page}
+            _previousPage={_previousPage}
+            _nextPage={_nextPage}
+          />
+        </WrapNewLinkPage>
+      )}
       {!loading && token && data.currentData ? (
         <LogInButtonWrap>
           <Link
