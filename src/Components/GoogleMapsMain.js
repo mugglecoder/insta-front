@@ -4,6 +4,8 @@ import GoogleMapReact from "google-map-react";
 import Marker from "./Marker";
 import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
+import { relative } from "path";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 // 메인 맵
 
@@ -83,6 +85,18 @@ const Button = styled.button`
   }
 `;
 
+const H1 = styled.div`
+  position: absolute;
+  padding: 8px 15px;
+  background: #e57070;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  top: 8%;
+  left: 43%;
+`;
+
 export default ({
   onBoundsChange,
   zoom,
@@ -147,9 +161,11 @@ export default ({
     console.log("마우스 온 더 잇");
   };
 
+  const setItems = () => {};
+
   return (
     <Container>
-      <Mapdiv style={{ height, width }}>
+      <Mapdiv style={{ height, width, position: "relative" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
@@ -177,6 +193,9 @@ export default ({
               )
             )}
         </GoogleMapReact>
+        <Link to="/new/search">
+          <H1 onClick={setItems}>여기에 있는 매물 상세검색!</H1>
+        </Link>
       </Mapdiv>
     </Container>
   );

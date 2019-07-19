@@ -320,69 +320,74 @@ const RoomsDetailPresenter = ({
           <hr />
         </OptionText>
         <Options>
-          {data.detailPost && data.detailPost.airConditioner === true && (
+          {console.log(data.detailPost)}
+          {data.detailPost && data.detailPost.airConditioner === "에어컨" && (
             <Option>airConditioner</Option>
           )}
-          {data.detailPost && data.detailPost.washer === true && (
+          {data.detailPost && data.detailPost.washer === "세탁기" && (
             <Option>washer</Option>
           )}
-          {data.detailPost && data.detailPost.refrigerator === true && (
+          {data.detailPost && data.detailPost.refrigerator === "냉장고" && (
             <Option>refrigerator</Option>
           )}
-          {data.detailPost && data.detailPost.internet === true && (
+          {data.detailPost && data.detailPost.internet === "인터넷" && (
             <Option>internet</Option>
           )}
-          {data.detailPost && data.detailPost.microwave === true && (
+          {data.detailPost && data.detailPost.microwave === "전자렌지" && (
             <Option>microwave</Option>
           )}
-          {data.detailPost && data.detailPost.wifi === true && (
+          {data.detailPost && data.detailPost.wifi === "wifi" && (
             <Option>wifi</Option>
           )}
-          {data.detailPost && data.detailPost.bed === true && (
+          {data.detailPost && data.detailPost.bed === "침대" && (
             <Option>bed</Option>
           )}
-          {data.detailPost && data.detailPost.desk === true && (
+          {data.detailPost && data.detailPost.desk === "책상" && (
             <Option>desk</Option>
           )}
-          {data.detailPost && data.detailPost.induction === true && (
+          {data.detailPost && data.detailPost.induction === "인덕션" && (
             <Option>induction</Option>
           )}
-          {data.detailPost && data.detailPost.gasRange === true && (
+          {data.detailPost && data.detailPost.gasRange === "가스레인지" && (
             <Option>gasRange</Option>
           )}
-          {data.detailPost && data.detailPost.doorLock === true && (
+          {data.detailPost && data.detailPost.doorLock === "도어락" && (
             <Option>doorLock</Option>
           )}
-          {data.detailPost && data.detailPost.CCTV === true && (
+          {data.detailPost && data.detailPost.CCTV === "CCTV" && (
             <Option>CCTV</Option>
           )}
-          {data.detailPost && data.detailPost.pets === true && (
+          {data.detailPost && data.detailPost.pets === "애완동물" && (
             <Option>pets</Option>
           )}
-          {data.detailPost && data.detailPost.elevator === true && (
+          {data.detailPost && data.detailPost.elevator === "엘리베이터" && (
             <Option>elevator</Option>
           )}
-          {data.detailPost && data.detailPost.parking === true && (
+          {data.detailPost && data.detailPost.parking === "주차" && (
             <Option>parking</Option>
           )}
-          {data.detailPost && data.detailPost.electricHeating === true && (
-            <Option>electricHeating</Option>
-          )}
-          {data.detailPost && data.detailPost.cityGasHeating === true && (
-            <Option>tecityGasHeatingst</Option>
-          )}
-          {data.detailPost && data.detailPost.nightElectric === true && (
+          {data.detailPost &&
+            data.detailPost.electricHeating === "전기난방" && (
+              <Option>electricHeating</Option>
+            )}
+          {data.detailPost &&
+            data.detailPost.cityGasHeating === "도시가스난방" && (
+              <Option>tecityGasHeatingst</Option>
+            )}
+          {data.detailPost && data.detailPost.nightElectric === "심야전기" && (
             <Option>nightElectric</Option>
           )}
-          {data.detailPost && data.detailPost.wateTax === true && (
+          {data.detailPost && data.detailPost.wateTax === "수도세" && (
             <Option>wateTax</Option>
           )}
-          {data.detailPost && data.detailPost.includingElectricity === true && (
-            <Option>includingElectricity</Option>
-          )}
-          {data.detailPost && data.detailPost.cityGasIncluded === true && (
-            <Option>cityGasIncluded</Option>
-          )}
+          {data.detailPost &&
+            data.detailPost.includingElectricity === "전기세포함" && (
+              <Option>includingElectricity</Option>
+            )}
+          {data.detailPost &&
+            data.detailPost.cityGasIncluded === "도시가스포함" && (
+              <Option>cityGasIncluded</Option>
+            )}
         </Options>
 
         {data.detailPost &&

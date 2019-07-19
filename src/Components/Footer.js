@@ -71,6 +71,8 @@ export default () => (
         <Link href="#">language</Link>
       </ListItem>
     </List>
-    <Copyright>Instaclone {new Date().getFullYear()} &copy;</Copyright>
+    <Copyright>
+      경대케익 {new Date().getFullYear()} &copy; all right reserved
+    </Copyright>
   </Footer>
 );

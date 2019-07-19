@@ -1,110 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Loader from "../../Components/Loader";
 import NewLinkPage from "../../Components/NewLinkPage";
-import GoogleMapReact from "google-map-react";
-import Popup from "reactjs-popup";
 import MapPartsImageGall from "../../Components/MapPartsImageGall";
 import "../../css/image-gallery.css";
 import Floater from "react-floater";
 import Marker from "../../Components/Marker";
-import GoogleMaps from "../../Components/GoogleMaps";
 import GoogleMapsMain from "../../Components/GoogleMapsMain";
-import Toggle from "react-toggle";
 import "react-toggle/style.css";
-import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import LazyLoad from "react-lazy-load";
-import PlaceHolder from "../../Components/PlaceHolderForLoader/PlaceHolder";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import img from "../../../src/loading-item.png";
 import Loading from "../../Components/PlaceHolderForLoader/Loading";
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1300px;
+  padding: 10px;
   width: 100%;
 `;
 const WrapperS = styled.div`
   margin: 0 auto;
   max-width: 500px;
   line-height: 1.5;
-`;
-
-const PorkMain = styled.div`
-  background-color: #fff5f0;
-  height: 90vh;
-  width: 100%;
-  margin-bottom: 25px;
-  position: relative;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
-`;
-
-const Rooms = styled.div`
-  position: absolute;
-  top: 2vw;
-  left: 1vw;
-  font-size: 19vw;
-  font-weight: 900;
-  color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
-`;
-const For = styled.div`
-  position: absolute;
-  top: 18vw;
-  right: 11vw;
-  font-size: 17vw;
-  font-weight: 900;
-  color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
-`;
-const Rent = styled.div`
-  position: absolute;
-  top: 38vw;
-  left: 4vw;
-  font-size: 17vw;
-  font-weight: 900;
-  color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
-`;
-
-const RoomsForRentImage = styled.div`
-  position: absolute;
-  top: 16vw;
-  background-image: url("http://kexpedia.co.kr/files/attach/images/111/833/038/cd5ba8c23206d9377eb1c92e0dbf4cf6.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 36vw;
-  width: 73vw;
 `;
 
 const LogInButtonWrap = styled.div`
@@ -175,6 +91,7 @@ const SearchBox = styled.div`
   align-items: center;
   flex-direction: row;
   width: 100%;
+  margin: 0px 0px 0px -15px;
 `;
 const SelectBox = styled.select`
   border: 1px solid #ffbfbf;
@@ -478,7 +395,7 @@ export default ({
 
   const menuOption = [
     {
-      value: "원룸 ",
+      value: "",
       label: (
         <DivSeparator>
           <div>종류(필수)</div>
@@ -518,7 +435,7 @@ export default ({
 
   const menuOption2 = [
     {
-      value: "월세 ",
+      value: "",
       label: (
         <DivSeparator>
           <div>선택(필수)</div>
@@ -662,6 +579,26 @@ export default ({
       label: "전세금"
     },
     {
+      value: [0, 3000],
+      label: "0 - 3000"
+    },
+    {
+      value: [3000, 5000],
+      label: "3000 - 5000"
+    },
+    {
+      value: [5000, 7000],
+      label: "5000 - 7000"
+    },
+    {
+      value: [7000, 10000],
+      label: "7000 - 1억"
+    },
+    {
+      value: [10000, 100000000],
+      label: "1억 이상"
+    },
+    {
       value: "매물종류",
       label: (
         <DivSeparator>
@@ -674,32 +611,23 @@ export default ({
   const setMenuOption = () => {
     const item2 = localStorage.getItem("종류");
     const doit = menuOption.filter(item => item.value === item2);
-
-    if (doit) {
-      console.log("이건 1");
-      return doit[0];
-    }
-    return menuOption[0];
+    return doit[0];
   };
   const setMenuOption2 = () => {
     const kindOfitem = localStorage.getItem("종류2");
     const doit = menuOption2.filter(item => item.value === kindOfitem);
-    if (doit) {
-      console.log("이건 1");
-      return doit[0];
-    }
-    return menuOption2[0];
+    return doit[0];
   };
   const setMenuOption3 = () => {
     const kindOfitem3 = JSON.parse(localStorage.getItem("보증금"));
     const doit = monthDeposit.filter(
       item => String(item.value) === String(kindOfitem3)
     );
-    if (doit) {
-      console.log("이건 1");
+    if (doit.length === 0) {
+      return monthDeposit[0];
+    } else {
       return doit[0];
     }
-    return monthDeposit[0];
   };
   /// 배열의 값이 같아야함
   const setMenuOption4 = () => {
@@ -707,55 +635,17 @@ export default ({
     const doit = monthMoney.filter(item => {
       return String(item.value) === String(kindOfitem4);
     });
-    if (doit) {
-      console.log("이건 1");
+    if (doit.length === 0) {
+      return monthMoney[0];
+    } else {
       return doit[0];
     }
-    return monthMoney[0];
   };
 
   return (
     ////////////////////////////////////////////////////////////////////
     <>
       <Wrapper>
-        <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionAppear={true}
-          transitionAppearTimeout={1500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-          <PorkMain>
-            <RoomsForRentImage />
-            <ReactCSSTransitionGroup
-              transitionName="example"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={300}
-            >
-              <Rooms>Rooms</Rooms>
-            </ReactCSSTransitionGroup>
-            <ReactCSSTransitionGroup
-              transitionName="example"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={300}
-            >
-              <For>For</For>
-            </ReactCSSTransitionGroup>
-            <ReactCSSTransitionGroup
-              transitionName="example"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={300}
-            >
-              <Rent>Rent</Rent>
-            </ReactCSSTransitionGroup>
-          </PorkMain>
-        </ReactCSSTransitionGroup>
         <GoogleMapsMain
           onBoundsChange={onBoundsChange}
           latAndlng={latAndlng}

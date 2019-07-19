@@ -13,7 +13,6 @@ const Header = styled.header`
   background-color: white;
   border-bottom: ${props => props.theme.boxBorder};
   border-radius: 0;
-  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,12 +86,13 @@ export default withRouter(({ history }) => {
           </form>
         </HeaderColumn>
         <HeaderColumn>
-          <HeaderLink href="/fullmap">
+          <Link to="/new/page">
             <Compass />
-          </HeaderLink>
-          <HeaderLink to="/notification">
+          </Link>
+
+          <Link to="/fullmap">
             <HeartEmpty />
-          </HeaderLink>
+          </Link>
           {!data.me ? (
             <HeaderLink to="/#">
               <User />

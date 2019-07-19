@@ -323,8 +323,8 @@ export default props => {
       "map",
       JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
     );
-    localStorage.setItem("종류", "원룸 ");
-    localStorage.setItem("종류2", "월세 ");
+    localStorage.setItem("종류", "");
+    localStorage.setItem("종류2", "");
     localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
     localStorage.setItem("월세", JSON.stringify([0, 1000000]));
   }, []);
@@ -372,6 +372,9 @@ export default props => {
     setLngS(lngS);
     seLng2S(lng2S);
     setCenter(centerS);
+
+    localStorage.setItem("map", JSON.stringify(centerS));
+
     return true;
   };
   let herrrr = props.history;
@@ -465,7 +468,7 @@ export default props => {
   const latAndlng =
     data && data.currentData && data.currentData.map(item => item);
 
-  props.history.push(`/new/search`);
+  // props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
       onBoundsChange={onBoundsChange}

@@ -76,6 +76,21 @@ const Detail = styled.div`
   height: 80vh;
 `;
 
+const MapsLoder = styled.div`
+  height: 80vh;
+  width: 100%;
+  background: #7ec092;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Maps = styled.h1`
+  font-size: 23rem;
+  font-weight: 900;
+  color: white;
+`;
+
 export default props => {
   //구글지도
   const [center, setCenter] = useState({
@@ -97,7 +112,11 @@ export default props => {
     data && data.seeFullPost && data.seeFullPost.post.map(item => item);
   return (
     <FullMapContainer>
-      {loading && <Loader />}
+      {loading && (
+        <MapsLoder>
+          <Maps>MAPS</Maps>
+        </MapsLoder>
+      )}
       {!loading && !divide ? (
         <GoogleMaps
           zoom={zoom}
@@ -122,7 +141,6 @@ export default props => {
               width={"100%"}
               setDivide={setDivide}
             />
-            <FullmapDivide data={data} props={props} setDivide={setDivide} />
           </DividerWrap>
         )
       )}

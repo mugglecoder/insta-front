@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Feed from "../Routes/Feed";
@@ -13,27 +13,34 @@ import WritePost from "../Routes/WritePost";
 import Fullmap from "../Routes/Fullmap";
 import FullmapDivide from "../Routes/FullmapDivide";
 import { withRouter } from "react-router-dom";
+import Main from "../Routes/Main";
+const LoggedInRoutes = withRouter((props, { match }) => {
+  const [divide, setDivide] = useState(false);
 
-const LoggedInRoutes = withRouter((props, { match }) => (
-  <Switch>
-    <Route exact path="/" render={() => <Redirect to="/new/1" />} />
-    <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
-    <Route exact path="/new/search" component={Search} />
-    <Route exact path="/new/searching" component={Search} />
-    <Route exact path="/new/:page" component={LinkPage} />
-    <Route
-      path="/fullmap"
-      render={() => <Redirect to="/fullmap" />}
-      component={Fullmap}
-    />
-    <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
-    <Route path="/roomsdetail/:id" component={RoomsDetail} />
-    <Route exact path="/edit/:id" component={RoomsDetail} />
-    <Route path="/writeboard/:id" component={WritePost} />
-    <Route path="/board" component={Feed} />
-    <Route path="/uploading" component={Loading} />
-  </Switch>
-));
+  return (
+    <Switch>
+      <Route exact path="/" render={Main} />
+      <Route exact path="/new" render={() => <Redirect to="/new/1" />} />
+      <Route exact path="/new/page" component={LinkPage} />
+      <Route exact path="/new/search" component={Search} />
+      <Route exact path="/new/searching" component={Search} />
+      <Route exact path="/new/:page" component={LinkPage} />
+      <Route
+        path="/fullmap"
+        render={() => <Redirect to="/fullmap" />}
+        component={Fullmap}
+        divide={divide}
+        setDivide={setDivide}
+      />
+      <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
+      <Route path="/roomsdetail/:id" component={RoomsDetail} />
+      <Route exact path="/edit/:id" component={RoomsDetail} />
+      <Route path="/writeboard/:id" component={WritePost} />
+      <Route path="/board" component={Feed} />
+      <Route path="/uploading" component={Loading} />
+    </Switch>
+  );
+});
 
 const LoggedOutRoutes = ({ history }) => (
   <Switch>

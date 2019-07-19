@@ -6,11 +6,13 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   flex-flow: row wrap;
 `;
 
 const Wrap = styled.div`
+  margin: 0px -15px;
   width: 25%;
 `;
 

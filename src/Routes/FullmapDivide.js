@@ -196,6 +196,7 @@ export default props => {
 
   const lat = parseFloat(data && data.places && data.places[0].lat);
   const lng = parseFloat(data && data.places && data.places[0].lng);
+
   return (
     <DetailContainer>
       <ContentWrap>
@@ -203,7 +204,7 @@ export default props => {
           onClick={() => props.setDivide(false)}
           style={{ marginTop: 10 }}
         >
-          colse
+          close
         </Button>
         <Column>
           <ColumnL>
@@ -232,37 +233,39 @@ export default props => {
           <hr />
         </OptionText>
         <Options>
-          {data && data.airConditioner === true && (
+          {data && data.airConditioner === "에어컨" && (
             <Option>airConditioner</Option>
           )}
-          {data && data.washer === true && <Option>washer</Option>}
-          {data && data.refrigerator === true && <Option>refrigerator</Option>}
-          {data && data.internet === true && <Option>internet</Option>}
-          {data && data.microwave === true && <Option>microwave</Option>}
-          {data && data.wifi === true && <Option>wifi</Option>}
-          {data && data.bed === true && <Option>bed</Option>}
-          {data && data.desk === true && <Option>desk</Option>}
-          {data && data.induction === true && <Option>induction</Option>}
-          {data && data.gasRange === true && <Option>gasRange</Option>}
-          {data && data.doorLock === true && <Option>doorLock</Option>}
-          {data && data.CCTV === true && <Option>CCTV</Option>}
-          {data && data.pets === true && <Option>pets</Option>}
-          {data && data.elevator === true && <Option>elevator</Option>}
-          {data && data.parking === true && <Option>parking</Option>}
-          {data && data.electricHeating === true && (
+          {data && data.washer === "세탁기" && <Option>washer</Option>}
+          {data && data.refrigerator === "냉장고" && (
+            <Option>refrigerator</Option>
+          )}
+          {data && data.internet === "인터넷" && <Option>internet</Option>}
+          {data && data.microwave === "전자렌지" && <Option>microwave</Option>}
+          {data && data.wifi === "wifi" && <Option>wifi</Option>}
+          {data && data.bed === "침대" && <Option>bed</Option>}
+          {data && data.desk === "책상" && <Option>desk</Option>}
+          {data && data.induction === "인덕션" && <Option>induction</Option>}
+          {data && data.gasRange === "가스레인지" && <Option>gasRange</Option>}
+          {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
+          {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
+          {data && data.pets === "애완동물" && <Option>pets</Option>}
+          {data && data.elevator === "엘리베이터" && <Option>elevator</Option>}
+          {data && data.parking === "주차" && <Option>parking</Option>}
+          {data && data.electricHeating === "전기난방" && (
             <Option>electricHeating</Option>
           )}
-          {data && data.cityGasHeating === true && (
+          {data && data.cityGasHeating === "도시가스난방" && (
             <Option>tecityGasHeatingst</Option>
           )}
-          {data && data.nightElectric === true && (
+          {data && data.nightElectric === "심야전기" && (
             <Option>nightElectric</Option>
           )}
-          {data && data.wateTax === true && <Option>wateTax</Option>}
-          {data && data.includingElectricity === true && (
+          {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
+          {data && data.includingElectricity === "전기세포함" && (
             <Option>includingElectricity</Option>
           )}
-          {data && data.cityGasIncluded === true && (
+          {data && data.cityGasIncluded === "도시가스포함" && (
             <Option>cityGasIncluded</Option>
           )}
         </Options>

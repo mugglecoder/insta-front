@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import ImageGallery from "react-image-gallery";
-import style from "styled-jsx/dist/style";
+import "../css/image-gallery.css";
 
 const Container = styled.div`
-  height: 200px;
+  height: 350px;
   overflow: scroll;
 `;
 
@@ -23,24 +23,27 @@ const Files = styled.div`
 
 const Subject = styled.div`
   background-color: #ffe4d740;
-  padding: 5px;
-  width: 80px;
-  height: 130px;
+  width: 100px;
+  height: 150px;
+  padding: 8px;
+  width: 100px;
+  margin-right: 5px;
   overflow-wrap: break-word;
   line-height: 1.4;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 15px;
   color: #836c80;
   overflow: scroll;
   text-align: start;
 `;
 const SubColumn = styled.div`
-  width: 210px;
+  width: 250px;
   position: relative;
-  padding: 10px;
+  padding: 5px;
 `;
 const ContentMain = styled.div`
   display: flex;
+  margin-top: 5px;
 `;
 
 const SelectType = styled.div`
@@ -79,6 +82,56 @@ const Content = styled.div`
   line-height: 1.4;
   text-align: start;
 `;
+const OptionText = styled.div`
+  margin-top: -50px;
+  margin-bottom: 20px;
+  h1 {
+    text-align: start;
+    margin-top: 30px;
+    font-size: 20px;
+    color: grey;
+  }
+`;
+const Option = styled.div`
+  height: 130px;
+  width: 20%;
+  padding: 1%;
+  background-color: #c5bfea;
+`;
+const Options = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: pink;
+  margin-top: -10px;
+  margin-bottom: 30px;
+`;
+
+const DetailText = styled.div`
+  margin: 50px 0px;
+  margin-top: 10px;
+  h1 {
+    text-align: start;
+    font-size: 20px;
+    color: grey;
+  }
+`;
+
+const ImageGalleryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const FilesA = styled.div`
+  width: 95%;
+  height: 300px;
+`;
+
 export default (item, setDivide) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
@@ -160,6 +213,87 @@ export default (item, setDivide) => {
         </ContentMain>
         <Hr />
         <Content>{item.item.content}</Content>
+
+        <OptionText>
+          <h1>옵션</h1>
+          <hr />
+        </OptionText>
+        {console.log(item.item, "item")}
+        <Options>
+          {item.item && item.item.airConditioner === "에어컨" && (
+            <Option>airConditioner</Option>
+          )}
+          {item.item && item.item.washer === "세탁기" && (
+            <Option>washer</Option>
+          )}
+          {item.item && item.item.refrigerator === true && (
+            <Option>refrigerator</Option>
+          )}
+          {item.item && item.item.internet === "인터넷" && (
+            <Option>internet</Option>
+          )}
+          {item.item && item.item.microwave === "전자렌지" && (
+            <Option>microwave</Option>
+          )}
+          {item.item && item.item.wifi === "wifi" && <Option>wifi</Option>}
+          {item.item && item.item.bed === "침대" && <Option>bed</Option>}
+          {item.item && item.item.desk === "책상" && <Option>desk</Option>}
+          {item.item && item.item.induction === "인덕션" && (
+            <Option>induction</Option>
+          )}
+          {item.item && item.item.gasRange === "가스레인지" && (
+            <Option>gasRange</Option>
+          )}
+          {item.item && item.item.doorLock === "도어락" && (
+            <Option>doorLock</Option>
+          )}
+          {item.item && item.item.CCTV === "CCTV" && <Option>CCTV</Option>}
+          {item.item && item.item.pets === "애완동물" && <Option>pets</Option>}
+          {item.item && item.item.elevator === "엘리베이터" && (
+            <Option>elevator</Option>
+          )}
+          {item.item && item.item.parking === "주차" && (
+            <Option>parking</Option>
+          )}
+          {item.item && item.item.electricHeating === "전기난방" && (
+            <Option>electricHeating</Option>
+          )}
+          {item.item && item.item.cityGasHeating === "도시가스난방" && (
+            <Option>tecityGasHeatingst</Option>
+          )}
+          {item.item && item.item.nightElectric === "심야전기" && (
+            <Option>nightElectric</Option>
+          )}
+          {item.item && item.item.wateTax === "수도세" && (
+            <Option>wateTax</Option>
+          )}
+          {item.item && item.item.includingElectricity === "전기세포함" && (
+            <Option>includingElectricity</Option>
+          )}
+          {item.item && item.item.cityGasIncluded === "도시가스포함" && (
+            <Option>cityGasIncluded</Option>
+          )}
+        </Options>
+
+        <DetailText>
+          <h1>디테일</h1>
+          <hr />
+        </DetailText>
+        <ImageGalleryContainer>
+          <FilesA>
+            <ImageGallery
+              additionalClass={`inTheMapDetail`}
+              items={path}
+              showFullscreenButton={false}
+              useBrowserFullscreen={false}
+              showThumbnails={true}
+              showPlayButton={false}
+              showBullets={true}
+              lazyLoad={true}
+              showIndex={false}
+            />
+          </FilesA>
+        </ImageGalleryContainer>
       </Files>
     </Container>
   );

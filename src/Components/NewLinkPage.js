@@ -12,6 +12,7 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin: 0px -15px;
 `;
 
 const SLink = styled(Link)`

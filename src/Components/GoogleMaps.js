@@ -57,13 +57,12 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 7px;
-  padding-left: 15px;
+  padding: 15px;
   position: relative;
   background-color: #fcfcfc;
   border-radius: 5px;
-  width: 303px;
-  height: 228px;
+  width: 365px;
+  height: 350px;
   text-align: right;
 `;
 
@@ -128,11 +127,7 @@ export default ({
             pathname: `/fullmap/roomsdetail/${item.id}/new/1`,
             data: { item }
           }}
-        >
-          <ButtonBottom onClick={() => setDivide(true)}>
-            자세히보기
-          </ButtonBottom>
-        </Link>
+        />
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
           colse
         </Button>
