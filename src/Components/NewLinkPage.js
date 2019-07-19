@@ -46,19 +46,19 @@ export default ({
 }) => {
   return (
     <Wrapper>
-      {data && data.currentData ? (
+      {data && data.seeFullPost ? (
         <Container>
           {data &&
-            data.currentData &&
-            data.currentData.post.map((item, key) => {
+            data.seeFullPost &&
+            data.seeFullPost.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
 
               if (
-                data.currentData &&
-                data.currentData.post[key] &&
-                data.currentData.post[key].files.length === 0
+                data.seeFullPost &&
+                data.seeFullPost.post[key] &&
+                data.seeFullPost.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -81,9 +81,9 @@ export default ({
               } else {
                 /////// 이미지 있을때
 
-                data.currentData &&
-                  data.currentData.post[key] &&
-                  data.currentData.post[key].files.map(item => {
+                data.seeFullPost &&
+                  data.seeFullPost.post[key] &&
+                  data.seeFullPost.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));

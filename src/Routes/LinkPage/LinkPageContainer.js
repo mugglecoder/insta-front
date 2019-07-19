@@ -4,23 +4,9 @@ import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
 
-const CURRENTDATA = gql`
-  query currentData(
-    $first: Int
-    $skip: Int
-    $lat: Float
-    $lng: Float
-    $lat2: Float
-    $lng2: Float
-  ) {
-    currentData(
-      first: $first
-      skip: $skip
-      lat: $lat
-      lng: $lng
-      lat2: $lat2
-      lng2: $lng2
-    ) {
+const FEED_QUERY = gql`
+  query seeFullPost($first: Int, $skip: Int) {
+    seeFullPost(first: $first, skip: $skip) {
       post {
         id
         caption
@@ -29,8 +15,6 @@ const CURRENTDATA = gql`
           lat
           lng
         }
-        lat
-        lng
         selectType
         deposit
         money
@@ -52,44 +36,12 @@ const CURRENTDATA = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 4;
+const LINKS_PER_PAGE = 16;
 
 export default props => {
   //페이지네이션
   const [skip, setSkip] = useState(0);
   const [first, setFrist] = useState(0);
-
-  //셀렉트 박스
-  const [select, setSelect] = useState("");
-  const [selectValue1, setSelectValue1] = useState("");
-  useEffect(() => {
-    setSelect(String(`${selectValue1} ${selectValue2}`));
-  }, [selectValue1]);
-  const [selectValue2, setSelectValue2] = useState("");
-  useEffect(() => {
-    setSelect(String(`${selectValue1} ${selectValue2}`));
-  }, [selectValue2]);
-  //보증금과 월세에 대한 저장
-  const [select2, setSelect2] = useState([]);
-
-  //보증금 선택사항
-  const [selectValue3, setSelectValue3] = useState("");
-  useEffect(() => {
-    setSelect2(`${selectValue3} ${selectValue4}`);
-  }, [selectValue3]);
-
-  //월세선택사항
-  const [selectValue4, setSelectValue4] = useState("");
-  useEffect(() => {
-    setSelect2(`${selectValue3} ${selectValue4}`);
-  }, [selectValue4]);
-
-  const handleChange = async e => {
-    setSelectValue1(e.target.value);
-  };
-  const handleChange2 = async e => {
-    setSelectValue2(e.target.value);
-  };
 
   // 토글 팝업 에드 클래스
   const [isOpen, setIsOpen] = useState(false);
@@ -157,9 +109,8 @@ export default props => {
   };
   let herrrr = props.history;
   const token = localStorage.getItem("token");
-  const { data, loading } = useQuery(CURRENTDATA, {
-    variables: { first, skip, lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
-  });
+  const { data, loading } = useQuery(FEED_QUERY);
+
   console.log(data, "data");
 
   //구글지도
@@ -202,11 +153,11 @@ export default props => {
     const page = parseInt(
       props && props.match && props.match.params && props.match.params.page
     );
-    console.log(data && data.currentData && data.currentData.count, "page");
+    console.log(data && data.seeFullPost && data.seeFullPost.count, "page");
 
     if (
       page <=
-      (data && data.currentData && data.currentData.count / LINKS_PER_PAGE)
+      (data && data.seeFullPost && data.seeFullPost.count / LINKS_PER_PAGE)
     ) {
       const nextPage = page + 1;
 
@@ -230,12 +181,6 @@ export default props => {
     }
   };
 
-  const deposit = selectValue3[0];
-  const deposit2 = selectValue3[1];
-
-  const money = selectValue4[0];
-  const money2 = selectValue4[1];
-
   const searching = e => {
     e.preventDefault();
   };
@@ -245,7 +190,7 @@ export default props => {
 
   //주소를 가져온다
   const latAndlng =
-    data && data.currentData && data.currentData.post.map(item => item);
+    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
 
   // props.history.push(`/new/search`);
   return (
@@ -253,14 +198,6 @@ export default props => {
       onBoundsChange={onBoundsChange}
       isOpen={isOpen}
       setActiveClass={setActiveClass}
-      handleChange={handleChange}
-      handleChange2={handleChange2}
-      selectValue1={selectValue1}
-      selectValue2={selectValue2}
-      setSelectValue1={setSelectValue1}
-      setSelectValue2={setSelectValue2}
-      select={select}
-      setSelect={setSelect}
       setCenter={setCenter}
       latAndlng={latAndlng}
       center={center}
@@ -276,13 +213,6 @@ export default props => {
       onClick={onClick}
       _previousPage={_previousPage}
       _nextPage={_nextPage}
-      setSelectValue3={setSelectValue3}
-      setSelectValue4={setSelectValue4}
-      searching={searching}
-      deposit={deposit}
-      deposit2={deposit2}
-      money={money}
-      money2={money2}
     />
   );
 };
