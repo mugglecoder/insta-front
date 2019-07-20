@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
+import axios from "axios";
 
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
@@ -84,6 +85,40 @@ const CURRENTDATA = gql`
   }
 `;
 
+const NEXT = gql`
+  query nextBoard($first: Int) {
+    nextBoard(first: $first) {
+      post {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        selectType
+        deposit
+        money
+        count
+        selectType
+        content
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+      }
+      count
+    }
+  }
+`;
+
 const LINKS_PER_PAGE = 4;
 
 export default props => {
@@ -111,6 +146,7 @@ export default props => {
       props.location.pathname.includes("new");
 
     //페이지네이션
+
     const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
     const first = isNewPage || props ? LINKS_PER_PAGE : 100;
     setFrist(first);
@@ -128,17 +164,17 @@ export default props => {
 
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
     localStorage.setItem("map", JSON.stringify(center));
-
     return true;
   };
 
   let herrrr = props.history;
   const token = localStorage.getItem("token");
   const { data, loading } = useQuery(FEED_QUERY);
-  const { data: pageData, loading: loaddingS } = useQuery(FEED_QUERY, {
-    variables: { first, skip }
+  const { data: pageData, loading: loaddingS } = useQuery(NEXT, {
+    variables: { first }
   });
-
+  console.log(first, "pagedata");
+  console.log(pageData, "pagedata");
   //구글지도
   const [center, setCenter] = useState({
     lat: 35.8961565802915,
@@ -208,23 +244,13 @@ export default props => {
   //무한스크롤 로직
 
   const [hasMoreItems, setHasMoreItems] = useState(true);
-
-  useEffect(() => {
-    loadFunc();
-  }, [set]);
-
-  const loadFunc = () => {
-    if (pageData) {
-      if (loaddingS) {
-        console.log("다음 페이지");
-        setHasMoreItems(true);
-      } else {
-        console.log("set 없으");
-        setHasMoreItems(false);
-      }
-    }
+  const [database, setDatabase] = useState([]);
+  let items = [];
+  const loadFunc = page => {
+    pageData &&
+      pageData.seeFullPost &&
+      pageData.seeFullPost.post.map(item => items.push(item));
   };
-
   //주소를 가져온다
   const latAndlng =
     data && data.seeFullPost && data.seeFullPost.post.map(item => item);
@@ -232,6 +258,7 @@ export default props => {
   // props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
+      items={items}
       hasMoreItems={hasMoreItems}
       loadFunc={loadFunc}
       pageData={pageData}
