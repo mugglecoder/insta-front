@@ -87,6 +87,8 @@ const MarginDiv = styled.div`
   margin-top: 40px;
 `;
 export default ({
+  hasMoreItems,
+  loadFunc,
   pageData,
   onBoundsChange,
   pagenationData,
@@ -154,7 +156,21 @@ export default ({
       </Floater>
     </MarkerContainer>
   );
-
+  let items = [];
+  items.push(
+    <WrapNewLinkPage>
+      <NewLinkPage
+        pageData={pageData}
+        pagenationData={pagenationData}
+        props={props}
+        data={data}
+        loading={loading}
+        page={page}
+        _previousPage={_previousPage}
+        _nextPage={_nextPage}
+      />
+    </WrapNewLinkPage>
+  );
   return (
     ////////////////////////////////////////////////////////////////////
     <Wrapper>
@@ -169,20 +185,6 @@ export default ({
       <MarginDiv />
       {loading && <Loading />}
 
-      {!loading && (
-        <WrapNewLinkPage>
-          <NewLinkPage
-            pageData={pageData}
-            pagenationData={pagenationData}
-            props={props}
-            data={data}
-            loading={loading}
-            page={page}
-            _previousPage={_previousPage}
-            _nextPage={_nextPage}
-          />
-        </WrapNewLinkPage>
-      )}
       {!loading && token && data.currentData ? (
         <LogInButtonWrap>
           <Link
@@ -202,6 +204,18 @@ export default ({
       ) : (
         false
       )}
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={loadFunc}
+        hasMore={hasMoreItems}
+        loader={
+          <div className="loader" key={0}>
+            Loading ...
+          </div>
+        }
+      >
+        {items}
+      </InfiniteScroll>
     </Wrapper>
   );
 };

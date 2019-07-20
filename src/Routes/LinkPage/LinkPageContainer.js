@@ -135,7 +135,7 @@ export default props => {
   let herrrr = props.history;
   const token = localStorage.getItem("token");
   const { data, loading } = useQuery(FEED_QUERY);
-  const { data: pageData } = useQuery(FEED_QUERY, {
+  const { data: pageData, loading: loaddingS } = useQuery(FEED_QUERY, {
     variables: { first, skip }
   });
 
@@ -205,14 +205,25 @@ export default props => {
       return setSet2(true);
     }
   };
+  //무한스크롤 로직
 
-  const searching = e => {
-    e.preventDefault();
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+
+  useEffect(() => {
+    loadFunc();
+  }, [set]);
+
+  const loadFunc = () => {
+    if (pageData) {
+      if (loaddingS) {
+        console.log("다음 페이지");
+        setHasMoreItems(true);
+      } else {
+        console.log("set 없으");
+        setHasMoreItems(false);
+      }
+    }
   };
-  console.log(pageData, "pageData");
-
-  ////////////////////
-  //검색하는 데이터 쿼리
 
   //주소를 가져온다
   const latAndlng =
@@ -221,6 +232,8 @@ export default props => {
   // props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
+      hasMoreItems={hasMoreItems}
+      loadFunc={loadFunc}
       pageData={pageData}
       onBoundsChange={onBoundsChange}
       isOpen={isOpen}
