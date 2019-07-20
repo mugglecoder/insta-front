@@ -36,7 +36,55 @@ const FEED_QUERY = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 16;
+const CURRENTDATA = gql`
+  query currentData(
+    $first: Int
+    $skip: Int
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
+  ) {
+    currentData(
+      first: $first
+      skip: $skip
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
+    ) {
+      post {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        selectType
+        deposit
+        money
+        count
+        selectType
+        content
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+      }
+      count
+    }
+  }
+`;
+
+const LINKS_PER_PAGE = 4;
 
 export default props => {
   //페이지네이션
@@ -48,16 +96,7 @@ export default props => {
   const setActiveClass = () => (isOpen ? setIsOpen(false) : setIsOpen(true));
 
   //로컬스토리지 이용
-  useEffect(() => {
-    localStorage.setItem(
-      "map",
-      JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
-    );
-    localStorage.setItem("종류", "");
-    localStorage.setItem("종류2", "");
-    localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
-    localStorage.setItem("월세", JSON.stringify([0, 1000000]));
-  }, []);
+
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(16);
   const page = parseInt(
@@ -79,39 +118,26 @@ export default props => {
     return skip;
   };
 
+  console.log(first, skip);
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
 
   //
-  console.log(first, skip, "tyes");
+
   //온 바운드 체인지
-  const [latS, setLatS] = useState(0);
-  const [lat2S, setLat2S] = useState(0);
-  const [lngS, setLngS] = useState(0);
-  const [lng2S, seLng2S] = useState(0);
 
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
-    console.log(props);
-    const centerS = center;
-    const latS = bounds[0];
-    const lat2S = bounds[4];
-    const lngS = bounds[1];
-    const lng2S = bounds[3];
-    setLatS(latS);
-    setLat2S(lat2S);
-    setLngS(lngS);
-    seLng2S(lng2S);
-    setCenter(centerS);
-
-    localStorage.setItem("map", JSON.stringify(centerS));
+    localStorage.setItem("map", JSON.stringify(center));
 
     return true;
   };
+
   let herrrr = props.history;
   const token = localStorage.getItem("token");
   const { data, loading } = useQuery(FEED_QUERY);
-
-  console.log(data, "data");
+  const { data: pageData } = useQuery(FEED_QUERY, {
+    variables: { first, skip }
+  });
 
   //구글지도
   const [center, setCenter] = useState({
@@ -153,7 +179,6 @@ export default props => {
     const page = parseInt(
       props && props.match && props.match.params && props.match.params.page
     );
-    console.log(data && data.seeFullPost && data.seeFullPost.count, "page");
 
     if (
       page <=
@@ -184,6 +209,7 @@ export default props => {
   const searching = e => {
     e.preventDefault();
   };
+  console.log(pageData, "pageData");
 
   ////////////////////
   //검색하는 데이터 쿼리
@@ -195,6 +221,7 @@ export default props => {
   // props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
+      pageData={pageData}
       onBoundsChange={onBoundsChange}
       isOpen={isOpen}
       setActiveClass={setActiveClass}

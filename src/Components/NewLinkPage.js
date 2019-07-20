@@ -36,6 +36,7 @@ const P = styled.p`
 `;
 
 export default ({
+  pageData,
   props,
   data,
   searchData,
@@ -49,16 +50,16 @@ export default ({
       {data && data.seeFullPost ? (
         <Container>
           {data &&
-            data.seeFullPost &&
-            data.seeFullPost.post.map((item, key) => {
+            pageData.seeFullPost &&
+            pageData.seeFullPost.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
 
               if (
-                data.seeFullPost &&
-                data.seeFullPost.post[key] &&
-                data.seeFullPost.post[key].files.length === 0
+                pageData.seeFullPost &&
+                pageData.seeFullPost.post[key] &&
+                pageData.seeFullPost.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -81,9 +82,9 @@ export default ({
               } else {
                 /////// 이미지 있을때
 
-                data.seeFullPost &&
-                  data.seeFullPost.post[key] &&
-                  data.seeFullPost.post[key].files.map(item => {
+                pageData.seeFullPost &&
+                  pageData.seeFullPost.post[key] &&
+                  pageData.seeFullPost.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));

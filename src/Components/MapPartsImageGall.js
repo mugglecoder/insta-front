@@ -218,7 +218,7 @@ export default (item, setDivide) => {
           <h1>옵션</h1>
           <hr />
         </OptionText>
-        {console.log(item.item, "item")}
+
         <Options>
           {item.item && item.item.airConditioner === "에어컨" && (
             <Option>airConditioner</Option>

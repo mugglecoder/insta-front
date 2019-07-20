@@ -87,8 +87,9 @@ const MarginDiv = styled.div`
   margin-top: 40px;
 `;
 export default ({
+  pageData,
   onBoundsChange,
-
+  pagenationData,
   setCenter,
   latAndlng,
   places,
@@ -171,6 +172,8 @@ export default ({
       {!loading && (
         <WrapNewLinkPage>
           <NewLinkPage
+            pageData={pageData}
+            pagenationData={pagenationData}
             props={props}
             data={data}
             loading={loading}

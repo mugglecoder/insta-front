@@ -334,7 +334,6 @@ export default ({
 
   //매물 종류에 대한 저장
   const getValue1 = a => {
-    console.log(a, "a");
     localStorage.setItem("종류", a.value);
     return setSelectValue1(a.value);
   };
@@ -1062,7 +1061,7 @@ export default ({
         ) : (
           false
         )}
-        {console.log(data, "data")}
+
         {loading && (
           <ReactCSSTransitionGroup
             transitionName="example"
