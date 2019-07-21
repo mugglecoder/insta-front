@@ -87,7 +87,7 @@ const MarginDiv = styled.div`
   margin-top: 40px;
 `;
 export default ({
-  items,
+  itemsS,
   hasMoreItems,
   loadFunc,
   pageData,
@@ -107,8 +107,7 @@ export default ({
   first,
   token,
   onClick,
-  _previousPage,
-  _nextPage
+  _previousPage
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -157,7 +156,19 @@ export default ({
       </Floater>
     </MarkerContainer>
   );
-
+  let items = [];
+  items.push(
+    <WrapNewLinkPage>
+      <NewLinkPage
+        pagenationData={pagenationData}
+        props={props}
+        data={data}
+        loading={loading}
+        page={page}
+        _previousPage={_previousPage}
+      />
+    </WrapNewLinkPage>
+  );
   return (
     ////////////////////////////////////////////////////////////////////
     <Wrapper>
@@ -171,18 +182,7 @@ export default ({
       />
       <MarginDiv />
       {loading && <Loading />}
-      <WrapNewLinkPage>
-        <NewLinkPage
-          pageData={pageData}
-          pagenationData={pagenationData}
-          props={props}
-          data={data}
-          loading={loading}
-          page={page}
-          _previousPage={_previousPage}
-          _nextPage={_nextPage}
-        />
-      </WrapNewLinkPage>
+
       {!loading && token && data.currentData ? (
         <LogInButtonWrap>
           <Link
@@ -209,7 +209,7 @@ export default ({
         hasMore={hasMoreItems}
         loader={
           <div className="loader" key={0}>
-            Loading ...
+            Loading .............................................!
           </div>
         }
       >

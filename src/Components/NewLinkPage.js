@@ -47,19 +47,19 @@ export default ({
 }) => {
   return (
     <Wrapper>
-      {data && data.seeFullPost ? (
+      {data && data.nextBoard ? (
         <Container>
           {data &&
-            pageData.seeFullPost &&
-            pageData.seeFullPost.post.map((item, key) => {
+            data.nextBoard &&
+            data.nextBoard.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
 
               if (
-                pageData.seeFullPost &&
-                pageData.seeFullPost.post[key] &&
-                pageData.seeFullPost.post[key].files.length === 0
+                data.nextBoard &&
+                data.nextBoard.post[key] &&
+                data.nextBoard.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -82,9 +82,9 @@ export default ({
               } else {
                 /////// 이미지 있을때
 
-                pageData.seeFullPost &&
-                  pageData.seeFullPost.post[key] &&
-                  pageData.seeFullPost.post[key].files.map(item => {
+                data.nextBoard &&
+                  data.nextBoard.post[key] &&
+                  data.nextBoard.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));
@@ -123,20 +123,6 @@ export default ({
                 />
               );
             })}
-          {!loading && (
-            <PPcontainer>
-              <Pcontainer>
-                <P>
-                  이전
-                  <button onClick={_previousPage} />
-                </P>
-                <P>
-                  다음
-                  <button onClick={_nextPage} />
-                </P>
-              </Pcontainer>
-            </PPcontainer>
-          )}
         </Container>
       ) : (
         <Container>

@@ -86,8 +86,8 @@ const CURRENTDATA = gql`
 `;
 
 const NEXT = gql`
-  query nextBoard($first: Int) {
-    nextBoard(first: $first) {
+  query nextBoard($first: Int, $skip: Int) {
+    nextBoard(first: $first, skip: $skip) {
       post {
         id
         caption
@@ -139,18 +139,15 @@ export default props => {
   );
   const { data: dataOfMe } = useQuery(ME);
 
-  const _getQueryVariables = () => {
+  const _getQueryVariables = page => {
     const isNewPage =
       props.location &&
       props.location.pathname &&
       props.location.pathname.includes("new");
 
     //페이지네이션
-
-    const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage || props ? LINKS_PER_PAGE : 100;
+    const first = isNewPage || props ? page * LINKS_PER_PAGE : 100;
     setFrist(first);
-    setSkip(skip);
     return skip;
   };
 
@@ -159,9 +156,36 @@ export default props => {
   useEffect(() => {}, [getQueryVariables]);
 
   //
+  //무한 스크롤 로직 구현중
+  //  let dafaultValue = 4;
+  //  const nextPageGo = page => {
+  //    dafaultValue = dafaultValue * page;
+  //    return dafaultValue;
+  //  };
+  //  console.log(dafaultValue);
+  //  let herrrr = props.history;
+  //  const token = localStorage.getItem("token");
+  //  const { data, loading } = useQuery(FEED_QUERY);
+  //  const { data: pageData, loading: loaddingS } = useQuery(NEXT, {
+  //    variables: { first: nextPageGo() }
+  //  });
+  //  //무한스크롤 로직//
+
+  //  const [hasMoreItems, setHasMoreItems] = useState(true);
+  //  const [database, setDatabase] = useState([]);
+  //  let items = [];
+  //  const loadFunc = page => {
+  //    console.log(pageData.nextBoard && pageData.nextBoard.count, "로딩중");//
+
+  //    if (loaddingS) {
+  //      nextPageGo(page);
+  //      pageData.nextBoard &&
+  //        pageData.nextBoard.post.map(item => items.push(item));
+  //      if (pageData < pageData.count) setHasMoreItems(false);
+  //    }
+  //  };
 
   //온 바운드 체인지
-
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
     localStorage.setItem("map", JSON.stringify(center));
     return true;
@@ -169,12 +193,11 @@ export default props => {
 
   let herrrr = props.history;
   const token = localStorage.getItem("token");
-  const { data, loading } = useQuery(FEED_QUERY);
-  const { data: pageData, loading: loaddingS } = useQuery(NEXT, {
-    variables: { first }
+  const { data: pageData, loading } = useQuery(FEED_QUERY);
+  const { data, loading: loaddingS } = useQuery(NEXT, {
+    variables: { first, skip }
   });
-  console.log(first, "pagedata");
-  console.log(pageData, "pagedata");
+
   //구글지도
   const [center, setCenter] = useState({
     lat: 35.8961565802915,
@@ -210,15 +233,9 @@ export default props => {
   }, [set2]);
 
   //페이지네이션
-  const _nextPage = e => {
-    e.preventDefault();
-    const page = parseInt(
-      props && props.match && props.match.params && props.match.params.page
-    );
-
+  const _nextPage = page => {
     if (
-      page <=
-      (data && data.seeFullPost && data.seeFullPost.count / LINKS_PER_PAGE)
+      page <= (data && data.nextPage && data.nextPage.count / LINKS_PER_PAGE)
     ) {
       const nextPage = page + 1;
 
@@ -228,37 +245,28 @@ export default props => {
     }
   };
 
-  //페이지네이션
-  const _previousPage = async e => {
-    e.preventDefault();
-    const page = parseInt(
-      props && props.match && props.match.params && props.match.params.page
-    );
-    if (page > 1) {
-      const previousPage = page - 1;
-      props.history.push(`/new/${previousPage}`);
-      await _getQueryVariables();
-      return setSet2(true);
-    }
-  };
   //무한스크롤 로직
-
   const [hasMoreItems, setHasMoreItems] = useState(true);
-  const [database, setDatabase] = useState([]);
-  let items = [];
+  let itemsS = [];
   const loadFunc = page => {
-    pageData &&
-      pageData.seeFullPost &&
-      pageData.seeFullPost.post.map(item => items.push(item));
+    console.log(page, "page?");
+    if (data && data.nextBoard && data.nextBoard.count !== undefined) {
+      if (data.nextBoard && data.nextBoard.count > page) {
+        console.log("이게 실행 되어야지");
+        props.history.push(`/new/${page}`);
+        _getQueryVariables(page);
+      }
+    }
   };
   //주소를 가져온다
   const latAndlng =
-    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
+    pageData &&
+    pageData.seeFullPost &&
+    pageData.seeFullPost.post.map(item => item);
 
   // props.history.push(`/new/search`);
   return (
     <LinkPagePresenter
-      items={items}
       hasMoreItems={hasMoreItems}
       loadFunc={loadFunc}
       pageData={pageData}
@@ -278,7 +286,6 @@ export default props => {
       skip={skip}
       first={first}
       onClick={onClick}
-      _previousPage={_previousPage}
       _nextPage={_nextPage}
     />
   );
