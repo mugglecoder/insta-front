@@ -7,6 +7,8 @@ import { ME } from "../../SharedQueries";
 
 const SEARCH = gql`
   query searchRoom(
+    $first: Int
+    $skip: Int
     $lat: Float
     $lng: Float
     $lat2: Float
@@ -44,6 +46,8 @@ const SEARCH = gql`
     $MLSnumber: String
   ) {
     searchRoom(
+      first: $first
+      skip: $skip
       lat: $lat
       lng: $lng
       lat2: $lat2
@@ -80,57 +84,60 @@ const SEARCH = gql`
       numberOfFoors: $numberOfFoors
       MLSnumber: $MLSnumber
     ) {
-      id
-      caption
-      places {
+      post {
         id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
         lat
         lng
+        count
+        content
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        numberOfFoors
+        MLSnumber
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
       }
-      lat
-      lng
-      count
-      content
-      airConditioner
-      washer
-      refrigerator
-      internet
-      microwave
-      wifi
-      bed
-      desk
-      induction
-      gasRange
-      doorLock
-      CCTV
-      pets
-      elevator
-      parking
-      electricHeating
-      cityGasHeating
-      nightElectric
-      wateTax
-      includingElectricity
-      cityGasIncluded
-      numberOfFoors
-      MLSnumber
-      deposit
-      money
-      selectType
-      createdAt
-      user {
-        id
-        username
-      }
-      files {
-        id
-        url
-      }
+      counts
     }
   }
 `;
 
-const LINKS_PER_PAGE = 12;
+const LINKS_PER_PAGE = 8;
 
 export default withRouter(props => {
   ///체크박스 스테이트
@@ -428,7 +435,7 @@ export default withRouter(props => {
   };
 
   //구글지도 줌 레벨
-  const [zoom, setZoom] = useState(16);
+  const [zoom, setZoom] = useState(parseInt(localStorage.getItem("zoom")));
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );
@@ -447,6 +454,7 @@ export default withRouter(props => {
     setSkip(skip);
     return skip;
   };
+  console.log(page, "page");
 
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
@@ -516,6 +524,8 @@ export default withRouter(props => {
 
   const { data: searchData, loading } = useQuery(SEARCH, {
     variables: {
+      first,
+      skip,
       lat: latS,
       lat2: lat2S,
       lng: lngS,
@@ -550,8 +560,7 @@ export default withRouter(props => {
       //  MLSnumber
     }
   });
-  console.log(searchData, "searchData");
-  console.log(props, "props");
+
   //페이지네이션
   const _nextPage = e => {
     e.preventDefault();
@@ -591,14 +600,43 @@ export default withRouter(props => {
     e.preventDefault();
   };
 
+  const [activePage, setActivePage] = useState(page);
+  useEffect(() => {}, [activePage]);
+  //new 페이지네이션
+  const handlePageChange = pageNumber => {
+    console.log(pageNumber, "pageNumber");
+    const isNewPage =
+      props.location &&
+      props.location.pathname &&
+      props.location.pathname.includes("new");
+
+    //페이지네이션
+    const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
+    const first = isNewPage || props ? LINKS_PER_PAGE : 100;
+    setFrist(first);
+    setSkip(skip);
+    props.history.push(`/new/search/${pageNumber}`);
+    setActivePage(pageNumber);
+    setSet(true);
+  };
+  const itemsCountPerPage = () => {};
+
+  const totalCount =
+    searchData.searchRoom && searchData.searchRoom.counts
+      ? searchData.searchRoom && searchData.searchRoom.counts
+      : 10;
   //주소를 가져온다
   const latAndlng =
     searchData &&
     searchData.searchRoom &&
-    searchData.searchRoom.map(item => item);
+    searchData.searchRoom.post.map(item => item);
 
   return (
     <SearchPresenter
+      itemsCountPerPage={itemsCountPerPage}
+      totalCount={totalCount}
+      activePage={activePage}
+      handlePageChange={handlePageChange}
       setFixCenter={setFixCenter}
       onBoundsChange={onBoundsChange}
       isOpen={isOpen}

@@ -11,6 +11,9 @@ import "react-toggle/style.css";
 import CreatableSelect from "react-select/creatable";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Loading from "../../Components/PlaceHolderForLoader/Loading";
+import Pagination from "react-js-pagination";
+import "../../css/pagination.css";
+
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1300px;
@@ -201,7 +204,19 @@ const Container = styled.section`
   }
 `;
 
+const PaginationDiv = styled.div`
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default ({
+  itemsCountPerPage,
+  totalCount,
+  activePage,
+  handlePageChange,
   onBoundsChange,
   isOpen,
   setActiveClass,
@@ -653,7 +668,22 @@ export default ({
           zoom={zoom}
           setCenter={setCenter}
         />
-
+        <PaginationDiv>
+          <Pagination
+            activeClass="activeClass"
+            activeLinkClass="activeLinkClass"
+            itemClass="itemClass"
+            itemClassFirst="itemClassFirst"
+            itemClassPrev="itemClassPrev"
+            itemClassNext="itemClassNext"
+            itemClassLast="itemClassLast"
+            activePage={activePage}
+            itemsCountPerPage={first}
+            totalItemsCount={totalCount}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+          />
+        </PaginationDiv>
         <SearchBox>
           <CreatableSelect
             arrowRenderer={false}

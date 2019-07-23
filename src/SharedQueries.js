@@ -5,6 +5,9 @@ export const ME = gql`
     me {
       id
       username
+      likes {
+        id
+      }
     }
   }
 `;

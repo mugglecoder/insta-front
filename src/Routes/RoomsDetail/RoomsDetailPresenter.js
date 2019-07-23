@@ -7,6 +7,7 @@ import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
 import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
+import { HeartEmpty } from "../../Components/Icons";
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1300px;
@@ -127,15 +128,6 @@ const File = styled.img`
   background: no-repeat;
 `;
 
-const FileS = styled.img`
-  background-size: contain;
-  background-image: url(${props => props.src});
-  background-position: center;
-  width: 100%;
-  background-repeat: no-repeat;
-  margin: 80px 0px;
-`;
-
 const MoreRooms = styled.div`
   margin: 30px 0px;
   h1 {
@@ -145,6 +137,7 @@ const MoreRooms = styled.div`
 `;
 
 const ContentWrap = styled.div`
+  position: relative;
   padding: 20px;
 `;
 
@@ -175,10 +168,6 @@ const Container = styled.div`
   justify-content: flex-start;
 `;
 
-const SLink = styled(Link)`
-  color: grey;
-`;
-
 const PPcontainer = styled.div`
   width: 100%;
 
@@ -203,8 +192,6 @@ const ImageGalleryContainer = styled.div`
   align-items: center;
 `;
 
-const ButtonDiv = styled.div``;
-
 const DeleteButton = styled.button`
   cursor: pointer;
   margin: 10px;
@@ -227,12 +214,37 @@ const MarkerIcon = styled.div`
   border-radius: 50%;
 `;
 
+// 좋아요
+
+const LikeContainer = styled.div``;
+const Like = styled.div`
+  background-color: pink;
+  display: flex;
+  flex-direction: row;
+  z-index: 100;
+  position: fixed;
+  bottom: 100px;
+  right: 50px;
+`;
+
+const LikeToggle = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  :focus {
+    outline: none;
+  }
+`;
+
 //구글 맵 컨테이너
 
 const MapContainer = styled.div``;
 const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
-
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  joayo,
+  toggleLike,
   lat,
   lng,
   center,
@@ -282,6 +294,35 @@ const RoomsDetailPresenter = ({
     )}
     {!loading && (
       <ContentWrap>
+        <LikeContainer>
+          <Like>
+            <LikeToggle onClick={toggleLike}>
+              {joayo ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#ED4956"
+                >
+                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                >
+                  <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z" />
+                </svg>
+              )}
+            </LikeToggle>
+            <h1>전화</h1>
+            <h1>카톡</h1>
+          </Like>
+        </LikeContainer>
         <Column>
           <ColumnL>
             <Username>
@@ -320,7 +361,6 @@ const RoomsDetailPresenter = ({
           <hr />
         </OptionText>
         <Options>
-          {console.log(data.detailPost)}
           {data.detailPost && data.detailPost.airConditioner === "에어컨" && (
             <Option>airConditioner</Option>
           )}
@@ -469,7 +509,6 @@ const RoomsDetailPresenter = ({
                 let arrayOfPath = [];
                 let test = [];
                 let path = [];
-                console.log(path, test, "path");
 
                 if (
                   data2.seeFullPost &&
@@ -481,7 +520,6 @@ const RoomsDetailPresenter = ({
                     `http://localhost:4000/images/preImage/no-image.jpg`
                   );
                   arrayOfPath.map((item, key) => {
-                    console.log(item, "inthe arrayofMap");
                     return test.push(item);
                   });
                   const s = test.reduce((s, a) => {

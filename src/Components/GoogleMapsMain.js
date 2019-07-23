@@ -63,7 +63,7 @@ const Wrapper = styled.div`
   background-color: #fcfcfc;
   border-radius: 10px;
   width: 300px;
-  height: 200px;
+  height: 250px;
   text-align: right;
 `;
 
@@ -193,8 +193,8 @@ export default ({
               )
             )}
         </GoogleMapReact>
-        <Link to="/news/search">
-          <H1 onClick={setItems}>여기에 있는 매물 상세검색!</H1>
+        <Link to="/new/search">
+          <H1 onClick={setItems}>여기에 있는 매물 상세검색!!</H1>
         </Link>
       </Mapdiv>
     </Container>

@@ -1,9 +1,10 @@
 import { gql } from "apollo-boost";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 import LinkPagePresenter from "./LinkPagePresenter";
 import axios from "axios";
+import { formatExecError } from "jest-message-util";
 
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
@@ -85,6 +86,25 @@ const CURRENTDATA = gql`
   }
 `;
 
+//
+const QUERY_REPOS = gql`
+  query($q: String!, $end: String) {
+    search(first: 20, type: REPOSITORY, query: $q, after: $end) {
+      nodes {
+        ... on Repository {
+          name
+          url
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`;
+
+//
 const NEXT = gql`
   query nextBoard($first: Int, $skip: Int) {
     nextBoard(first: $first, skip: $skip) {
@@ -139,51 +159,23 @@ export default props => {
   );
   const { data: dataOfMe } = useQuery(ME);
 
-  const _getQueryVariables = page => {
+  const _getQueryVariables = () => {
     const isNewPage =
       props.location &&
       props.location.pathname &&
       props.location.pathname.includes("new");
 
     //페이지네이션
-    const first = isNewPage || props ? page * LINKS_PER_PAGE : 100;
+    const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
+    const first = isNewPage || props ? LINKS_PER_PAGE : 100;
     setFrist(first);
+    setSkip(skip);
     return skip;
   };
 
   console.log(first, skip);
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
-
-  //
-  //무한 스크롤 로직 구현중
-  //  let dafaultValue = 4;
-  //  const nextPageGo = page => {
-  //    dafaultValue = dafaultValue * page;
-  //    return dafaultValue;
-  //  };
-  //  console.log(dafaultValue);
-  //  let herrrr = props.history;
-  //  const token = localStorage.getItem("token");
-  //  const { data, loading } = useQuery(FEED_QUERY);
-  //  const { data: pageData, loading: loaddingS } = useQuery(NEXT, {
-  //    variables: { first: nextPageGo() }
-  //  });
-  //  //무한스크롤 로직//
-
-  //  const [hasMoreItems, setHasMoreItems] = useState(true);
-  //  const [database, setDatabase] = useState([]);
-  //  let items = [];
-  //  const loadFunc = page => {
-  //    console.log(pageData.nextBoard && pageData.nextBoard.count, "로딩중");//
-
-  //    if (loaddingS) {
-  //      nextPageGo(page);
-  //      pageData.nextBoard &&
-  //        pageData.nextBoard.post.map(item => items.push(item));
-  //      if (pageData < pageData.count) setHasMoreItems(false);
-  //    }
-  //  };
 
   //온 바운드 체인지
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
@@ -194,9 +186,6 @@ export default props => {
   let herrrr = props.history;
   const token = localStorage.getItem("token");
   const { data: pageData, loading } = useQuery(FEED_QUERY);
-  const { data, loading: loaddingS } = useQuery(NEXT, {
-    variables: { first, skip }
-  });
 
   //구글지도
   const [center, setCenter] = useState({
@@ -231,33 +220,31 @@ export default props => {
     }
     _getQueryVariables();
   }, [set2]);
-
   //페이지네이션
-  const _nextPage = page => {
-    if (
-      page <= (data && data.nextPage && data.nextPage.count / LINKS_PER_PAGE)
-    ) {
-      const nextPage = page + 1;
-
-      props.history.push(`/new/${nextPage}`);
-      _getQueryVariables();
-      return setSet(true);
-    }
-  };
+  const _nextPage = () => {};
 
   //무한스크롤 로직
-  const [hasMoreItems, setHasMoreItems] = useState(true);
-  let itemsS = [];
-  const loadFunc = page => {
-    console.log(page, "page?");
-    if (data && data.nextBoard && data.nextBoard.count !== undefined) {
-      if (data.nextBoard && data.nextBoard.count > page) {
-        console.log("이게 실행 되어야지");
-        props.history.push(`/new/${page}`);
-        _getQueryVariables(page);
+
+  const { loading: loadings, data, updateQuery, fetchMore } = useQuery(NEXT, {
+    props: ({ data }) => ({
+      loadMore: () => {
+        return {
+          variables: {
+            first,
+            skip
+          },
+          updateQuery(previousResult, { fetchMoreResult }) {
+            const connection = fetchMoreResult;
+          }
+        };
       }
-    }
-  };
+    })
+  });
+  console.log(data, "data");
+
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+
+  const loadFunc = async () => {};
   //주소를 가져온다
   const latAndlng =
     pageData &&

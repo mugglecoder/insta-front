@@ -5,6 +5,7 @@ import "../css/image-gallery.css";
 
 const Container = styled.div`
   height: 350px;
+  width: 98%;
   overflow: scroll;
 `;
 
@@ -22,17 +23,16 @@ const Files = styled.div`
 `;
 
 const Subject = styled.div`
-  background-color: #ffe4d740;
+  background-color: #9ab9e1;
   width: 100px;
-  height: 150px;
-  padding: 8px;
+  height: 140px;
+  padding: 3px 3px 0px 7px;
   width: 100px;
-  margin-right: 5px;
+  margin-right: 1px;
   overflow-wrap: break-word;
   line-height: 1.4;
-  font-weight: 600;
-  font-size: 15px;
-  color: #836c80;
+  font-size: 14px;
+  color: #ffffff;
   overflow: scroll;
   text-align: start;
 `;

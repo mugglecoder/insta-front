@@ -1,0 +1,35 @@
+.pagination {
+  display: flex;
+}
+
+.activeClass {
+  display: block;
+  margin: 10px;
+}
+
+.activeLinkClass {
+  display: block;
+  font-weight: 900;
+}
+
+.itemClass {
+  display: block;
+  margin: 10px;
+}
+
+.itemClassFirst {
+  display: block;
+  margin: 10px;
+}
+.itemClassPrev {
+  display: block;
+  margin: 10px;
+}
+.itemClassNext {
+  display: block;
+  margin: 10px;
+}
+.itemClassLast {
+  display: block;
+  margin: 10px;
+}

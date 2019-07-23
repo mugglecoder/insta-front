@@ -86,7 +86,7 @@ export default withRouter(({ history }) => {
           </form>
         </HeaderColumn>
         <HeaderColumn>
-          <Link to="/new">
+          <Link to="/fullmap">
             <Compass />
           </Link>
 

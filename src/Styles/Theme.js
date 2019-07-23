@@ -2,6 +2,7 @@ const BOX_BORDER = "1px solid #e6e6e6";
 const BORDER_RADIUS = "4px";
 
 export default {
+  paginationColor: "#ed9292;",
   maxWidth: "935px",
   bgColor: "#FAFAFA",
   blackColor: "#262626",

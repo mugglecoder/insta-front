@@ -2,12 +2,45 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
+const MaxHeight = styled.div`
+  margin: 0 auto;
+`;
 const PorkMain = styled.div`
   background-color: #fff5f0;
   height: 90vh;
   min-height: 740px;
+
   width: 100%;
-  margin-bottom: 25px;
+  position: relative;
+  &.example-appear {
+    opacity: 0.01;
+  }
+
+  &.example-appear-active {
+    opacity: 1;
+    transition: opacity ${1000}ms ease-out;
+  }
+`;
+const PorkMain2 = styled.div`
+  background-color: #e8dbee;
+  height: 90vh;
+  min-height: 740px;
+  width: 100%;
+  position: relative;
+  &.example-appear {
+    opacity: 0.01;
+  }
+
+  &.example-appear-active {
+    opacity: 1;
+    transition: opacity ${1000}ms ease-out;
+  }
+`;
+const PorkMain3 = styled.div`
+  background-color: #dbe7ee;
+  height: 90vh;
+  min-height: 740px;
+  width: 100%;
   position: relative;
   &.example-appear {
     opacity: 0.01;
@@ -26,14 +59,6 @@ const Rooms = styled.div`
   font-size: 19vw;
   font-weight: 900;
   color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
 `;
 const For = styled.div`
   position: absolute;
@@ -42,14 +67,6 @@ const For = styled.div`
   font-size: 17vw;
   font-weight: 900;
   color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
 `;
 const Rent = styled.div`
   position: absolute;
@@ -58,14 +75,6 @@ const Rent = styled.div`
   font-size: 17vw;
   font-weight: 900;
   color: #7ec092;
-  &.example-appear {
-    opacity: 0.01;
-  }
-
-  &.example-appear-active {
-    opacity: 1;
-    transition: opacity ${1000}ms ease-out;
-  }
 `;
 
 const RoomsForRentImage = styled.div`
@@ -84,6 +93,7 @@ export default () => {
     "map",
     JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
   );
+  localStorage.setItem("zoom", JSON.stringify(16));
   localStorage.setItem("종류", "");
   localStorage.setItem("종류2", "");
   localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
@@ -97,36 +107,40 @@ export default () => {
       transitionEnterTimeout={500}
       transitionLeaveTimeout={300}
     >
-      <PorkMain>
-        <RoomsForRentImage />
-        <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionAppear={true}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-          <Rooms>Rooms</Rooms>
-        </ReactCSSTransitionGroup>
-        <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionAppear={true}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-          <For>For</For>
-        </ReactCSSTransitionGroup>
-        <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionAppear={true}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-          <Rent>Rent</Rent>
-        </ReactCSSTransitionGroup>
-      </PorkMain>
+      <MaxHeight>
+        <PorkMain>
+          <RoomsForRentImage />
+          <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionAppear={true}
+            transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}
+          >
+            <Rooms>Rooms</Rooms>
+          </ReactCSSTransitionGroup>
+          <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionAppear={true}
+            transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}
+          >
+            <For>For</For>
+          </ReactCSSTransitionGroup>
+          <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionAppear={true}
+            transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}
+          >
+            <Rent>Rent</Rent>
+          </ReactCSSTransitionGroup>
+        </PorkMain>
+        <PorkMain2 />
+        <PorkMain3 />
+      </MaxHeight>
     </ReactCSSTransitionGroup>
   );
 };

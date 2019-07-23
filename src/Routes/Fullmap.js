@@ -4,8 +4,8 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
 import GoogleMaps from "../Components/GoogleMaps";
-import Loader from "../Components/Loader";
-import FullmapDivide from "./FullmapDivide";
+
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
 const FEED_QUERY = gql`
   query seeFullPost($first: Int, $skip: Int) {
@@ -77,16 +77,29 @@ const Detail = styled.div`
 `;
 
 const MapsLoder = styled.div`
+  margin: 0 auto;
   height: 80vh;
-  width: 100%;
+  width: 100vw;
   background: #7ec092;
   display: flex;
   justify-content: center;
   align-items: center;
+  &.example-appear {
+    opacity: 0.01;
+  }
+
+  &.example-appear-active {
+    opacity: 1;
+    transition: opacity ${1000}ms ease-out;
+  }
 `;
 
 const Maps = styled.h1`
-  font-size: 23rem;
+  text-align: center;
+  display: block;
+  background: #7ec092;
+  width: 100%;
+  font-size: 30vw;
   font-weight: 900;
   color: white;
 `;
@@ -113,11 +126,19 @@ export default props => {
   return (
     <FullMapContainer>
       {loading && (
-        <MapsLoder>
-          <Maps>MAPS</Maps>
-        </MapsLoder>
+        <ReactCSSTransitionGroup
+          transitionName="example"
+          transitionAppear={true}
+          transitionAppearTimeout={1500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}
+        >
+          <MapsLoder>
+            <Maps>MAPS</Maps>
+          </MapsLoder>
+        </ReactCSSTransitionGroup>
       )}
-      {!loading && !divide ? (
+      {!loading && (
         <GoogleMaps
           zoom={zoom}
           center={center}
@@ -127,22 +148,6 @@ export default props => {
           height={"80vh"}
           setDivide={setDivide}
         />
-      ) : (
-        !loading &&
-        divide && (
-          <DividerWrap>
-            <GoogleMaps
-              zoom={zoom}
-              center={center}
-              latAndlng={latAndlng}
-              props={props}
-              setCenter={setCenter}
-              height={"80vh"}
-              width={"100%"}
-              setDivide={setDivide}
-            />
-          </DividerWrap>
-        )
       )}
     </FullMapContainer>
   );

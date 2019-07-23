@@ -9,6 +9,17 @@ import { ME } from "../../SharedQueries";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
 
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
+const CHECK_LIKE = gql`
+  query checkLike($postId: String!) {
+    checkLike(postId: $postId)
+  }
+`;
+
 const DELETEPOST = gql`
   mutation detelePost($id: String) {
     detelePost(id: $id)
@@ -91,6 +102,12 @@ const GETPOST = gql`
         id
         username
       }
+      likes {
+        id
+        post {
+          id
+        }
+      }
     }
   }
 `;
@@ -104,7 +121,6 @@ const LOCAL_LOG_IN = gql`
 const Wrapper = styled.div``;
 
 export default withRouter(props => {
-  console.log(props, "여기에서 백 할때 정보를 보내주자");
   const id = props.history.location.pathname.split("/")[2];
   const { data, loading } = useQuery(GETPOST, {
     variables: { id }
@@ -271,12 +287,42 @@ export default withRouter(props => {
     console.log(axiosData, "axios data");
   };
 
+  // 좋아요
+  const {
+    data: { checkLike },
+    loading: checkLikeLoading
+  } = useQuery(CHECK_LIKE, { variables: { postId: id } });
+
+  const toggleButton = useMutation(TOGGLE_LIKE);
+
+  const [joayo, setJoayo] = useState(false);
+
+  //default 좋아요를 셋팅함
+  useEffect(() => {
+    setJoayo(checkLike);
+  }, [checkLikeLoading]);
+
+  useEffect(() => {
+    console.log(checkLikeLoading, "checkLikeLoading", checkLike, "checkLike");
+    setJoayo(checkLike);
+  }, [props.match.params]);
+
+  const toggleLike = async () => {
+    const {
+      data: { toggleLike }
+    } = await toggleButton({ variables: { postId: id } });
+    console.log(toggleLike);
+    setJoayo(toggleLike);
+  };
+
   ////여기는 modifyPresenter ///////////////////////////////////////////
 
   return (
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          joayo={joayo}
+          toggleLike={toggleLike}
           lng={lng}
           lat={lat}
           center={center}

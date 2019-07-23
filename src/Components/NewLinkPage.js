@@ -128,15 +128,15 @@ export default ({
         <Container>
           {searchData &&
             searchData.searchRoom &&
-            searchData.searchRoom.map((item, key) => {
+            searchData.searchRoom.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
 
               if (
                 searchData.searchRoom &&
-                searchData.searchRoom[key] &&
-                searchData.searchRoom[key].files.length === 0
+                searchData.searchRoom.post[key] &&
+                searchData.searchRoom.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -160,8 +160,8 @@ export default ({
                 /////// 이미지 있을때
                 searchData &&
                   searchData.searchRoom &&
-                  searchData.searchRoom[key] &&
-                  searchData.searchRoom[key].files.map(item => {
+                  searchData.searchRoom.post[key] &&
+                  searchData.searchRoom.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));

@@ -5,13 +5,13 @@ const Wrapper = styled.div``;
 
 const MarkerInner = styled.button`
   cursor: pointer;
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 700;
   position: relative;
   width: auto;
   padding: 0.3px 1.5px;
   margin: 0;
-  border: 4px solid ${props => types(props.type)};
+  border: 3px solid ${props => types(props.type)};
   color: #333;
   background: #fff;
   border-radius: 7px;

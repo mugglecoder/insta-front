@@ -98,7 +98,18 @@ const ButtonBottom = styled.div`
     border: none;
   }
 `;
-
+const H1 = styled.div`
+  cursor: pointer;
+  position: absolute;
+  padding: 8px 15px;
+  background: #e57070;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  top: 8%;
+  left: 43%;
+`;
 export default ({
   zoom,
   center,
@@ -129,7 +140,7 @@ export default ({
           }}
         />
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
-          colse
+          close
         </Button>
       </Wrapper>
     );
@@ -167,8 +178,9 @@ export default ({
 
   const createMapOptions = maps => console.log(maps, "createMapOptions");
 
-  const onBoundsChange = (center, zoom) => {
-    console.log("onBoundsChange");
+  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
+    localStorage.setItem("map", JSON.stringify(center));
+    localStorage.setItem("zoom", JSON.stringify(zoom));
     setCenter(center);
   };
 
@@ -182,7 +194,7 @@ export default ({
 
   return (
     <Container>
-      <Mapdiv style={{ height, width }}>
+      <Mapdiv style={{ height, width, position: "relative" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
@@ -210,6 +222,9 @@ export default ({
               )
             )}
         </GoogleMapReact>
+        <Link to="/new/search">
+          <H1>여기에 있는 매물 상세검색!</H1>
+        </Link>
       </Mapdiv>
     </Container>
   );
