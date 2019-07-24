@@ -19,6 +19,11 @@ const CHECK_LIKE = gql`
     checkLike(postId: $postId)
   }
 `;
+const BEFORE_CHECK = gql`
+  mutation beforeLike($postId: String!) {
+    beforeLike(postId: $postId)
+  }
+`;
 
 const DELETEPOST = gql`
   mutation detelePost($id: String) {
@@ -294,8 +299,18 @@ export default withRouter(props => {
   } = useQuery(CHECK_LIKE, { variables: { postId: id } });
 
   const toggleButton = useMutation(TOGGLE_LIKE);
+  const [fakeUpdate, setFakeUpdate] = useState(props.match.params);
+
+  const beforeCheck = useMutation(BEFORE_CHECK);
+
+  //
+
+  //
 
   const [joayo, setJoayo] = useState(false);
+  useEffect(() => {
+    console.log("이게 나와야됨");
+  }, [joayo]);
 
   //default 좋아요를 셋팅함
   useEffect(() => {
@@ -303,16 +318,49 @@ export default withRouter(props => {
   }, [checkLikeLoading]);
 
   useEffect(() => {
-    console.log(checkLikeLoading, "checkLikeLoading", checkLike, "checkLike");
-    setJoayo(checkLike);
+    (async function() {
+      try {
+        const {
+          data: { beforeLike }
+        } = await beforeCheck({ variables: { postId: id } });
+        console.log(beforeLike, "testtttt");
+        setJoayo(beforeLike);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   }, [props.match.params]);
 
   const toggleLike = async () => {
+    if (joayo === true) {
+      setJoayo(false);
+    } else if (joayo === false) {
+      setJoayo(true);
+    }
     const {
       data: { toggleLike }
     } = await toggleButton({ variables: { postId: id } });
-    console.log(toggleLike);
     setJoayo(toggleLike);
+    console.log(toggleLike, "이게 실제 변경되는 데이터");
+  };
+
+  //하단
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 10,
+      slidesToSlide: 3 // optional, default to 1.
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 10,
+      slidesToSlide: 2 // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 10,
+      slidesToSlide: 1 // optional, default to 1.
+    }
   };
 
   ////여기는 modifyPresenter ///////////////////////////////////////////
@@ -321,6 +369,7 @@ export default withRouter(props => {
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          responsive={responsive}
           joayo={joayo}
           toggleLike={toggleLike}
           lng={lng}

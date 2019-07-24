@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
-import className from "classnames";
-import _JSXStyle from "styled-jsx/style";
 import "../css/image-gallery.css";
 
 const Container = styled.div`

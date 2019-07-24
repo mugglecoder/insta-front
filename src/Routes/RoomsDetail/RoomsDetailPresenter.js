@@ -7,7 +7,8 @@ import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
 import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
-import { HeartEmpty } from "../../Components/Icons";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 1300px;
@@ -243,6 +244,7 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  responsive,
   joayo,
   toggleLike,
   lat,
@@ -501,6 +503,7 @@ const RoomsDetailPresenter = ({
         ) : (
           false
         )}
+        ;
         {data2 && data2.seeFullPost && (
           <Container>
             {data2 &&
@@ -577,20 +580,6 @@ const RoomsDetailPresenter = ({
                   />
                 );
               })}
-            {!loading && (
-              <PPcontainer>
-                <Pcontainer>
-                  <P>
-                    이전
-                    <button onClick={_previousPage} />
-                  </P>
-                  <P>
-                    다음
-                    <button onClick={_nextPage} />
-                  </P>
-                </Pcontainer>
-              </PPcontainer>
-            )}
           </Container>
         )}
       </MoreRooms>
