@@ -114,7 +114,7 @@
 .image-gallery-right-nav::before {
   color: #fff;
   line-height: 0.7;
-  text-shadow: 0 2px 2px #1a1a1a;
+  /*text-shadow: 0 2px 2px #1a1a1a;*/
   transition: color 0.2s ease-out;
 }
 .image-gallery-fullscreen-button:hover::before,
@@ -191,11 +191,11 @@
 
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  color: #fff;
-  font-size: 3em;
-  padding: 50px 15px;
+  color: #ffffff;
+  font-size: 2em;
+  padding: 10px 15px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-45%);
 }
 .inTheMap .image-gallery-left-nav,
 .inTheMap .image-gallery-right-nav {

@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Loader from "../../Components/Loader";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import BoardParts from "../../Components/BoardParts";
+import BoardPartsSlide from "../../Components/boardPartsSlide";
 import ImageGallery from "react-image-gallery";
 import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
@@ -49,8 +48,14 @@ const Username = styled.div`
 `;
 
 const ContentMain = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   padding: 30px;
 `;
+
+const ContentMainWrap = styled.div``;
 
 const Deposit = styled.span`
   font-size: 18px;
@@ -163,6 +168,7 @@ const LogInButton = styled.button`
 `;
 
 const Container = styled.div`
+  height: 250px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -219,11 +225,10 @@ const MarkerIcon = styled.div`
 
 const LikeContainer = styled.div``;
 const Like = styled.div`
-  background-color: pink;
   display: flex;
+  align-items: center;
   flex-direction: row;
   z-index: 100;
-  position: fixed;
   bottom: 100px;
   right: 50px;
 `;
@@ -235,6 +240,9 @@ const LikeToggle = styled.button`
   :focus {
     outline: none;
   }
+`;
+const LikeToggleH1 = styled.h1`
+  font-size: 20px;
 `;
 
 //구글 맵 컨테이너
@@ -296,35 +304,6 @@ const RoomsDetailPresenter = ({
     )}
     {!loading && (
       <ContentWrap>
-        <LikeContainer>
-          <Like>
-            <LikeToggle onClick={toggleLike}>
-              {joayo ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#ED4956"
-                >
-                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                >
-                  <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z" />
-                </svg>
-              )}
-            </LikeToggle>
-            <h1>전화</h1>
-            <h1>카톡</h1>
-          </Like>
-        </LikeContainer>
         <Column>
           <ColumnL>
             <Username>
@@ -348,16 +327,47 @@ const RoomsDetailPresenter = ({
           </ColumnR>
         </Column>
         <ContentMain>
-          <Deposit>보증금 {data.detailPost && data.detailPost.deposit}</Deposit>
-          <Deposit>월세 {data.detailPost && data.detailPost.money}</Deposit>
-          <Deposit>
-            {data.detailPost && data.detailPost.numberOfFoors}층
-          </Deposit>
-          <Deposit>
-            매물번호 {data.detailPost && data.detailPost.MLSnumber}
-          </Deposit>
-          <Content>{data.detailPost && data.detailPost.content}</Content>
+          <ContentMainWrap>
+            <Deposit>
+              보증금 {data.detailPost && data.detailPost.deposit}
+            </Deposit>
+            <Deposit>월세 {data.detailPost && data.detailPost.money}</Deposit>
+            <Deposit>
+              {data.detailPost && data.detailPost.numberOfFoors}층
+            </Deposit>
+            <Deposit>
+              매물번호 {data.detailPost && data.detailPost.MLSnumber}
+            </Deposit>
+          </ContentMainWrap>
+          <LikeContainer>
+            <Like>
+              <LikeToggleH1>찜하기</LikeToggleH1>
+              <LikeToggle onClick={toggleLike}>
+                {joayo ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="#ED4956"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z" />
+                  </svg>
+                )}
+              </LikeToggle>
+            </Like>
+          </LikeContainer>
         </ContentMain>
+        <Content>{data.detailPost && data.detailPost.content}</Content>
         <OptionText>
           <h1>옵션</h1>
           <hr />
@@ -503,9 +513,24 @@ const RoomsDetailPresenter = ({
         ) : (
           false
         )}
-        ;
+
         {data2 && data2.seeFullPost && (
-          <Container>
+          <Carousel
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            responsive={responsive}
+            ssr={true} // means to render carousel on server-side.
+            infinite={true}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            deviceType={props.deviceType}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
             {data2 &&
               data2.seeFullPost &&
               data2.seeFullPost.post.map((item, key) => {
@@ -562,7 +587,7 @@ const RoomsDetailPresenter = ({
                 const onclick = () =>
                   props.history.push(`/roomsdetail/${item.id}`);
                 return (
-                  <BoardParts
+                  <BoardPartsSlide
                     onclick={onclick}
                     path={path}
                     id={item.id}
@@ -580,7 +605,7 @@ const RoomsDetailPresenter = ({
                   />
                 );
               })}
-          </Container>
+          </Carousel>
         )}
       </MoreRooms>
     )}
