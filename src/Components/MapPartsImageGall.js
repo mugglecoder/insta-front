@@ -1,11 +1,123 @@
-import React from "react";
+import React, { useQuery, useMutation, useState, useEffect } from "react";
 import styled from "styled-components";
 import ImageGallery from "react-image-gallery";
+import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
 
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
+const CHECK_LIKE = gql`
+  query checkLike($postId: String!) {
+    checkLike(postId: $postId)
+  }
+`;
+const BEFORE_CHECK = gql`
+  mutation beforeLike($postId: String!) {
+    beforeLike(postId: $postId)
+  }
+`;
+
+const DELETEPOST = gql`
+  mutation detelePost($id: String) {
+    detelePost(id: $id)
+  }
+`;
+
+const FEED_QUERY = gql`
+  query seeFullPost($first: Int, $skip: Int) {
+    seeFullPost(first: $first, skip: $skip) {
+      post {
+        id
+        caption
+        deposit
+        money
+        count
+        selectType
+        content
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+      }
+      count
+    }
+  }
+`;
+
+const LINKS_PER_PAGE = 12;
+
+const GETPOST = gql`
+  query detailPost($id: String!) {
+    detailPost(id: $id) {
+      id
+      places {
+        lat
+        lng
+      }
+      count
+      numberOfFoors
+      MLSnumber
+      deposit
+      money
+      content
+      caption
+      airConditioner
+      washer
+      refrigerator
+      internet
+      microwave
+      wifi
+      bed
+      desk
+      induction
+      gasRange
+      doorLock
+      CCTV
+      pets
+      elevator
+      parking
+      electricHeating
+      cityGasHeating
+      nightElectric
+      wateTax
+      includingElectricity
+      cityGasIncluded
+      selectType
+      comments {
+        id
+      }
+      files {
+        id
+        url
+      }
+      user {
+        id
+        username
+      }
+      likes {
+        id
+        post {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const Container = styled.div`
+  margin: 0 auto;
   height: 350px;
-  width: 98%;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  width: 100%;
   overflow: scroll;
 `;
 
@@ -17,39 +129,72 @@ const Column = styled.div`
 `;
 
 const Files = styled.div`
-  height: 100px;
+  height: 100%;
   width: 100%;
-  cursor: pointer;
 `;
 
 const Subject = styled.div`
-  background-color: #9ab9e1;
+  /* background-color: #9ab9e1; */
   width: 100px;
-  height: 140px;
-  padding: 3px 3px 0px 7px;
+  /* height: 140px; */
+  padding: 5px 3px 5px 5px;
   width: 100px;
   margin-right: 1px;
   overflow-wrap: break-word;
   line-height: 1.4;
   font-size: 14px;
-  color: #ffffff;
+  /* color: #ffffff; */
   overflow: scroll;
   text-align: start;
 `;
 const SubColumn = styled.div`
-  width: 250px;
   position: relative;
-  padding: 5px;
+`;
+
+// 좋아요
+
+const LikeContainer = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 4px;
+  z-index: 100;
+`;
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  z-index: 100;
+  bottom: 100px;
+  right: 50px;
+`;
+const LikeToggle = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  :focus {
+    outline: none;
+  }
+`;
+const LikeToggleH1 = styled.h1`
+  opacity: 0.7;
+  font-size: 18px;
+  padding-bottom: 4px;
+`;
+
+const Heart = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 const ContentMain = styled.div`
   display: flex;
   margin-top: 5px;
+  padding: 4px;
 `;
 
 const SelectType = styled.div`
   margin-right: 7px;
   display: inline-block;
-  font-weight: 600;
   font-size: 14px;
   color: rgb(169, 193, 232);
 `;
@@ -57,7 +202,6 @@ const SelectType = styled.div`
 const Deposit = styled.span`
   display: inline-block;
   margin-right: 5px;
-  font-weight: 600;
   font-size: 14px;
   color: #c87777;
 `;
@@ -65,7 +209,6 @@ const Deposit = styled.span`
 const Money = styled.span`
   display: inline-block;
   margin-left: 5px;
-  font-weight: 600;
   font-size: 14px;
   color: #c87777;
 `;
@@ -76,19 +219,18 @@ const Hr = styled.hr`
 const Content = styled.div`
   padding: 7px;
   width: 100%;
-  height: 80%;
   overflow: scroll;
   font-size: 14px;
   line-height: 1.4;
   text-align: start;
 `;
 const OptionText = styled.div`
-  margin-top: -50px;
   margin-bottom: 20px;
   h1 {
     text-align: start;
-    margin-top: 30px;
-    font-size: 20px;
+    margin-top: 20px;
+    padding: 5px;
+    font-size: 13px;
     color: grey;
   }
 `;
@@ -115,7 +257,9 @@ const DetailText = styled.div`
   margin-top: 10px;
   h1 {
     text-align: start;
-    font-size: 20px;
+    margin-top: 20px;
+    padding: 5px;
+    font-size: 13px;
     color: grey;
   }
 `;
@@ -132,7 +276,22 @@ const FilesA = styled.div`
   height: 300px;
 `;
 
-export default (item, setDivide) => {
+const BottomFiles = styled.div`
+  height: 100px;
+  width: 100%;
+  h1 {
+    text-align: start;
+    margin-top: 5px;
+    color: #a2cbd8;
+  }
+`;
+
+const H1Bottom = styled.div`
+  margin-top: 17px;
+`;
+
+export default item => {
+  console.log(item, "item");
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
 
@@ -185,116 +344,187 @@ export default (item, setDivide) => {
   const onclick = () => {
     return props.history.push(`/roomsdetail/${item.item.id}/new/1`);
   };
+  //좋아요 로직
+  // 좋아요
+  const {
+    data: { checkLike },
+    loading: checkLikeLoading
+  } = useQuery(CHECK_LIKE, { variables: { postId: item.item.id } });
+
+  const toggleButton = useMutation(TOGGLE_LIKE);
+
+  const beforeCheck = useMutation(BEFORE_CHECK);
+
+  //
+
+  //
+
+  const [joayo, setJoayo] = useState(false);
+  useEffect(() => {
+    console.log("이게 나와야됨");
+  }, [joayo]);
+
+  //default 좋아요를 셋팅함
+  useEffect(() => {
+    setJoayo(checkLike);
+  }, [checkLikeLoading]);
+
+  useEffect(() => {
+    (async function() {
+      try {
+        const {
+          data: { beforeLike }
+        } = await beforeCheck({ variables: { postId: item.item.id } });
+        console.log(beforeLike, "testtttt");
+        setJoayo(beforeLike);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [item.props.match.params]);
+
+  const toggleLike = async () => {
+    if (joayo === true) {
+      setJoayo(false);
+    } else if (joayo === false) {
+      setJoayo(true);
+    }
+    const {
+      data: { toggleLike }
+    } = await toggleButton({ variables: { postId: item.item.id } });
+    setJoayo(toggleLike);
+    console.log(toggleLike, "이게 실제 변경되는 데이터");
+  };
 
   return (
-    <Container>
-      <Files>
-        <Column>
+    <>
+      <Container>
+        <Files>
+          <Column>
+            <SubColumn>
+              <LikeContainer>
+                <Like>
+                  <LikeToggle onClick={toggleLike}>
+                    {joayo ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="30"
+                        height="26"
+                        viewBox="0 0 30 30"
+                        fill="#ED4956"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="30"
+                        height="26"
+                        viewBox="0 0 30 30"
+                        fill="#000000"
+                        fill-opacity="0.1"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    )}
+                  </LikeToggle>
+                </Like>
+              </LikeContainer>
+              <ImageGallery
+                additionalClass={`inTheMap`}
+                items={path}
+                showFullscreenButton={false}
+                useBrowserFullscreen={false}
+                showThumbnails={false}
+                showPlayButton={false}
+                showBullets={false}
+                lazyLoad={true}
+                showIndex={false}
+                onClick={onclick}
+              />
+            </SubColumn>
+          </Column>
+          <ContentMain>
+            <SelectType>{item.item.selectType}</SelectType>
+            <Deposit>보증금 {item.item.deposit}</Deposit>
+            <Money> 월세 {item.item.money}</Money>
+          </ContentMain>
           <Subject>{item.item.caption}</Subject>
-          <SubColumn>
-            <ImageGallery
-              additionalClass={`inTheMap`}
-              items={path}
-              showFullscreenButton={false}
-              useBrowserFullscreen={false}
-              showThumbnails={false}
-              showPlayButton={false}
-              showBullets={false}
-              lazyLoad={true}
-              showIndex={false}
-              onClick={onclick}
-            />
-          </SubColumn>
-        </Column>
-        <ContentMain>
-          <SelectType>{item.item.selectType}</SelectType>
-          <Deposit>보증금 {item.item.deposit}</Deposit>
-          <Money> 월세 {item.item.money}</Money>
-        </ContentMain>
-        <Hr />
-        <Content>{item.item.content}</Content>
-
-        <OptionText>
-          <h1>옵션</h1>
           <hr />
-        </OptionText>
+          <Content>{item.item.content}</Content>
 
-        <Options>
-          {item.item && item.item.airConditioner === "에어컨" && (
-            <Option>airConditioner</Option>
-          )}
-          {item.item && item.item.washer === "세탁기" && (
-            <Option>washer</Option>
-          )}
-          {item.item && item.item.refrigerator === true && (
-            <Option>refrigerator</Option>
-          )}
-          {item.item && item.item.internet === "인터넷" && (
-            <Option>internet</Option>
-          )}
-          {item.item && item.item.microwave === "전자렌지" && (
-            <Option>microwave</Option>
-          )}
-          {item.item && item.item.wifi === "wifi" && <Option>wifi</Option>}
-          {item.item && item.item.bed === "침대" && <Option>bed</Option>}
-          {item.item && item.item.desk === "책상" && <Option>desk</Option>}
-          {item.item && item.item.induction === "인덕션" && (
-            <Option>induction</Option>
-          )}
-          {item.item && item.item.gasRange === "가스레인지" && (
-            <Option>gasRange</Option>
-          )}
-          {item.item && item.item.doorLock === "도어락" && (
-            <Option>doorLock</Option>
-          )}
-          {item.item && item.item.CCTV === "CCTV" && <Option>CCTV</Option>}
-          {item.item && item.item.pets === "애완동물" && <Option>pets</Option>}
-          {item.item && item.item.elevator === "엘리베이터" && (
-            <Option>elevator</Option>
-          )}
-          {item.item && item.item.parking === "주차" && (
-            <Option>parking</Option>
-          )}
-          {item.item && item.item.electricHeating === "전기난방" && (
-            <Option>electricHeating</Option>
-          )}
-          {item.item && item.item.cityGasHeating === "도시가스난방" && (
-            <Option>tecityGasHeatingst</Option>
-          )}
-          {item.item && item.item.nightElectric === "심야전기" && (
-            <Option>nightElectric</Option>
-          )}
-          {item.item && item.item.wateTax === "수도세" && (
-            <Option>wateTax</Option>
-          )}
-          {item.item && item.item.includingElectricity === "전기세포함" && (
-            <Option>includingElectricity</Option>
-          )}
-          {item.item && item.item.cityGasIncluded === "도시가스포함" && (
-            <Option>cityGasIncluded</Option>
-          )}
-        </Options>
+          <OptionText>
+            <h1>옵션</h1>
+            <hr />
+          </OptionText>
 
-        <DetailText>
-          <h1>디테일</h1>
-          <hr />
-        </DetailText>
-        <ImageGalleryContainer>
-          <FilesA>
-            <ImageGallery
-              additionalClass={`inTheMapDetail`}
-              items={path}
-              showFullscreenButton={false}
-              useBrowserFullscreen={false}
-              showThumbnails={true}
-              showPlayButton={false}
-              showBullets={true}
-              lazyLoad={true}
-              showIndex={false}
-            />
-          </FilesA>
-        </ImageGalleryContainer>
-      </Files>
-    </Container>
+          <Options>
+            {item.item && item.item.airConditioner === "에어컨" && (
+              <Option>airConditioner</Option>
+            )}
+            {item.item && item.item.washer === "세탁기" && (
+              <Option>washer</Option>
+            )}
+            {item.item && item.item.refrigerator === true && (
+              <Option>refrigerator</Option>
+            )}
+            {item.item && item.item.internet === "인터넷" && (
+              <Option>internet</Option>
+            )}
+            {item.item && item.item.microwave === "전자렌지" && (
+              <Option>microwave</Option>
+            )}
+            {item.item && item.item.wifi === "wifi" && <Option>wifi</Option>}
+            {item.item && item.item.bed === "침대" && <Option>bed</Option>}
+            {item.item && item.item.desk === "책상" && <Option>desk</Option>}
+            {item.item && item.item.induction === "인덕션" && (
+              <Option>induction</Option>
+            )}
+            {item.item && item.item.gasRange === "가스레인지" && (
+              <Option>gasRange</Option>
+            )}
+            {item.item && item.item.doorLock === "도어락" && (
+              <Option>doorLock</Option>
+            )}
+            {item.item && item.item.CCTV === "CCTV" && <Option>CCTV</Option>}
+            {item.item && item.item.pets === "애완동물" && (
+              <Option>pets</Option>
+            )}
+            {item.item && item.item.elevator === "엘리베이터" && (
+              <Option>elevator</Option>
+            )}
+            {item.item && item.item.parking === "주차" && (
+              <Option>parking</Option>
+            )}
+            {item.item && item.item.electricHeating === "전기난방" && (
+              <Option>electricHeating</Option>
+            )}
+            {item.item && item.item.cityGasHeating === "도시가스난방" && (
+              <Option>tecityGasHeatingst</Option>
+            )}
+            {item.item && item.item.nightElectric === "심야전기" && (
+              <Option>nightElectric</Option>
+            )}
+            {item.item && item.item.wateTax === "수도세" && (
+              <Option>wateTax</Option>
+            )}
+            {item.item && item.item.includingElectricity === "전기세포함" && (
+              <Option>includingElectricity</Option>
+            )}
+            {item.item && item.item.cityGasIncluded === "도시가스포함" && (
+              <Option>cityGasIncluded</Option>
+            )}
+          </Options>
+        </Files>
+      </Container>
+      <BottomFiles>
+        <H1Bottom>
+          <h1>사진을 스크롤하면 </h1>
+          <h1>더 많은 정보가 나옵니다</h1>
+        </H1Bottom>
+      </BottomFiles>
+    </>
   );
 };

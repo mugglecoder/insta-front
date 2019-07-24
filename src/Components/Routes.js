@@ -3,20 +3,15 @@ import PropTypes from "prop-types";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Feed from "../Routes/Feed";
 import Auth from "../Routes/Auth";
-import Explore from "../Routes/Explore";
 import Search from "../Routes/Search";
 import RoomsDetail from "../Routes/RoomsDetail";
 import Loading from "../Routes/Loading";
-import LinkPage from "../Routes/LinkPage";
-import EditPost from "../Routes/EditPost";
 import WritePost from "../Routes/WritePost";
 import Fullmap from "../Routes/Fullmap";
 import FullmapDivide from "../Routes/FullmapDivide";
 import { withRouter } from "react-router-dom";
 import Main from "../Routes/Main";
 const LoggedInRoutes = withRouter((props, { match }) => {
-  const [divide, setDivide] = useState(false);
-
   return (
     <Switch>
       <Route exact path="/" render={Main} />
@@ -30,8 +25,6 @@ const LoggedInRoutes = withRouter((props, { match }) => {
         path="/fullmap"
         render={() => <Redirect to="/fullmap" />}
         component={Fullmap}
-        divide={divide}
-        setDivide={setDivide}
       />
       <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
       <Route path="/roomsdetail/:id" component={RoomsDetail} />

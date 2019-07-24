@@ -9,6 +9,7 @@ import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 const Wrapper = styled.div`
+  padding: 10px;
   margin: 0 auto;
   max-width: 1300px;
   width: 100%;
@@ -60,8 +61,9 @@ const ContentMainWrap = styled.div``;
 const Deposit = styled.span`
   font-size: 18px;
   display: inline-block;
-  font-weight: 600;
-  color: grey;
+  /*font-weight: 600;*/
+  /*color: grey;*/
+  opacity: 0.7;
   margin-right: 10px;
 `;
 
@@ -148,6 +150,8 @@ const ContentWrap = styled.div`
 `;
 
 const LogInButtonWrap = styled.div`
+  padding: 20px;
+  width: 100%;
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
@@ -242,7 +246,9 @@ const LikeToggle = styled.button`
   }
 `;
 const LikeToggleH1 = styled.h1`
-  font-size: 20px;
+  opacity: 0.7;
+  font-size: 18px;
+  padding-bottom: 4px;
 `;
 
 //구글 맵 컨테이너
@@ -341,14 +347,14 @@ const RoomsDetailPresenter = ({
           </ContentMainWrap>
           <LikeContainer>
             <Like>
-              <LikeToggleH1>찜하기</LikeToggleH1>
+              <LikeToggleH1>장바구니에 넣자</LikeToggleH1>
               <LikeToggle onClick={toggleLike}>
                 {joayo ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 28 28"
                     fill="#ED4956"
                   >
                     <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
@@ -356,9 +362,9 @@ const RoomsDetailPresenter = ({
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 28 28"
                   >
                     <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z" />
                   </svg>

@@ -57,26 +57,28 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: 20px;
   position: relative;
   background-color: #fcfcfc;
-  border-radius: 5px;
-  width: 365px;
-  height: 350px;
+  border-radius: 3px;
+  width: 300px;
+  height: 260px;
   text-align: right;
 `;
 
 const Button = styled.button`
   cursor: pointer;
   position: absolute;
-  top: -4px;
-  right: 10px;
+  bottom: 21px;
+  right: 20px;
+  font-size: 16px;
   left: -1;
   border: none;
   background-color: #ff9b9b;
   color: #fff;
   display: block;
-  padding: 3px;
+  padding: 4px;
+  line-height: 1.2;
   border-radius: 4px;
   z-index: 100;
   :focus {
@@ -139,6 +141,7 @@ export default ({
             data: { item }
           }}
         />
+
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
           close
         </Button>
@@ -204,6 +207,7 @@ export default ({
           onChildClick={onChildClick}
           defaultZoom={zoom}
           onBoundsChange={onBoundsChange}
+          f
           yesIWantToUseGoogleMapApiInternals
           options={{ maxZoom: 18, createMapOptions }}
         >
