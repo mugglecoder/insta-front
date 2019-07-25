@@ -660,14 +660,17 @@ export default ({
     ////////////////////////////////////////////////////////////////////
     <>
       <Wrapper>
-        <GoogleMapsMain
-          onBoundsChange={onBoundsChange}
-          latAndlng={latAndlng}
-          props={props}
-          center={center}
-          zoom={zoom}
-          setCenter={setCenter}
-        />
+        {
+          <GoogleMapsMain
+            loading={loading}
+            onBoundsChange={onBoundsChange}
+            latAndlng={latAndlng}
+            props={props}
+            center={center}
+            zoom={zoom}
+            setCenter={setCenter}
+          />
+        }
         <PaginationDiv>
           <Pagination
             activeClass="activeClass"
@@ -1125,6 +1128,22 @@ export default ({
             _nextPage={_nextPage}
           />
         )}
+        <PaginationDiv>
+          <Pagination
+            activeClass="activeClass"
+            activeLinkClass="activeLinkClass"
+            itemClass="itemClass"
+            itemClassFirst="itemClassFirst"
+            itemClassPrev="itemClassPrev"
+            itemClassNext="itemClassNext"
+            itemClassLast="itemClassLast"
+            activePage={activePage}
+            itemsCountPerPage={first}
+            totalItemsCount={totalCount}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+          />
+        </PaginationDiv>
         {token ? (
           <LogInButtonWrap>
             <Link

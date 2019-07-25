@@ -137,7 +137,7 @@ const SEARCH = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 8;
+const LINKS_PER_PAGE = 16;
 
 export default withRouter(props => {
   ///체크박스 스테이트

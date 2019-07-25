@@ -90,7 +90,7 @@ export default withRouter(({ history }) => {
             <Compass />
           </Link>
 
-          <Link to="/fullmap">
+          <Link to="/new/search">
             <HeartEmpty />
           </Link>
           {!data.me ? (

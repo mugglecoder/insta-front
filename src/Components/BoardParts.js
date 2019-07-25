@@ -25,6 +25,31 @@ const Files = styled.div`
   position: relative;
 `;
 
+// 좋아요
+
+const LikeContainer = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 4px;
+  z-index: 100;
+`;
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  z-index: 100;
+  bottom: 100px;
+  right: 50px;
+`;
+const LikeToggle = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  :focus {
+    outline: none;
+  }
+`;
+
 const File = styled(ImageGallery)`
   &&& {
     height: 600px;
@@ -69,7 +94,8 @@ const Money = styled.span`
 `;
 
 let url = [];
-
+const toggleLike = () => "";
+const joayo = false;
 const BoardParts = ({
   data,
   onclick,
@@ -88,6 +114,36 @@ const BoardParts = ({
   <Container>
     <Column>
       <Files>
+        <LikeContainer>
+          <Like>
+            <LikeToggle onClick={toggleLike}>
+              {joayo ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="34"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="#ED4956"
+                >
+                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="34"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="#000000"
+                  fill-opacity="0.2"
+                  stroke="white"
+                  stroke-width="3"
+                >
+                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                </svg>
+              )}
+            </LikeToggle>
+          </Like>
+        </LikeContainer>
         <File
           items={path}
           showFullscreenButton={false}

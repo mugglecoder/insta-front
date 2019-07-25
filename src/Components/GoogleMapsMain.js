@@ -57,27 +57,30 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 7px;
+  padding: 16px;
   padding-left: 15px;
   position: relative;
-  background-color: #fcfcfc;
+  background-color: #fffcf8;
   border-radius: 10px;
-  width: 300px;
+  width: 290px;
   height: 250px;
   text-align: right;
+  margin: 0 auto;
 `;
 
 const Button = styled.button`
   cursor: pointer;
   position: absolute;
-  top: -4px;
-  right: 10px;
+  bottom: 21px;
+  right: 20px;
+  font-size: 16px;
   left: -1;
   border: none;
   background-color: #ff9b9b;
   color: #fff;
   display: block;
-  padding: 3px;
+  padding: 4px;
+  line-height: 1.2;
   border-radius: 4px;
   z-index: 100;
   :focus {
@@ -96,8 +99,20 @@ const H1 = styled.div`
   top: 8%;
   left: 43%;
 `;
+const H12 = styled.div`
+  position: absolute;
+  padding: 8px 15px;
+  background: #e57070;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  top: 8%;
+  left: 45%;
+`;
 
 export default ({
+  loading,
   onBoundsChange,
   zoom,
   center,
@@ -194,7 +209,11 @@ export default ({
             )}
         </GoogleMapReact>
         <Link to="/new/search">
-          <H1 onClick={setItems}>여기에 있는 매물 상세검색!!</H1>
+          {loading ? (
+            <H12 onClick={setItems}>좋은집 찾는중!</H12>
+          ) : (
+            <H1 onClick={setItems}>지도안의 매물만 나옵니다</H1>
+          )}
         </Link>
       </Mapdiv>
     </Container>

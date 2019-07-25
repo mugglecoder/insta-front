@@ -200,20 +200,6 @@ export default ({
                 />
               );
             })}
-          {!loading && (
-            <PPcontainer>
-              <Pcontainer>
-                <P>
-                  이전
-                  <button onClick={_previousPage} />
-                </P>
-                <P>
-                  다음
-                  <button onClick={_nextPage} />
-                </P>
-              </Pcontainer>
-            </PPcontainer>
-          )}
         </Container>
       )}
     </Wrapper>

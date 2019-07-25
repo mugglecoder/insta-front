@@ -1,121 +1,15 @@
-import React, { useQuery, useMutation, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
 import ImageGallery from "react-image-gallery";
 import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
 
-const TOGGLE_LIKE = gql`
-  mutation toggleLike($postId: String!) {
-    toggleLike(postId: $postId)
-  }
-`;
-const CHECK_LIKE = gql`
-  query checkLike($postId: String!) {
-    checkLike(postId: $postId)
-  }
-`;
-const BEFORE_CHECK = gql`
-  mutation beforeLike($postId: String!) {
-    beforeLike(postId: $postId)
-  }
-`;
-
-const DELETEPOST = gql`
-  mutation detelePost($id: String) {
-    detelePost(id: $id)
-  }
-`;
-
-const FEED_QUERY = gql`
-  query seeFullPost($first: Int, $skip: Int) {
-    seeFullPost(first: $first, skip: $skip) {
-      post {
-        id
-        caption
-        deposit
-        money
-        count
-        selectType
-        content
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-      }
-      count
-    }
-  }
-`;
-
-const LINKS_PER_PAGE = 12;
-
-const GETPOST = gql`
-  query detailPost($id: String!) {
-    detailPost(id: $id) {
-      id
-      places {
-        lat
-        lng
-      }
-      count
-      numberOfFoors
-      MLSnumber
-      deposit
-      money
-      content
-      caption
-      airConditioner
-      washer
-      refrigerator
-      internet
-      microwave
-      wifi
-      bed
-      desk
-      induction
-      gasRange
-      doorLock
-      CCTV
-      pets
-      elevator
-      parking
-      electricHeating
-      cityGasHeating
-      nightElectric
-      wateTax
-      includingElectricity
-      cityGasIncluded
-      selectType
-      comments {
-        id
-      }
-      files {
-        id
-        url
-      }
-      user {
-        id
-        username
-      }
-      likes {
-        id
-        post {
-          id
-        }
-      }
-    }
-  }
-`;
-
 const Container = styled.div`
   margin: 0 auto;
   height: 350px;
   border: 1px solid #e8e8e8;
+  background-color: white;
   border-radius: 3px;
   width: 100%;
   overflow: scroll;
@@ -290,11 +184,9 @@ const H1Bottom = styled.div`
   margin-top: 17px;
 `;
 
-export default item => {
-  console.log(item, "item");
+export default (item, onChildClick, likes) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
-
   ///////////
   const urls = item.item.files && item.item.files.map(item => item);
   let arrayOfPath = [];
@@ -345,43 +237,8 @@ export default item => {
     return props.history.push(`/roomsdetail/${item.item.id}/new/1`);
   };
   //좋아요 로직
-  // 좋아요
-  const {
-    data: { checkLike },
-    loading: checkLikeLoading
-  } = useQuery(CHECK_LIKE, { variables: { postId: item.item.id } });
-
-  const toggleButton = useMutation(TOGGLE_LIKE);
-
-  const beforeCheck = useMutation(BEFORE_CHECK);
-
-  //
-
-  //
 
   const [joayo, setJoayo] = useState(false);
-  useEffect(() => {
-    console.log("이게 나와야됨");
-  }, [joayo]);
-
-  //default 좋아요를 셋팅함
-  useEffect(() => {
-    setJoayo(checkLike);
-  }, [checkLikeLoading]);
-
-  useEffect(() => {
-    (async function() {
-      try {
-        const {
-          data: { beforeLike }
-        } = await beforeCheck({ variables: { postId: item.item.id } });
-        console.log(beforeLike, "testtttt");
-        setJoayo(beforeLike);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [item.props.match.params]);
 
   const toggleLike = async () => {
     if (joayo === true) {
@@ -389,11 +246,6 @@ export default item => {
     } else if (joayo === false) {
       setJoayo(true);
     }
-    const {
-      data: { toggleLike }
-    } = await toggleButton({ variables: { postId: item.item.id } });
-    setJoayo(toggleLike);
-    console.log(toggleLike, "이게 실제 변경되는 데이터");
   };
 
   return (
@@ -408,8 +260,8 @@ export default item => {
                     {joayo ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="30"
-                        height="26"
+                        width="34"
+                        height="30"
                         viewBox="0 0 30 30"
                         fill="#ED4956"
                       >
@@ -418,11 +270,11 @@ export default item => {
                     ) : (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="30"
-                        height="26"
+                        width="34"
+                        height="30"
                         viewBox="0 0 30 30"
                         fill="#000000"
-                        fill-opacity="0.1"
+                        fill-opacity="0.2"
                         stroke="white"
                         stroke-width="3"
                       >

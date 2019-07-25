@@ -124,17 +124,15 @@ export default ({
 }) => {
   const passing = props;
 
-  //  onClick={() => {
-  //    setDivide(true);
-  //    return passing.history.push(
-  //      `/fullmap/roomsdetail/${item.id}/new/1`
-  //    );
-  //  }}
-
-  const AnyReactComponent = ({ item, setDivide }) => {
+  const AnyReactComponent = ({ item, onChildClick, likes }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
-        <MapPartsImageGall item={item} props={passing} setDivide={setDivide} />
+        <MapPartsImageGall
+          likes={likes}
+          item={item}
+          props={passing}
+          onChildClick={onChildClick}
+        />
         <Link
           to={{
             pathname: `/fullmap/roomsdetail/${item.id}/new/1`,
@@ -187,13 +185,11 @@ export default ({
     setCenter(center);
   };
 
-  const onChildClick = (a, b) => {
-    console.log(a, "onChildClick");
+  const onChildClick = (a, info) => {
+    console.log(info.item, "clickedddd  on Google map.js");
   };
 
-  const onChildMouseEnter = () => {
-    console.log("마우스 온 더 잇");
-  };
+  const onChildMouseEnter = () => {};
 
   return (
     <Container>
@@ -212,9 +208,11 @@ export default ({
           options={{ maxZoom: 18, createMapOptions }}
         >
           {latAndlng &&
-            latAndlng.map((item, key) =>
-              item.places[0] ? (
+            latAndlng.map((item, key) => {
+              return item.places[0] ? (
                 <AnyReactComponent
+                  likes={item.likes}
+                  onChildClick={onChildClick}
                   setDivide={setDivide}
                   key={key}
                   lat={item.places && item.places[0].lat}
@@ -223,8 +221,8 @@ export default ({
                 />
               ) : (
                 false
-              )
-            )}
+              );
+            })}
         </GoogleMapReact>
         <Link to="/new/search">
           <H1>여기에 있는 매물 상세검색!</H1>

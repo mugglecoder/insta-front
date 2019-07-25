@@ -12,61 +12,7 @@ const FEED_QUERY = gql`
     seeFullPost(first: $first, skip: $skip) {
       post {
         id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        selectType
-        deposit
-        airConditioner
-        washer
-        refrigerator
-        internet
-        microwave
-        wifi
-        bed
-        desk
-        induction
-        gasRange
-        doorLock
-        CCTV
-        pets
-        elevator
-        parking
-        numberOfFoors
-        electricHeating
-        cityGasHeating
-        nightElectric
-        wateTax
-        includingElectricity
-        cityGasIncluded
-        MLSnumber
-        money
-        count
-        content
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-        likes {
-          post {
-            id
-            caption
-          }
-          user {
-            id
-            username
-          }
-        }
       }
-      count
     }
   }
 `;
@@ -115,24 +61,10 @@ const Maps = styled.h1`
 `;
 
 export default props => {
-  //구글지도
-  const [center, setCenter] = useState({
-    lat: 35.8961565802915,
-    lng: 128.6162214802915
-  });
-
   //구글지도 줌 레벨
 
-  const [zoom, setZoom] = useState(16);
-  const [divide, setDivide] = useState(false);
-  const page = parseInt(
-    props && props.match && props.match.params && props.match.params.page
-  );
-  const { data: dataOfMe } = useQuery(ME);
-
   const { data, loading } = useQuery(FEED_QUERY);
-  const latAndlng =
-    data && data.seeFullPost && data.seeFullPost.post.map(item => item);
+
   return (
     <FullMapContainer>
       {loading && (
@@ -148,17 +80,7 @@ export default props => {
           </MapsLoder>
         </ReactCSSTransitionGroup>
       )}
-      {!loading && (
-        <GoogleMaps
-          zoom={zoom}
-          center={center}
-          latAndlng={latAndlng}
-          props={props}
-          setCenter={setCenter}
-          height={"80vh"}
-          setDivide={setDivide}
-        />
-      )}
+      {!loading && props.history.push(`/new/search`)}
     </FullMapContainer>
   );
 };

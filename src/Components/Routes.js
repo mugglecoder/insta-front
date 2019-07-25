@@ -11,6 +11,8 @@ import Fullmap from "../Routes/Fullmap";
 import FullmapDivide from "../Routes/FullmapDivide";
 import { withRouter } from "react-router-dom";
 import Main from "../Routes/Main";
+import Fullmap2 from "../Routes/Fullmap2";
+import Preloading from "./Preloading";
 const LoggedInRoutes = withRouter((props, { match }) => {
   return (
     <Switch>
@@ -24,7 +26,7 @@ const LoggedInRoutes = withRouter((props, { match }) => {
       <Route
         path="/fullmap"
         render={() => <Redirect to="/fullmap" />}
-        component={Fullmap}
+        component={Preloading}
       />
       <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
       <Route path="/roomsdetail/:id" component={RoomsDetail} />
