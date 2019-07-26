@@ -8,6 +8,7 @@ import useInput from "../Hooks/useInput";
 import TextareaAutosize from "react-autosize-textarea";
 import axios from "axios";
 import FileUploadWithPreview from "file-upload-with-preview";
+import "../css/preview.css";
 
 //주소 저장하는 gql
 const SAVEADDRESS = gql`

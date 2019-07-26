@@ -112,6 +112,8 @@ const H12 = styled.div`
 `;
 
 export default ({
+  dataOfMe,
+  searchData,
   loading,
   onBoundsChange,
   zoom,
@@ -124,11 +126,19 @@ export default ({
   setDivide
 }) => {
   const passing = props;
-
-  const AnyReactComponent = ({ item, setDivide }) => {
+  const dataOfMeS = dataOfMe;
+  const searchDataS = searchData;
+  const loadingS = loading;
+  const AnyReactComponent = ({ item }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
-        <MapPartsImageGall item={item} props={passing} setDivide={setDivide} />
+        <MapPartsImageGall
+          item={item}
+          props={passing}
+          dataOfMe={dataOfMeS}
+          searchData={searchDataS}
+          loading={loadingS}
+        />
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
           colse
         </Button>

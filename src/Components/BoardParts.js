@@ -121,14 +121,12 @@ const BoardParts = ({
   deposit
 }) => {
   let joayo = false;
-  console.log(data.id);
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
 
   const toggleJoayo = useMutation(TOGGLE_LIKE);
   const toggleLike = () => {
     toggleJoayo({ variables: { postId: data.id } });
-    console.log(joayo);
     if (joayo) {
       setJoayoS(true);
     } else {

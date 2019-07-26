@@ -26,7 +26,7 @@ const LoggedInRoutes = withRouter((props, { match }) => {
       <Route
         path="/fullmap"
         render={() => <Redirect to="/fullmap" />}
-        component={Preloading}
+        component={Fullmap}
       />
       <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
       <Route path="/roomsdetail/:id" component={RoomsDetail} />

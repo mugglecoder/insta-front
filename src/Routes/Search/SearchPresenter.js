@@ -661,6 +661,8 @@ export default ({
       <Wrapper>
         {
           <GoogleMapsMain
+            dataOfMe={dataOfMe}
+            searchData={searchData}
             loading={loading}
             onBoundsChange={onBoundsChange}
             latAndlng={latAndlng}

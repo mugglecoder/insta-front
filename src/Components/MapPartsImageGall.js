@@ -5,6 +5,12 @@ import ImageGallery from "react-image-gallery";
 import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
 
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
+
 const Container = styled.div`
   margin: 0 auto;
   height: 350px;
@@ -184,7 +190,7 @@ const H1Bottom = styled.div`
   margin-top: 17px;
 `;
 
-export default (item, onChildClick, likes) => {
+export default (item, onChildClick, likes, dataOfMe, searchData, loading) => {
   const props = item.props;
   const page = item.props.match && item.props.match.params.page;
   ///////////
@@ -238,15 +244,58 @@ export default (item, onChildClick, likes) => {
   };
   //좋아요 로직
 
-  const [joayo, setJoayo] = useState(false);
+  let joayo = false;
+  const [joayoS, setJoayoS] = useState(false);
+  const [joayoSS, setJoayoSS] = useState(false);
 
-  const toggleLike = async () => {
-    if (joayo === true) {
-      setJoayo(false);
-    } else if (joayo === false) {
-      setJoayo(true);
+  const toggleJoayo = useMutation(TOGGLE_LIKE);
+
+  const toggleLike = () => {
+    toggleJoayo({ variables: { postId: item.item.id } });
+    if (joayo) {
+      setJoayoS(true);
+    } else {
+      setJoayoS(true);
+      setJoayoSS(true);
+    }
+    if (joayoS === true) {
+      if (joayoSS === false) {
+        setJoayoSS(true);
+      }
+      if (joayoSS === true) {
+        setJoayoSS(false);
+      } else {
+        setJoayoSS(true);
+      }
     }
   };
+
+  if (item.loading === false) {
+    item &&
+      item.item.likes.map(items => {
+        if (items.user.id === item.dataOfMe.me.id) {
+          joayo = true;
+        } else {
+          console.log("2");
+        }
+      });
+  }
+
+  //  console.log(items.user.id, "1");
+  //  if (
+  //    items.user.id === item &&
+  //    item &&
+  //    item.dataOfMe &&
+  //    item.dataOfMe.me.id
+  //  ) {
+  //    return (joayo = true);
+  //  } else if (
+  //    items.user.id !== item &&
+  //    item.dataOfMe &&
+  //    item.dataOfMe.me.id
+  //  ) {
+  //    joayo = false;
+  //  }
 
   return (
     <>
@@ -257,7 +306,32 @@ export default (item, onChildClick, likes) => {
               <LikeContainer>
                 <Like>
                   <LikeToggle onClick={toggleLike}>
-                    {joayo ? (
+                    {joayoS ? (
+                      joayoSS ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="34"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="#ED4956"
+                        >
+                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="34"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="#000000"
+                          fill-opacity="0.2"
+                          stroke="white"
+                          stroke-width="3"
+                        >
+                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                        </svg>
+                      )
+                    ) : joayo ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="34"
