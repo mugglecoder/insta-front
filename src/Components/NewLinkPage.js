@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import BoardParts from "../Components/BoardParts";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -41,90 +41,13 @@ export default ({
   data,
   searchData,
   page,
-  _previousPage,
-  _nextPage,
-  loading
+  loading,
+  dataOfMe
 }) => {
+  console.log(searchData, "props");
   return (
     <Wrapper>
-      {data && data.nextBoard ? (
-        <Container>
-          {data &&
-            data.nextBoard &&
-            data.nextBoard.post.map((item, key) => {
-              let arrayOfPath = [];
-              let test = [];
-              let path = [];
-
-              if (
-                data.nextBoard &&
-                data.nextBoard.post[key] &&
-                data.nextBoard.post[key].files.length === 0
-              ) {
-                /// 임시로 메인에 보일 이미지 주소
-                arrayOfPath.push(
-                  `http://localhost:4000/images/preImage/no-image.jpg`
-                );
-                arrayOfPath.map((item, key) => {
-                  return test.push(item);
-                });
-                const s = test.reduce((s, a) => {
-                  {
-                    for (var i = 0; i < test.length; i++);
-                    let get;
-                    get = {
-                      original: `${a}`,
-                      thumbnail: `${a}`
-                    };
-                    return path.push(get);
-                  }
-                }, {});
-              } else {
-                /////// 이미지 있을때
-
-                data.nextBoard &&
-                  data.nextBoard.post[key] &&
-                  data.nextBoard.post[key].files.map(item => {
-                    return arrayOfPath.push(item.url);
-                  });
-                arrayOfPath.map((item, key) => test.push(item));
-
-                const s = test.reduce((s, a) => {
-                  {
-                    for (var i = 0; i < test.length; i++);
-                    let get;
-                    get = {
-                      original: `http://localhost:4000/${a}`,
-                      thumbnail: `http://localhost:4000/${a}`
-                    };
-                    return path.push(get);
-                  }
-                }, {});
-              }
-
-              const onclick = () =>
-                props.history.push(`/roomsdetail/${item.id}`);
-              return (
-                <BoardParts
-                  onclick={onclick}
-                  path={path}
-                  id={item.id}
-                  page={page}
-                  data={searchData}
-                  key={key}
-                  selectType={item.selectType}
-                  caption={item.caption}
-                  username={item.user.username}
-                  createdAt={item.createdAt.slice(0, 10)}
-                  count={item.count}
-                  url={item.files}
-                  deposit={item.deposit}
-                  money={item.money}
-                />
-              );
-            })}
-        </Container>
-      ) : (
+      {searchData && (
         <Container>
           {searchData &&
             searchData.searchRoom &&
@@ -183,11 +106,13 @@ export default ({
                 props.history.push(`/roomsdetail/${item.id}`);
               return (
                 <BoardParts
+                  loading={loading}
+                  dataOfMe={dataOfMe}
                   onclick={onclick}
                   path={path}
                   id={item.id}
                   page={page}
-                  data={data}
+                  data={item}
                   key={key}
                   selectType={item.selectType}
                   caption={item.caption}

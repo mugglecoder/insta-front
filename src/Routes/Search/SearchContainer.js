@@ -131,6 +131,16 @@ const SEARCH = gql`
           id
           url
         }
+        likes {
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
+        }
       }
       counts
     }
@@ -561,41 +571,6 @@ export default withRouter(props => {
     }
   });
 
-  //페이지네이션
-  const _nextPage = e => {
-    e.preventDefault();
-    const page = parseInt(
-      props && props.match && props.match.params && props.match.params.page
-    );
-
-    if (
-      page <=
-      (searchData &&
-        searchData.searchRoom &&
-        searchData.searchRoom.count / LINKS_PER_PAGE)
-    ) {
-      const nextPage = page + 1;
-
-      props.history.push(`/new/${nextPage}`);
-      _getQueryVariables();
-      return setSet(true);
-    }
-  };
-
-  //페이지네이션
-  const _previousPage = async e => {
-    e.preventDefault();
-    const page = parseInt(
-      props && props.match && props.match.params && props.match.params.page
-    );
-    if (page > 1) {
-      const previousPage = page - 1;
-      props.history.push(`/new/${previousPage}`);
-      await _getQueryVariables();
-      return setSet2(true);
-    }
-  };
-
   const searching = e => {
     e.preventDefault();
   };
@@ -663,8 +638,6 @@ export default withRouter(props => {
       skip={skip}
       first={first}
       onClick={onClick}
-      _previousPage={_previousPage}
-      _nextPage={_nextPage}
       airConditioner={airConditioner}
       washer={washer}
       refrigerator={refrigerator}

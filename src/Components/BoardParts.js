@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import "../css/image-gallery.css";
+import { useQuery } from "react-apollo-hooks";
 
 const Container = styled.div`
   max-width: 386px;
@@ -94,9 +95,10 @@ const Money = styled.span`
 `;
 
 let url = [];
-const toggleLike = () => "";
-const joayo = false;
+
 const BoardParts = ({
+  loading,
+  dataOfMe,
   data,
   onclick,
   id,
@@ -110,65 +112,126 @@ const BoardParts = ({
   url,
   money,
   deposit
-}) => (
-  <Container>
-    <Column>
-      <Files>
-        <LikeContainer>
-          <Like>
-            <LikeToggle onClick={toggleLike}>
-              {joayo ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="34"
-                  height="30"
-                  viewBox="0 0 30 30"
-                  fill="#ED4956"
-                >
-                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="34"
-                  height="30"
-                  viewBox="0 0 30 30"
-                  fill="#000000"
-                  fill-opacity="0.2"
-                  stroke="white"
-                  stroke-width="3"
-                >
-                  <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                </svg>
-              )}
-            </LikeToggle>
-          </Like>
-        </LikeContainer>
-        <File
-          items={path}
-          showFullscreenButton={false}
-          useBrowserFullscreen={false}
-          showThumbnails={false}
-          showPlayButton={false}
-          showBullets={true}
-          lazyLoad={true}
-          showIndex={false}
-          sizes={500}
-          onClick={onclick}
-        />
-      </Files>
-    </Column>
-    <SubColumn>
-      <SmallSub>
-        <SelectType>{selectType}</SelectType>
-        <Deposit>보증금 {deposit}</Deposit>
-        {" / "}
-        <Money> 월세 {money}</Money>
-      </SmallSub>
-      <Subject>{caption}</Subject>
-    </SubColumn>
-  </Container>
-);
+}) => {
+  let joayo = false;
+  const [joayoS, setJoayoS] = useState(false);
+  const [joayoSS, setJoayoSS] = useState(false);
+  useEffect(() => {}, [joayoS]);
+
+  const toggleLike = () => {
+    console.log(joayo);
+    if (joayo) {
+      setJoayoS(true);
+    } else {
+      setJoayoS(true);
+      setJoayoSS(true);
+    }
+    if (joayoS === true) {
+      if (joayoSS === false) {
+        setJoayoSS(true);
+      }
+      if (joayoSS === true) {
+        setJoayoSS(false);
+      } else {
+        setJoayoSS(true);
+      }
+    }
+  };
+  if (loading === false) {
+    data &&
+      data.likes.map(item => {
+        if (item.user.id === dataOfMe.me.id) {
+          joayo = true;
+        } else if (item.user.id !== dataOfMe.me.id) {
+          joayo = false;
+        }
+      });
+  }
+  return (
+    <Container>
+      <Column>
+        <Files>
+          <LikeContainer>
+            <Like>
+              <LikeToggle onClick={toggleLike}>
+                {joayoS ? (
+                  joayoSS ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#ED4956"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#000000"
+                      fill-opacity="0.2"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  )
+                ) : joayo ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="34"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="#ED4956"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="34"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="#000000"
+                    fill-opacity="0.2"
+                    stroke="white"
+                    stroke-width="3"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                )}
+              </LikeToggle>
+            </Like>
+          </LikeContainer>
+          <File
+            items={path}
+            showFullscreenButton={false}
+            useBrowserFullscreen={false}
+            showThumbnails={false}
+            showPlayButton={false}
+            showBullets={true}
+            lazyLoad={true}
+            showIndex={false}
+            sizes={500}
+            onClick={onclick}
+          />
+        </Files>
+      </Column>
+      <SubColumn>
+        <SmallSub>
+          <SelectType>{selectType}</SelectType>
+          <Deposit>보증금 {deposit}</Deposit>
+          {" / "}
+          <Money> 월세 {money}</Money>
+        </SmallSub>
+        <Subject>{caption}</Subject>
+      </SubColumn>
+    </Container>
+  );
+};
 
 BoardParts.propTypes = {
   caption: PropTypes.string.isRequired

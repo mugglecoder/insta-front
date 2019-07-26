@@ -242,8 +242,7 @@ export default ({
   first,
   token,
   onClick,
-  _previousPage,
-  _nextPage,
+
   airConditioner,
   washer,
   refrigerator,
@@ -1109,23 +1108,13 @@ export default ({
           </ReactCSSTransitionGroup>
         )}
 
-        {!loading && data.currentData ? (
+        {!loading && (
           <NewLinkPage
-            props={props}
-            data={data}
-            loading={loading}
-            page={page}
-            _previousPage={_previousPage}
-            _nextPage={_nextPage}
-          />
-        ) : (
-          <NewLinkPage
+            dataOfMe={dataOfMe}
             props={props}
             searchData={searchData}
             loading={loading}
             page={page}
-            _previousPage={_previousPage}
-            _nextPage={_nextPage}
           />
         )}
         <PaginationDiv>
