@@ -3,7 +3,14 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import "../css/image-gallery.css";
-import { useQuery } from "react-apollo-hooks";
+import { gql } from "apollo-boost";
+import { useQuery, useMutation } from "react-apollo-hooks";
+
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
 
 const Container = styled.div`
   max-width: 386px;
@@ -114,11 +121,13 @@ const BoardParts = ({
   deposit
 }) => {
   let joayo = false;
+  console.log(data.id);
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
-  useEffect(() => {}, [joayoS]);
 
+  const toggleJoayo = useMutation(TOGGLE_LIKE);
   const toggleLike = () => {
+    toggleJoayo({ variables: { postId: data.id } });
     console.log(joayo);
     if (joayo) {
       setJoayoS(true);
