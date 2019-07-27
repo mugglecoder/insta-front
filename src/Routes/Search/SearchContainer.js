@@ -392,7 +392,7 @@ export default withRouter(props => {
 
   //보증금 선택사항
   const [selectValue3, setSelectValue3] = useState(
-    localStorage.getItem("보증금")
+    Number(localStorage.getItem("보증금"))
   );
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
@@ -400,7 +400,7 @@ export default withRouter(props => {
 
   //월세선택사항
   const [selectValue4, setSelectValue4] = useState(
-    localStorage.getItem("월세")
+    Number(localStorage.getItem("월세"))
   );
   useEffect(() => {
     setSelect2(`${selectValue3} ${selectValue4}`);
@@ -521,7 +521,7 @@ export default withRouter(props => {
     seLng2S(lng2S);
     setCenter(centerS);
     localStorage.setItem("map", JSON.stringify(centerS));
-    //props.history.push(`/new/search/1`);
+    props.history.push(`/new/search/1`);
 
     return centerS;
   };

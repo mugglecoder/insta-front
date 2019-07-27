@@ -354,6 +354,11 @@ export default ({
 
   const getValue2 = a => {
     localStorage.setItem("종류2", a.value);
+    if (a.value === "전세") {
+      localStorage.setItem("보증금", JSON.stringify([0, 100000]));
+      localStorage.setItem("월세", JSON.stringify([0, 100000]));
+      props.history.push(`/new/search`);
+    }
     return setSelectValue2(a.value);
   };
 
@@ -588,7 +593,7 @@ export default ({
   //원룸 전세
   const leaseMoney = [
     {
-      value: "전세",
+      value: [0, 100000],
       label: "전세금"
     },
     {
@@ -624,15 +629,18 @@ export default ({
   const setMenuOption = () => {
     const item2 = localStorage.getItem("종류");
     const doit = menuOption.filter(item => item.value === item2);
+
     return doit[0];
   };
   const setMenuOption2 = () => {
     const kindOfitem = localStorage.getItem("종류2");
     const doit = menuOption2.filter(item => item.value === kindOfitem);
+
     return doit[0];
   };
   const setMenuOption3 = () => {
     const kindOfitem3 = JSON.parse(localStorage.getItem("보증금"));
+    console.log(kindOfitem3, "kindofitem3");
     const doit = monthDeposit.filter(
       item => String(item.value) === String(kindOfitem3)
     );
