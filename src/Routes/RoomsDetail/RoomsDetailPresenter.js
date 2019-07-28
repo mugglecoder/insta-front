@@ -31,6 +31,7 @@ const ColumnL = styled.div`
 `;
 
 const ColumnR = styled.div`
+  position: relative;
   height: 580px;
   width: 100%;
 `;
@@ -123,7 +124,7 @@ const MapText = styled.div`
 `;
 
 const FilesA = styled.div`
-  width: 75%;
+  width: 90%;
   height: 100%;
 `;
 
@@ -227,7 +228,11 @@ const MarkerIcon = styled.div`
 
 // 좋아요
 
-const LikeContainer = styled.div``;
+const LikeContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`;
 const Like = styled.div`
   display: flex;
   align-items: center;
@@ -302,7 +307,6 @@ const RoomsDetailPresenter = ({
         >
           <DeleteButton> 수정하기 </DeleteButton>
         </Link>
-
         <DeleteButton onClick={onDeletePost}>삭제</DeleteButton>
       </LogInButtonWrap>
     ) : (
@@ -320,6 +324,36 @@ const RoomsDetailPresenter = ({
             <Caption>{data.detailPost && data.detailPost.caption}</Caption>
           </ColumnL>
           <ColumnR>
+            <LikeContainer>
+              <Like>
+                <LikeToggle onClick={toggleLike}>
+                  {joayo ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="35"
+                      viewBox="0 0 30 30"
+                      fill="#ED4956"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="35"
+                      viewBox="0 0 30 30"
+                      fill="#000000"
+                      fill-opacity="0.2"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  )}
+                </LikeToggle>
+              </Like>
+            </LikeContainer>
             <File
               src={
                 data.detailPost &&
@@ -345,33 +379,6 @@ const RoomsDetailPresenter = ({
               매물번호 {data.detailPost && data.detailPost.MLSnumber}
             </Deposit>
           </ContentMainWrap>
-          <LikeContainer>
-            <Like>
-              <LikeToggleH1>장바구니에 넣자</LikeToggleH1>
-              <LikeToggle onClick={toggleLike}>
-                {joayo ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 28 28"
-                    fill="#ED4956"
-                  >
-                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 28 28"
-                  >
-                    <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z" />
-                  </svg>
-                )}
-              </LikeToggle>
-            </Like>
-          </LikeContainer>
         </ContentMain>
         <Content>{data.detailPost && data.detailPost.content}</Content>
         <OptionText>
@@ -500,34 +507,16 @@ const RoomsDetailPresenter = ({
       false
     ) : (
       <MoreRooms>
-        <h1>더 많은 매물이 있습니다.</h1>
+        <h1>비슷한 매물이 더 있습니다!</h1>
         <hr />
-        {data2.seeFullPost ? (
-          <LogInButtonWrap>
-            <Link
-              key={data2.seeFullPost.id}
-              to={{
-                pathname: `/writeboard/${dataOfMe &&
-                  dataOfMe.me &&
-                  dataOfMe.me.id}`,
-                data
-              }}
-            >
-              <LogInButton onClick={onClick}>글쓰기</LogInButton>
-            </Link>
-          </LogInButtonWrap>
-        ) : (
-          false
-        )}
-
-        {data2 && data2.seeFullPost && (
+        {data2 && data2.searchRoom && (
           <Carousel
             swipeable={true}
             draggable={true}
             showDots={false}
             responsive={responsive}
             ssr={true} // means to render carousel on server-side.
-            infinite={true}
+            infinite={false}
             keyBoardControl={true}
             customTransition="all .5"
             transitionDuration={500}
@@ -538,20 +527,20 @@ const RoomsDetailPresenter = ({
             itemClass="carousel-item-padding-40-px"
           >
             {data2 &&
-              data2.seeFullPost &&
-              data2.seeFullPost.post.map((item, key) => {
+              data2.searchRoom &&
+              data2.searchRoom.post.map((item, key) => {
                 let arrayOfPath = [];
                 let test = [];
                 let path = [];
 
                 if (
-                  data2.seeFullPost &&
-                  data2.seeFullPost.post[key] &&
-                  data2.seeFullPost.post[key].files.length === 0
+                  data2.searchRoom &&
+                  data2.searchRoom.post[key] &&
+                  data2.searchRoom.post[key].files.length === 0
                 ) {
                   /// 임시로 메인에 보일 이미지 주소
                   arrayOfPath.push(
-                    `http://localhost:4000/images/preImage/no-image.jpg`
+                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
                   );
                   arrayOfPath.map((item, key) => {
                     return test.push(item);
@@ -570,9 +559,9 @@ const RoomsDetailPresenter = ({
                 } else {
                   /////// 이미지 있을때
 
-                  data2.seeFullPost &&
-                    data2.seeFullPost.post[key] &&
-                    data2.seeFullPost.post[key].files.map(item => {
+                  data2.searchRoom &&
+                    data2.searchRoom.post[key] &&
+                    data2.searchRoom.post[key].files.map(item => {
                       return arrayOfPath.push(item.url);
                     });
                   arrayOfPath.map((item, key) => test.push(item));
@@ -582,18 +571,19 @@ const RoomsDetailPresenter = ({
                       for (var i = 0; i < test.length; i++);
                       let get;
                       get = {
-                        original: `http://localhost:4000/${a}`,
-                        thumbnail: `http://localhost:4000/${a}`
+                        original: `http://127.0.0.1:4000/${a}`,
+                        thumbnail: `http://127.0.0.1:4000/${a}`
                       };
                       return path.push(get);
                     }
                   }, {});
                 }
-
-                const onclick = () =>
-                  props.history.push(`/roomsdetail/${item.id}`);
+                const onclick = () => {};
                 return (
                   <BoardPartsSlide
+                    dataOfMe={dataOfMe}
+                    loading={loading}
+                    data2={data2}
                     onclick={onclick}
                     path={path}
                     id={item.id}

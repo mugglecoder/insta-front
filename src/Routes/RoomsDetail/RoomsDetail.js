@@ -176,10 +176,15 @@ export default withRouter(props => {
 
   let herrrr = props.history;
   const token = localStorage.getItem("token");
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  //  const { data: data2 } = useQuery(FEED_QUERY, {
+  //    variables: { first, skip }
+  //  });
+  //  console.log(data2, "ㅇㅁㅅㅁ2");
 
-  const { data: data2 } = useQuery(FEED_QUERY, {
-    variables: { first, skip }
-  });
+  const data2 = props && props.location && props.location.state.data;
+  //http://127.0.0.1:4000
 
   const onClick = props => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
@@ -308,9 +313,7 @@ export default withRouter(props => {
   //
 
   const [joayo, setJoayo] = useState(false);
-  useEffect(() => {
-    console.log("이게 나와야됨");
-  }, [joayo]);
+  useEffect(() => {}, [joayo]);
 
   //default 좋아요를 셋팅함
   useEffect(() => {
@@ -323,7 +326,6 @@ export default withRouter(props => {
         const {
           data: { beforeLike }
         } = await beforeCheck({ variables: { postId: id } });
-        console.log(beforeLike, "testtttt");
         setJoayo(beforeLike);
       } catch (e) {
         console.error(e);
@@ -341,7 +343,6 @@ export default withRouter(props => {
       data: { toggleLike }
     } = await toggleButton({ variables: { postId: id } });
     setJoayo(toggleLike);
-    console.log(toggleLike, "이게 실제 변경되는 데이터");
   };
 
   //하단

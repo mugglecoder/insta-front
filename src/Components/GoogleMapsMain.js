@@ -112,6 +112,7 @@ const H12 = styled.div`
 `;
 
 export default ({
+  data,
   dataOfMe,
   searchData,
   loading,
@@ -129,14 +130,17 @@ export default ({
   const dataOfMeS = dataOfMe;
   const searchDataS = searchData;
   const loadingS = loading;
-  const AnyReactComponent = ({ item }) => {
+
+  const AnyReactComponent = ({ item, searchData }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
+        {console.log(searchData, "serched data in google maps main")}
         <MapPartsImageGall
+          data={data}
           item={item}
           props={passing}
           dataOfMe={dataOfMeS}
-          searchData={searchDataS}
+          searchData={searchData}
           loading={loadingS}
         />
         <Button onClick={closeFn} style={{ marginTop: 10 }}>
@@ -207,6 +211,7 @@ export default ({
             latAndlng.map((item, key) =>
               item.places[0] ? (
                 <AnyReactComponent
+                  searchData={searchDataS}
                   setDivide={setDivide}
                   key={key}
                   lat={item.places && item.places[0].lat}

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ImageGallery from "react-image-gallery";
 import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
@@ -190,18 +191,22 @@ const H1Bottom = styled.div`
   margin-top: 17px;
 `;
 
-export default (item, onChildClick, likes, dataOfMe, searchData, loading) => {
-  const props = item.props;
+export default item => {
+  console.log(
+    item,
+
+    "searchDatasearchDatasearchDatasearchDatasearchData"
+  );
+
   const page = item.props.match && item.props.match.params.page;
   ///////////
   const urls = item.item.files && item.item.files.map(item => item);
   let arrayOfPath = [];
   let test = [];
   let path = [];
-
   if (item.item.files && item.item.files.length === 0) {
     /// 임시로 메인에 보일 이미지 주소
-    arrayOfPath.push(`http://localhost:4000/images/preImage/no-image.jpg`);
+    arrayOfPath.push(`http://127.0.0.1:4000/images/preImage/no-image.jpg`);
     arrayOfPath.map((item, key) => {
       return test.push(item);
     });
@@ -230,8 +235,8 @@ export default (item, onChildClick, likes, dataOfMe, searchData, loading) => {
         for (var i = 0; i < test.length; i++);
         let get;
         get = {
-          original: `http://localhost:4000/${a}`,
-          thumbnail: `http://localhost:4000/${a}`
+          original: `http://127.0.0.1:4000/${a}`,
+          thumbnail: `http://127.0.0.1:4000/${a}`
         };
         return path.push(get);
       }
@@ -239,9 +244,7 @@ export default (item, onChildClick, likes, dataOfMe, searchData, loading) => {
   }
   //////////
 
-  const onclick = () => {
-    return props.history.push(`/roomsdetail/${item.item.id}/new/1`);
-  };
+  const onclick = () => {};
   //좋아요 로직
 
   let joayo = false;
@@ -358,18 +361,25 @@ export default (item, onChildClick, likes, dataOfMe, searchData, loading) => {
                   </LikeToggle>
                 </Like>
               </LikeContainer>
-              <ImageGallery
-                additionalClass={`inTheMap`}
-                items={path}
-                showFullscreenButton={false}
-                useBrowserFullscreen={false}
-                showThumbnails={false}
-                showPlayButton={false}
-                showBullets={false}
-                lazyLoad={true}
-                showIndex={false}
-                onClick={onclick}
-              />
+              <Link
+                to={{
+                  pathname: `/roomsdetail/${item.item.id}/new/${page}`,
+                  state: { data: item.searchData }
+                }}
+              >
+                <ImageGallery
+                  additionalClass={`inTheMap`}
+                  items={path}
+                  showFullscreenButton={false}
+                  useBrowserFullscreen={false}
+                  showThumbnails={false}
+                  showPlayButton={false}
+                  showBullets={false}
+                  lazyLoad={true}
+                  showIndex={false}
+                  onClick={onclick}
+                />
+              </Link>
             </SubColumn>
           </Column>
           <ContentMain>

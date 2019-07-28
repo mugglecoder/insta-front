@@ -5,6 +5,7 @@ import ImageGallery from "react-image-gallery";
 import "../css/image-gallery.css";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
@@ -101,9 +102,14 @@ const Money = styled.span`
   color: #c87777;
 `;
 
+const StyledLink = styled(Link)`
+  width: 25%;
+`;
+
 let url = [];
 
 const BoardParts = ({
+  searchData,
   loading,
   dataOfMe,
   data,
@@ -213,18 +219,25 @@ const BoardParts = ({
               </LikeToggle>
             </Like>
           </LikeContainer>
-          <File
-            items={path}
-            showFullscreenButton={false}
-            useBrowserFullscreen={false}
-            showThumbnails={false}
-            showPlayButton={false}
-            showBullets={true}
-            lazyLoad={true}
-            showIndex={false}
-            sizes={500}
-            onClick={onclick}
-          />
+          <StyledLink
+            to={{
+              pathname: `/roomsdetail/${data.id}`,
+              state: { data: searchData }
+            }}
+          >
+            <File
+              items={path}
+              showFullscreenButton={false}
+              useBrowserFullscreen={false}
+              showThumbnails={false}
+              showPlayButton={false}
+              showBullets={true}
+              lazyLoad={true}
+              showIndex={false}
+              sizes={500}
+              onClick={onclick}
+            />
+          </StyledLink>
         </Files>
       </Column>
       <SubColumn>

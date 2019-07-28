@@ -173,7 +173,6 @@ export default props => {
     return skip;
   };
 
-  console.log(first, skip);
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
 
@@ -240,7 +239,6 @@ export default props => {
       }
     })
   });
-  console.log(data, "data");
 
   const [hasMoreItems, setHasMoreItems] = useState(true);
 

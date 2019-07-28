@@ -8,6 +8,7 @@ import RoomsDetail from "../Routes/RoomsDetail";
 import Loading from "../Routes/Loading";
 import WritePost from "../Routes/WritePost";
 import Fullmap from "../Routes/Fullmap";
+import LinkPage from "../Routes/LinkPage";
 import FullmapDivide from "../Routes/FullmapDivide";
 import { withRouter } from "react-router-dom";
 import Main from "../Routes/Main";
@@ -26,7 +27,7 @@ const LoggedInRoutes = withRouter((props, { match }) => {
       <Route
         path="/fullmap"
         render={() => <Redirect to="/fullmap" />}
-        component={Fullmap}
+        component={LinkPage}
       />
       <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
       <Route path="/roomsdetail/:id" component={RoomsDetail} />

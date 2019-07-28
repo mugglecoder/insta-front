@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
+import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
+import { Link } from "react-router-dom/cjs/react-router-dom";
+import { useMutation } from "react-apollo-hooks";
 
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
 const Container = styled.div`
   max-width: 386px;
   width: 100%;
@@ -94,9 +102,11 @@ const Money = styled.span`
 `;
 
 let url = [];
-const toggleLike = () => "";
-const joayo = false;
+
 const BoardParts = ({
+  dataOfMe,
+  loading,
+  data2,
   item,
   data,
   onclick,
@@ -112,7 +122,46 @@ const BoardParts = ({
   money,
   deposit
 }) => {
-  console.log(data, "data!!!!!!");
+  const [joayoS, setJoayoS] = useState(false);
+  const [joayoSS, setJoayoSS] = useState(false);
+  let joayo = false;
+  const toggleJoayo = useMutation(TOGGLE_LIKE);
+  const toggleLike = () => {
+    toggleJoayo({ variables: { postId: data.id } });
+    if (joayo) {
+      setJoayoS(true);
+    } else {
+      setJoayoS(true);
+      setJoayoSS(true);
+    }
+    if (joayoS === true) {
+      if (joayoSS === false) {
+        setJoayoSS(true);
+      }
+      if (joayoSS === true) {
+        setJoayoSS(false);
+      } else {
+        setJoayoSS(true);
+      }
+    }
+  };
+  if (loading === false) {
+    data &&
+      data.likes.map(item => {
+        if (
+          String(item.user.id) ===
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+        ) {
+          joayo = true;
+        } else if (
+          String(item.user.id) !==
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+        ) {
+          joayo = false;
+        }
+      });
+  }
+
   return (
     <Container>
       <Column>
@@ -120,7 +169,32 @@ const BoardParts = ({
           <LikeContainer>
             <Like>
               <LikeToggle onClick={toggleLike}>
-                {joayo ? (
+                {joayoS ? (
+                  joayoSS ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#ED4956"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#000000"
+                      fill-opacity="0.2"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  )
+                ) : joayo ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="34"
@@ -147,18 +221,26 @@ const BoardParts = ({
               </LikeToggle>
             </Like>
           </LikeContainer>
-          <File
-            items={path}
-            showFullscreenButton={false}
-            useBrowserFullscreen={false}
-            showThumbnails={false}
-            showPlayButton={false}
-            showBullets={true}
-            lazyLoad={true}
-            showIndex={false}
-            sizes={500}
-            onClick={onclick}
-          />
+          <Link
+            to={{
+              pathname: `/roomsdetail/${data.id}`,
+              state: { data: data2 }
+            }}
+            key={data.id}
+          >
+            <File
+              items={path}
+              showFullscreenButton={false}
+              useBrowserFullscreen={false}
+              showThumbnails={false}
+              showPlayButton={false}
+              showBullets={true}
+              lazyLoad={true}
+              showIndex={false}
+              sizes={500}
+              onClick={onclick}
+            />
+          </Link>
         </Files>
       </Column>
       <SubColumn>

@@ -415,9 +415,7 @@ export default withRouter(props => {
 
   //서치
   const deposit = selectValue3 && selectValue3[0];
-  console.log(deposit, "deposit");
   const deposit2 = selectValue3 && selectValue3[1];
-  console.log(deposit2, "deposit");
 
   const money = selectValue4 && selectValue4[0];
   const money2 = selectValue4 && selectValue4[1];
@@ -466,7 +464,6 @@ export default withRouter(props => {
     setSkip(skip);
     return skip;
   };
-  console.log(page, "page");
 
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
@@ -521,7 +518,6 @@ export default withRouter(props => {
     seLng2S(lng2S);
     setCenter(centerS);
     localStorage.setItem("map", JSON.stringify(centerS));
-    props.history.push(`/new/search/1`);
 
     return centerS;
   };
@@ -582,7 +578,6 @@ export default withRouter(props => {
   useEffect(() => {}, [activePage]);
   //new 페이지네이션
   const handlePageChange = pageNumber => {
-    console.log(pageNumber, "pageNumber");
     const isNewPage =
       props.location &&
       props.location.pathname &&

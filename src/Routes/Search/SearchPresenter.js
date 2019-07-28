@@ -13,6 +13,20 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Loading from "../../Components/PlaceHolderForLoader/Loading";
 import Pagination from "react-js-pagination";
 import "../../css/pagination.css";
+import {
+  progressBarFetch,
+  setOriginalFetch,
+  ProgressBar
+} from "react-fetch-progressbar";
+
+// Let react-fetch-progressbar know what the original fetch is.
+setOriginalFetch(window.fetch);
+
+/* 
+  Now override the fetch with progressBarFetch, so the ProgressBar
+  knows how many requests are currently active.
+*/
+window.fetch = progressBarFetch;
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -640,7 +654,7 @@ export default ({
   };
   const setMenuOption3 = () => {
     const kindOfitem3 = JSON.parse(localStorage.getItem("보증금"));
-    console.log(kindOfitem3, "kindofitem3");
+
     const doit = monthDeposit.filter(
       item => String(item.value) === String(kindOfitem3)
     );
@@ -666,9 +680,11 @@ export default ({
   return (
     ////////////////////////////////////////////////////////////////////
     <>
+      <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
       <Wrapper>
         {
           <GoogleMapsMain
+            data={data}
             dataOfMe={dataOfMe}
             searchData={searchData}
             loading={loading}
@@ -680,6 +696,7 @@ export default ({
             setCenter={setCenter}
           />
         }
+
         <PaginationDiv>
           <Pagination
             activeClass="activeClass"

@@ -8886,6 +8886,11 @@ react-fast-compare@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
+react-fetch-progressbar@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-fetch-progressbar/-/react-fetch-progressbar-1.0.0.tgz#a2bf8e8a508f0417a1b2b44cc9bbee143fdc2746"
+  integrity sha512-GYaZCgyazMV5r8r3WGAHric95qN6JFas9g3oc6fS6DWlBDIijUDCh3laGXJIVY+9D4oAAAy2CPRED2FUOWFQWA==
+
 react-filepond@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/react-filepond/-/react-filepond-7.0.1.tgz#caf96526287140884a31a1476b8328d9d6ecdee2"
@@ -8981,10 +8986,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-multi-carousel@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/react-multi-carousel/-/react-multi-carousel-2.1.2.tgz#39785a8d1c04c7ca4b982b218e69954f9ae9e5bf"
-  integrity sha512-zqX/F03vPrcv6YdWJeDnO7xWXELA/AovHKbs+LT6Q3jiI+5nTcvRvyLvKaCnukFcfPd+FHTGpp6DzhNlsywNWw==
+react-multi-carousel@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-multi-carousel/-/react-multi-carousel-2.2.1.tgz#c831c17c025112db2b515cbded7d166c5c9eff4d"
+  integrity sha512-guoaKJdYsG9p3OjRyXkk/x/AGR3CFH8VTrq68E4fOz1i3pUoC8XD17YTv/l/35SrEmYrFicOfvPe4rHHZWbRBQ==
 
 react-proptype-conditional-require@^1.0.4:
   version "1.0.4"

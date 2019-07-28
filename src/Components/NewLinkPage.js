@@ -44,7 +44,6 @@ export default ({
   loading,
   dataOfMe
 }) => {
-  console.log(searchData, "props");
   return (
     <Wrapper>
       {searchData && (
@@ -102,10 +101,10 @@ export default ({
                 }, {});
               }
 
-              const onclick = () =>
-                props.history.push(`/roomsdetail/${item.id}`);
+              const onclick = () => {};
               return (
                 <BoardParts
+                  searchData={searchData}
                   loading={loading}
                   dataOfMe={dataOfMe}
                   onclick={onclick}
