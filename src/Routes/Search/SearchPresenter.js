@@ -676,514 +676,518 @@ export default ({
       return doit[0];
     }
   };
-
+  const detail = false;
   return (
     ////////////////////////////////////////////////////////////////////
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
-      <Wrapper>
-        {
-          <GoogleMapsMain
-            data={data}
-            dataOfMe={dataOfMe}
-            searchData={searchData}
-            loading={loading}
-            onBoundsChange={onBoundsChange}
-            latAndlng={latAndlng}
-            props={props}
-            center={center}
-            zoom={zoom}
-            setCenter={setCenter}
-          />
-        }
-
-        <PaginationDiv>
-          <Pagination
-            activeClass="activeClass"
-            activeLinkClass="activeLinkClass"
-            itemClass="itemClass"
-            itemClassFirst="itemClassFirst"
-            itemClassPrev="itemClassPrev"
-            itemClassNext="itemClassNext"
-            itemClassLast="itemClassLast"
-            activePage={activePage}
-            itemsCountPerPage={first}
-            totalItemsCount={totalCount}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-          />
-        </PaginationDiv>
-        <SearchBox>
-          <CreatableSelect
-            arrowRenderer={false}
-            defaultValue={setMenuOption()}
-            styles={customStyles}
-            options={menuOption}
-            onChange={getValue1}
-          />
-          <CreatableSelect
-            arrowRenderer={false}
-            defaultValue={setMenuOption2()}
-            styles={customStyles}
-            options={menuOption2}
-            onChange={getValue2}
-          />
-
-          {select === "원룸 " && (
-            <CreatableSelect
-              defaultValue={monthDeposit[0]}
-              styles={customStyles}
-              options={monthDeposit}
+      {detail ? (
+        false
+      ) : (
+        <Wrapper>
+          {
+            <GoogleMapsMain
+              data={data}
+              dataOfMe={dataOfMe}
+              searchData={searchData}
+              loading={loading}
+              onBoundsChange={onBoundsChange}
+              latAndlng={latAndlng}
+              props={props}
+              center={center}
+              zoom={zoom}
+              setCenter={setCenter}
             />
-          )}
-          {select === "원룸 " && (
-            <CreatableSelect
-              defaultValue={monthMoney[0]}
-              styles={customStyles}
-              options={monthMoney}
+          }
+
+          <PaginationDiv>
+            <Pagination
+              activeClass="activeClass"
+              activeLinkClass="activeLinkClass"
+              itemClass="itemClass"
+              itemClassFirst="itemClassFirst"
+              itemClassPrev="itemClassPrev"
+              itemClassNext="itemClassNext"
+              itemClassLast="itemClassLast"
+              activePage={activePage}
+              itemsCountPerPage={first}
+              totalItemsCount={totalCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
             />
-          )}
-          {select === "원룸 월세" && (
+          </PaginationDiv>
+          <SearchBox>
             <CreatableSelect
-              defaultValue={setMenuOption3()}
+              arrowRenderer={false}
+              defaultValue={setMenuOption()}
               styles={customStyles}
-              options={monthDeposit}
-              onChange={getValue3}
+              options={menuOption}
+              onChange={getValue1}
             />
-          )}
-          {select === "원룸 월세" && (
             <CreatableSelect
-              defaultValue={setMenuOption4()}
+              arrowRenderer={false}
+              defaultValue={setMenuOption2()}
               styles={customStyles}
-              options={monthMoney}
-              onChange={getValue4}
+              options={menuOption2}
+              onChange={getValue2}
             />
-          )}
-          {select === "원룸 전세" && (
-            <CreatableSelect
-              defaultValue={leaseMoney[0]}
-              styles={customStyles}
-              options={leaseMoney}
-              onChange={getValue3}
-            />
-          )}
 
-          <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
-          <Link
-            to={{
-              pathname: "/new/search",
-              state: {
-                depositSS: deposit,
-                deposit2SS: deposit2,
-                moneySS: money,
-                money2SS: money2,
-                selectTypeSS: select,
-                airConditionerSS: airConditioner,
-                washerSS: washer,
-                refrigeratorSS: refrigerator,
-                internetSS: internet,
-                microwaveSS: microwave,
-                wifiSS: wifi,
-                bedSS: bed,
-                deskSS: desk,
-                inductionSS: induction,
-                gasRangeSS: gasRange,
-                doorLockSS: doorLock,
-                CCTVSS: CCTV,
-                petsSS: pets,
-                elevatorSS: elevator,
-                parkingSS: parking,
-                electricHeatingSS: electricHeating,
-                cityGasHeatingSS: cityGasHeating,
-                nightElectricSS: nightElectric,
-                wateTaxSS: wateTax,
-                includingElectricitySS: includingElectricity,
-                cityGasIncludedSS: cityGasIncluded
-              }
-            }}
-          >
-            <ButtonSearch>검색</ButtonSearch>
-          </Link>
-        </SearchBox>
-        {isOpen ? (
-          <ToggleDetail>
-            <OptionCheckBox>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  에어컨
-                  <input
-                    type="checkbox"
-                    name="airConditioner"
-                    checked={airConditioner}
-                    onChange={airConditionerS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  세탁기
-                  <input
-                    type="checkbox"
-                    name="washer"
-                    checked={washer}
-                    onChange={washerS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  냉장고
-                  <input
-                    type="checkbox"
-                    name="refrigerator"
-                    checked={refrigerator}
-                    onChange={refrigeratorS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  인터넷
-                  <input
-                    type="checkbox"
-                    name="internet"
-                    checked={internet}
-                    onChange={internetS}
-                  />
-                </div>
-              </label>
+            {select === "원룸 " && (
+              <CreatableSelect
+                defaultValue={monthDeposit[0]}
+                styles={customStyles}
+                options={monthDeposit}
+              />
+            )}
+            {select === "원룸 " && (
+              <CreatableSelect
+                defaultValue={monthMoney[0]}
+                styles={customStyles}
+                options={monthMoney}
+              />
+            )}
+            {select === "원룸 월세" && (
+              <CreatableSelect
+                defaultValue={setMenuOption3()}
+                styles={customStyles}
+                options={monthDeposit}
+                onChange={getValue3}
+              />
+            )}
+            {select === "원룸 월세" && (
+              <CreatableSelect
+                defaultValue={setMenuOption4()}
+                styles={customStyles}
+                options={monthMoney}
+                onChange={getValue4}
+              />
+            )}
+            {select === "원룸 전세" && (
+              <CreatableSelect
+                defaultValue={leaseMoney[0]}
+                styles={customStyles}
+                options={leaseMoney}
+                onChange={getValue3}
+              />
+            )}
 
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  전자레인지
-                  <input
-                    type="checkbox"
-                    name="microwave"
-                    checked={microwave}
-                    onChange={microwaveS}
-                  />
-                </div>
-              </label>
-              <label>
-                {" "}
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  wifi
-                  <input
-                    type="checkbox"
-                    name="wifi"
-                    checked={wifi}
-                    onChange={wifiS}
-                  />
-                </div>
-              </label>
-
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  침대
-                  <input
-                    type="checkbox"
-                    name="bed"
-                    checked={bed}
-                    onChange={bedS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  책상
-                  <input
-                    type="checkbox"
-                    name="desk"
-                    checked={desk}
-                    onChange={deskS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  인덕션
-                  <input
-                    type="checkbox"
-                    name="induction"
-                    checked={induction}
-                    onChange={inductionS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  가스레인지
-                  <input
-                    type="checkbox"
-                    name="gasRange"
-                    checked={gasRange}
-                    onChange={gasRangeS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  도어락
-                  <input
-                    type="checkbox"
-                    name="doorLock"
-                    checked={doorLock}
-                    onChange={doorLockS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  CCTV
-                  <input
-                    type="checkbox"
-                    name="CCTV"
-                    checked={CCTV}
-                    onChange={CCTVS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  애완동물
-                  <input
-                    type="checkbox"
-                    name="pets"
-                    checked={pets}
-                    onChange={petsS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  엘리베이터
-                  <input
-                    type="checkbox"
-                    name="elevator"
-                    checked={elevator}
-                    onChange={elevatorS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  주차
-                  <input
-                    type="checkbox"
-                    name="parking"
-                    checked={parking}
-                    onChange={parkingS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  전기난방
-                  <input
-                    type="checkbox"
-                    name="electricHeating"
-                    checked={electricHeating}
-                    onChange={electricHeatingS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  도시가스
-                  <input
-                    type="checkbox"
-                    name="cityGasHeating"
-                    checked={cityGasHeating}
-                    onChange={cityGasHeatingS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  심야전기
-                  <input
-                    type="checkbox"
-                    name="nightElectric"
-                    checked={nightElectric}
-                    onChange={nightElectricS}
-                  />
-                </div>
-              </label>
-
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  전기세포함
-                  <input
-                    type="checkbox"
-                    name="includingElectricity"
-                    checked={includingElectricity}
-                    onChange={includingElectricityS}
-                  />
-                </div>
-              </label>
-              <label>
-                <InTheDetailOption
-                  src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
-                  alt="air"
-                />
-                <div>
-                  도시가스포함
-                  <input
-                    type="checkbox"
-                    name="cityGasIncluded"
-                    checked={cityGasIncluded}
-                    onChange={cityGasIncludedS}
-                  />
-                </div>
-              </label>
-            </OptionCheckBox>
-            <ButtonSearchInside onClick={setActiveClass}>
-              찾기
-            </ButtonSearchInside>
-          </ToggleDetail>
-        ) : (
-          false
-        )}
-
-        {loading && (
-          <ReactCSSTransitionGroup
-            transitionName="example"
-            transitionAppear={true}
-            transitionAppearTimeout={500}
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={300}
-          >
-            <Container>
-              <Loading />
-            </Container>
-          </ReactCSSTransitionGroup>
-        )}
-
-        {!loading && (
-          <NewLinkPage
-            dataOfMe={dataOfMe}
-            props={props}
-            searchData={searchData}
-            loading={loading}
-            page={page}
-          />
-        )}
-        <PaginationDiv>
-          <Pagination
-            activeClass="activeClass"
-            activeLinkClass="activeLinkClass"
-            itemClass="itemClass"
-            itemClassFirst="itemClassFirst"
-            itemClassPrev="itemClassPrev"
-            itemClassNext="itemClassNext"
-            itemClassLast="itemClassLast"
-            activePage={activePage}
-            itemsCountPerPage={first}
-            totalItemsCount={totalCount}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-          />
-        </PaginationDiv>
-        {token ? (
-          <LogInButtonWrap>
+            <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
             <Link
-              key={
-                data.searchRoom
-                  ? data.searchRoom && data.searchRoom.id
-                  : data.currentData && data.currentData.id
-              }
               to={{
-                pathname: `/writeboard/${dataOfMe &&
-                  dataOfMe.me &&
-                  dataOfMe.me.id}`,
+                pathname: "/new/search",
                 state: {
-                  fromNotifications: true
+                  depositSS: deposit,
+                  deposit2SS: deposit2,
+                  moneySS: money,
+                  money2SS: money2,
+                  selectTypeSS: select,
+                  airConditionerSS: airConditioner,
+                  washerSS: washer,
+                  refrigeratorSS: refrigerator,
+                  internetSS: internet,
+                  microwaveSS: microwave,
+                  wifiSS: wifi,
+                  bedSS: bed,
+                  deskSS: desk,
+                  inductionSS: induction,
+                  gasRangeSS: gasRange,
+                  doorLockSS: doorLock,
+                  CCTVSS: CCTV,
+                  petsSS: pets,
+                  elevatorSS: elevator,
+                  parkingSS: parking,
+                  electricHeatingSS: electricHeating,
+                  cityGasHeatingSS: cityGasHeating,
+                  nightElectricSS: nightElectric,
+                  wateTaxSS: wateTax,
+                  includingElectricitySS: includingElectricity,
+                  cityGasIncludedSS: cityGasIncluded
                 }
               }}
             >
-              <LogInButton onClick={onClick}>글쓰기</LogInButton>
+              <ButtonSearch>검색</ButtonSearch>
             </Link>
-          </LogInButtonWrap>
-        ) : (
-          false
-        )}
-      </Wrapper>
+          </SearchBox>
+          {isOpen ? (
+            <ToggleDetail>
+              <OptionCheckBox>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    에어컨
+                    <input
+                      type="checkbox"
+                      name="airConditioner"
+                      checked={airConditioner}
+                      onChange={airConditionerS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    세탁기
+                    <input
+                      type="checkbox"
+                      name="washer"
+                      checked={washer}
+                      onChange={washerS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    냉장고
+                    <input
+                      type="checkbox"
+                      name="refrigerator"
+                      checked={refrigerator}
+                      onChange={refrigeratorS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    인터넷
+                    <input
+                      type="checkbox"
+                      name="internet"
+                      checked={internet}
+                      onChange={internetS}
+                    />
+                  </div>
+                </label>
+
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    전자레인지
+                    <input
+                      type="checkbox"
+                      name="microwave"
+                      checked={microwave}
+                      onChange={microwaveS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  {" "}
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    wifi
+                    <input
+                      type="checkbox"
+                      name="wifi"
+                      checked={wifi}
+                      onChange={wifiS}
+                    />
+                  </div>
+                </label>
+
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    침대
+                    <input
+                      type="checkbox"
+                      name="bed"
+                      checked={bed}
+                      onChange={bedS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    책상
+                    <input
+                      type="checkbox"
+                      name="desk"
+                      checked={desk}
+                      onChange={deskS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    인덕션
+                    <input
+                      type="checkbox"
+                      name="induction"
+                      checked={induction}
+                      onChange={inductionS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    가스레인지
+                    <input
+                      type="checkbox"
+                      name="gasRange"
+                      checked={gasRange}
+                      onChange={gasRangeS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    도어락
+                    <input
+                      type="checkbox"
+                      name="doorLock"
+                      checked={doorLock}
+                      onChange={doorLockS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    CCTV
+                    <input
+                      type="checkbox"
+                      name="CCTV"
+                      checked={CCTV}
+                      onChange={CCTVS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    애완동물
+                    <input
+                      type="checkbox"
+                      name="pets"
+                      checked={pets}
+                      onChange={petsS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    엘리베이터
+                    <input
+                      type="checkbox"
+                      name="elevator"
+                      checked={elevator}
+                      onChange={elevatorS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    주차
+                    <input
+                      type="checkbox"
+                      name="parking"
+                      checked={parking}
+                      onChange={parkingS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    전기난방
+                    <input
+                      type="checkbox"
+                      name="electricHeating"
+                      checked={electricHeating}
+                      onChange={electricHeatingS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    도시가스
+                    <input
+                      type="checkbox"
+                      name="cityGasHeating"
+                      checked={cityGasHeating}
+                      onChange={cityGasHeatingS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    심야전기
+                    <input
+                      type="checkbox"
+                      name="nightElectric"
+                      checked={nightElectric}
+                      onChange={nightElectricS}
+                    />
+                  </div>
+                </label>
+
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    전기세포함
+                    <input
+                      type="checkbox"
+                      name="includingElectricity"
+                      checked={includingElectricity}
+                      onChange={includingElectricityS}
+                    />
+                  </div>
+                </label>
+                <label>
+                  <InTheDetailOption
+                    src="https://as1.ftcdn.net/jpg/02/07/68/36/500_F_207683675_QoJOoCagnbzdGTmw3b4qY7hiXDewQeug.jpg"
+                    alt="air"
+                  />
+                  <div>
+                    도시가스포함
+                    <input
+                      type="checkbox"
+                      name="cityGasIncluded"
+                      checked={cityGasIncluded}
+                      onChange={cityGasIncludedS}
+                    />
+                  </div>
+                </label>
+              </OptionCheckBox>
+              <ButtonSearchInside onClick={setActiveClass}>
+                찾기
+              </ButtonSearchInside>
+            </ToggleDetail>
+          ) : (
+            false
+          )}
+
+          {loading && (
+            <ReactCSSTransitionGroup
+              transitionName="example"
+              transitionAppear={true}
+              transitionAppearTimeout={500}
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={300}
+            >
+              <Container>
+                <Loading />
+              </Container>
+            </ReactCSSTransitionGroup>
+          )}
+
+          {!loading && (
+            <NewLinkPage
+              dataOfMe={dataOfMe}
+              props={props}
+              searchData={searchData}
+              loading={loading}
+              page={page}
+            />
+          )}
+          <PaginationDiv>
+            <Pagination
+              activeClass="activeClass"
+              activeLinkClass="activeLinkClass"
+              itemClass="itemClass"
+              itemClassFirst="itemClassFirst"
+              itemClassPrev="itemClassPrev"
+              itemClassNext="itemClassNext"
+              itemClassLast="itemClassLast"
+              activePage={activePage}
+              itemsCountPerPage={first}
+              totalItemsCount={totalCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
+            />
+          </PaginationDiv>
+          {token ? (
+            <LogInButtonWrap>
+              <Link
+                key={
+                  data.searchRoom
+                    ? data.searchRoom && data.searchRoom.id
+                    : data.currentData && data.currentData.id
+                }
+                to={{
+                  pathname: `/writeboard/${dataOfMe &&
+                    dataOfMe.me &&
+                    dataOfMe.me.id}`,
+                  state: {
+                    fromNotifications: true
+                  }
+                }}
+              >
+                <LogInButton onClick={onClick}>글쓰기</LogInButton>
+              </Link>
+            </LogInButtonWrap>
+          ) : (
+            false
+          )}
+        </Wrapper>
+      )}
     </>
   );
 };

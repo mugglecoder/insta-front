@@ -111,6 +111,7 @@ const Money = styled.span`
 let url = [];
 
 const BoardParts = ({
+  beforeCheck,
   checkLikeLoading,
   setJoayo,
   toggleButton,
@@ -137,43 +138,45 @@ const BoardParts = ({
   const [joayoSS, setJoayoSS] = useState(false);
 
   const toggleJoayo = useMutation(TOGGLE_LIKE);
-  const toggleLikeS = async e => {
+  const toggleLikeS = () => {
+    setJoayoS(true);
+    toggleJoayo({ variables: { postId: data.id } });
     if (joayo) {
       setJoayoS(true);
+    } else {
+      setJoayoS(true);
       setJoayoSS(true);
-      console.log("1");
     }
     if (joayoS === true) {
       if (joayoSS === false) {
         setJoayoSS(true);
-        console.log("3");
       }
       if (joayoSS === true) {
         setJoayoSS(false);
-        console.log("4");
+      } else {
+        setJoayoSS(true);
       }
     }
-    const test = await toggleJoayo({ variables: { postId: data.id } });
-    console.log(test.data.toggleLike, "test");
   };
 
   //default heart state
   console.log(data, "data?");
   let joayoy = false;
-  if (!loading) {
-    data &&
-      data.likes.map(item => {
-        if (
-          String(item && item.user.id) === String(dataOfMe && dataOfMe.me.id)
-        ) {
-          joayoy = true;
-        } else if (
-          String(item && item.user.id) !== String(dataOfMe && dataOfMe.me.id)
-        ) {
-          joayoy = false;
-        }
-      });
-  }
+
+  data &&
+    data.likes.map(item => {
+      if (
+        String(item && item.user && item.user.id) ===
+        String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+      ) {
+        joayoy = true;
+      } else if (
+        String(item && item.user && item.user.id) !==
+        String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+      ) {
+        joayoy = false;
+      }
+    });
 
   return (
     <Container>

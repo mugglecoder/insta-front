@@ -263,6 +263,7 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  beforeCheck,
   checkLikeLoading,
   setJoayo,
   toggleButton,
@@ -587,6 +588,7 @@ const RoomsDetailPresenter = ({
               const onclick = () => {};
               return (
                 <BoardPartsSlide
+                  beforeCheck={beforeCheck}
                   checkLikeLoading={checkLikeLoading}
                   setJoayo={setJoayo}
                   toggleButton={toggleButton}

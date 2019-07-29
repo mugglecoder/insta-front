@@ -374,6 +374,7 @@ export default withRouter(props => {
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          beforeCheck={beforeCheck}
           checkLikeLoading={checkLikeLoading}
           setJoayo={setJoayo}
           toggleButton={toggleButton}
