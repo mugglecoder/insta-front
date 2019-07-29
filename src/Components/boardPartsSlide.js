@@ -163,7 +163,9 @@ const BoardParts = ({
   if (!loading) {
     data &&
       data.likes.map(item => {
-        if (String(item.user.id) === String(dataOfMe.me.id)) {
+        if (
+          String(item && item.user.id) === String(dataOfMe && dataOfMe.me.id)
+        ) {
           joayoy = true;
         } else if (
           String(item && item.user.id) !== String(dataOfMe && dataOfMe.me.id)
