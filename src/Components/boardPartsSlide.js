@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import { useMutation } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
     toggleLike(postId: $postId)
   }
 `;
+
+const BEFORE_CHECK = gql`
+  mutation beforeLike($postId: String!) {
+    beforeLike(postId: $postId)
+  }
+`;
+
 const Container = styled.div`
   max-width: 386px;
   width: 100%;
@@ -104,60 +111,64 @@ const Money = styled.span`
 let url = [];
 
 const BoardParts = ({
+  checkLikeLoading,
+  setJoayo,
+  toggleButton,
+  database,
+  toggleLike,
+  joayo,
+  token,
+  props,
+  id,
   dataOfMe,
   loading,
   data2,
-  item,
   data,
   onclick,
-  id,
-  page,
   path,
   caption,
   selectType,
-  username,
-  createdAt,
-  count,
-  url,
   money,
   deposit
 }) => {
+  //
+
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
-  let joayo = false;
+
   const toggleJoayo = useMutation(TOGGLE_LIKE);
-  const toggleLike = () => {
-    toggleJoayo({ variables: { postId: data.id } });
+  const toggleLikeS = async e => {
     if (joayo) {
       setJoayoS(true);
-    } else {
-      setJoayoS(true);
       setJoayoSS(true);
+      console.log("1");
     }
     if (joayoS === true) {
       if (joayoSS === false) {
         setJoayoSS(true);
+        console.log("3");
       }
       if (joayoSS === true) {
         setJoayoSS(false);
-      } else {
-        setJoayoSS(true);
+        console.log("4");
       }
     }
+    const test = await toggleJoayo({ variables: { postId: data.id } });
+    console.log(test.data.toggleLike, "test");
   };
-  if (loading === false) {
+
+  //default heart state
+  console.log(data, "data?");
+  let joayoy = false;
+  if (!loading) {
     data &&
       data.likes.map(item => {
-        if (
-          String(item.user.id) ===
-          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
-        ) {
-          joayo = true;
+        if (String(item.user.id) === String(dataOfMe.me.id)) {
+          joayoy = true;
         } else if (
-          String(item.user.id) !==
-          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+          String(item && item.user.id) !== String(dataOfMe && dataOfMe.me.id)
         ) {
-          joayo = false;
+          joayoy = false;
         }
       });
   }
@@ -168,8 +179,37 @@ const BoardParts = ({
         <Files>
           <LikeContainer>
             <Like>
-              <LikeToggle onClick={toggleLike}>
-                {joayoS ? (
+              <LikeToggle
+                onClick={
+                  String(id) === String(data.id) ? toggleLike : toggleLikeS
+                }
+              >
+                {String(id) === String(data.id) ? (
+                  joayo ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#ED4956"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="#000000"
+                      fill-opacity="0.2"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  )
+                ) : joayoS ? (
                   joayoSS ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -194,7 +234,7 @@ const BoardParts = ({
                       <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
                     </svg>
                   )
-                ) : joayo ? (
+                ) : joayoy ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="34"

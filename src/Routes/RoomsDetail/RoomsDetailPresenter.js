@@ -263,6 +263,12 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  checkLikeLoading,
+  setJoayo,
+  toggleButton,
+  id,
+  beforeLike,
+  checkLike,
   responsive,
   joayo,
   toggleLike,
@@ -509,100 +515,108 @@ const RoomsDetailPresenter = ({
       <MoreRooms>
         <h1>비슷한 매물이 더 있습니다!</h1>
         <hr />
-        {data2 && data2.searchRoom && (
-          <Carousel
-            swipeable={true}
-            draggable={true}
-            showDots={false}
-            responsive={responsive}
-            ssr={true} // means to render carousel on server-side.
-            infinite={false}
-            keyBoardControl={true}
-            customTransition="all .5"
-            transitionDuration={500}
-            containerClass="carousel-container"
-            removeArrowOnDeviceType={["tablet", "mobile"]}
-            deviceType={props.deviceType}
-            dotListClass="custom-dot-list-style"
-            itemClass="carousel-item-padding-40-px"
-          >
-            {data2 &&
-              data2.searchRoom &&
-              data2.searchRoom.post.map((item, key) => {
-                let arrayOfPath = [];
-                let test = [];
-                let path = [];
 
-                if (
-                  data2.searchRoom &&
-                  data2.searchRoom.post[key] &&
-                  data2.searchRoom.post[key].files.length === 0
-                ) {
-                  /// 임시로 메인에 보일 이미지 주소
-                  arrayOfPath.push(
-                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
-                  );
-                  arrayOfPath.map((item, key) => {
-                    return test.push(item);
-                  });
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `${a}`,
-                        thumbnail: `${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                } else {
-                  /////// 이미지 있을때
-
-                  data2.searchRoom &&
-                    data2.searchRoom.post[key] &&
-                    data2.searchRoom.post[key].files.map(item => {
-                      return arrayOfPath.push(item.url);
-                    });
-                  arrayOfPath.map((item, key) => test.push(item));
-
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `http://127.0.0.1:4000/${a}`,
-                        thumbnail: `http://127.0.0.1:4000/${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                }
-                const onclick = () => {};
-                return (
-                  <BoardPartsSlide
-                    dataOfMe={dataOfMe}
-                    loading={loading}
-                    data2={data2}
-                    onclick={onclick}
-                    path={path}
-                    id={item.id}
-                    page={page}
-                    data={item}
-                    key={key}
-                    selectType={item.selectType}
-                    caption={item.caption}
-                    username={item.user.username}
-                    createdAt={item.createdAt.slice(0, 10)}
-                    count={item.count}
-                    url={item.files}
-                    deposit={item.deposit}
-                    money={item.money}
-                  />
+        <Carousel
+          swipeable={true}
+          draggable={true}
+          showDots={false}
+          responsive={responsive}
+          ssr={true} // means to render carousel on server-side.
+          infinite={false}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          deviceType={props.deviceType}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          {data2 &&
+            data2.searchRoom &&
+            data2.searchRoom.post.map((item, key) => {
+              let arrayOfPath = [];
+              let test = [];
+              let path = [];
+              if (
+                data2.searchRoom &&
+                data2.searchRoom.post[key] &&
+                data2.searchRoom.post[key].files.length === 0
+              ) {
+                /// 임시로 메인에 보일 이미지 주소
+                arrayOfPath.push(
+                  `http://127.0.0.1:4000/images/preImage/no-image.jpg`
                 );
-              })}
-          </Carousel>
-        )}
+                arrayOfPath.map((item, key) => {
+                  return test.push(item);
+                });
+                const s = test.reduce((s, a) => {
+                  {
+                    for (var i = 0; i < test.length; i++);
+                    let get;
+                    get = {
+                      original: `${a}`,
+                      thumbnail: `${a}`
+                    };
+                    return path.push(get);
+                  }
+                }, {});
+              } else {
+                /////// 이미지 있을때
+
+                data2.searchRoom &&
+                  data2.searchRoom.post[key] &&
+                  data2.searchRoom.post[key].files.map(item => {
+                    return arrayOfPath.push(item.url);
+                  });
+                arrayOfPath.map((item, key) => test.push(item));
+
+                const s = test.reduce((s, a) => {
+                  {
+                    for (var i = 0; i < test.length; i++);
+                    let get;
+                    get = {
+                      original: `http://127.0.0.1:4000/${a}`,
+                      thumbnail: `http://127.0.0.1:4000/${a}`
+                    };
+                    return path.push(get);
+                  }
+                }, {});
+              }
+
+              const onclick = () => {};
+              return (
+                <BoardPartsSlide
+                  checkLikeLoading={checkLikeLoading}
+                  setJoayo={setJoayo}
+                  toggleButton={toggleButton}
+                  joayo={joayo}
+                  props={props}
+                  token={token}
+                  toggleLike={toggleLike}
+                  checkLike={checkLike}
+                  dataOfMe={dataOfMe}
+                  loading={loading}
+                  data2={data2}
+                  onclick={onclick}
+                  path={path}
+                  id={id}
+                  page={page}
+                  data={item}
+                  database={data}
+                  key={key}
+                  selectType={item.selectType}
+                  caption={item.caption}
+                  username={item.user.username}
+                  createdAt={item.createdAt.slice(0, 10)}
+                  count={item.count}
+                  url={item.files}
+                  deposit={item.deposit}
+                  money={item.money}
+                />
+              );
+            })}
+        </Carousel>
       </MoreRooms>
     )}
   </Wrapper>

@@ -184,6 +184,7 @@ export default withRouter(props => {
   //  console.log(data2, "ㅇㅁㅅㅁ2");
 
   const data2 = props && props.location && props.location.state.data;
+  console.log(data2, "니미씨발 데이터");
   //http://127.0.0.1:4000
 
   const onClick = props => {
@@ -304,22 +305,20 @@ export default withRouter(props => {
   } = useQuery(CHECK_LIKE, { variables: { postId: id } });
 
   const toggleButton = useMutation(TOGGLE_LIKE);
-  const [fakeUpdate, setFakeUpdate] = useState(props.match.params);
 
   const beforeCheck = useMutation(BEFORE_CHECK);
-
   //
 
   //
 
   const [joayo, setJoayo] = useState(false);
-  useEffect(() => {}, [joayo]);
 
   //default 좋아요를 셋팅함
   useEffect(() => {
     setJoayo(checkLike);
   }, [checkLikeLoading]);
 
+  //페이지 넘길때 좋아요 미리 표시해줌
   useEffect(() => {
     (async function() {
       try {
@@ -333,16 +332,21 @@ export default withRouter(props => {
     })();
   }, [props.match.params]);
 
+  //좋아요 클릭했을때 로직인데 음
   const toggleLike = async () => {
-    if (joayo === true) {
-      setJoayo(false);
-    } else if (joayo === false) {
-      setJoayo(true);
+    if (token) {
+      if (joayo === true) {
+        setJoayo(false);
+      } else if (joayo === false) {
+        setJoayo(true);
+      }
+      const {
+        data: { toggleLike }
+      } = await toggleButton({ variables: { postId: id } });
+      setJoayo(toggleLike);
+    } else {
+      console.log("로그인 후 이용가능 합니다");
     }
-    const {
-      data: { toggleLike }
-    } = await toggleButton({ variables: { postId: id } });
-    setJoayo(toggleLike);
   };
 
   //하단
@@ -370,6 +374,12 @@ export default withRouter(props => {
     <Wrapper>
       {checker ? (
         <RoomsDetailPresenter
+          checkLikeLoading={checkLikeLoading}
+          setJoayo={setJoayo}
+          toggleButton={toggleButton}
+          props={props}
+          id={id}
+          checkLike={checkLike}
           responsive={responsive}
           joayo={joayo}
           toggleLike={toggleLike}
@@ -381,7 +391,6 @@ export default withRouter(props => {
           token={token}
           path={getPath}
           page={page}
-          props={props}
           data={data}
           data2={data2}
           loading={loading}
