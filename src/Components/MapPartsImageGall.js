@@ -192,12 +192,6 @@ const H1Bottom = styled.div`
 `;
 
 export default item => {
-  console.log(
-    item,
-
-    "searchDatasearchDatasearchDatasearchDatasearchData"
-  );
-
   const page = item.props.match && item.props.match.params.page;
   ///////////
   const urls = item.item.files && item.item.files.map(item => item);
@@ -363,7 +357,7 @@ export default item => {
               </LikeContainer>
               <Link
                 to={{
-                  pathname: `/roomsdetail/${item.item.id}/new/${page}`,
+                  pathname: `/new/detail/${item.item.id}/${page}`,
                   state: { data: item.searchData }
                 }}
               >

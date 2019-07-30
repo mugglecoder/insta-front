@@ -221,7 +221,7 @@ const BoardParts = ({
           </LikeContainer>
           <StyledLink
             to={{
-              pathname: `/roomsdetail/${data.id}`,
+              pathname: `/new/detail/${data.id}`,
               state: { data: searchData }
             }}
           >

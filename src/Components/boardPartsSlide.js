@@ -160,7 +160,7 @@ const BoardParts = ({
   };
 
   //default heart state
-  console.log(data, "data?");
+
   let joayoy = false;
 
   data &&

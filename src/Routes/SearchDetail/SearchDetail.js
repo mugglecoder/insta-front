@@ -3,11 +3,11 @@ import styled from "styled-components";
 import ReactDOM from "react-dom";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
-import RoomsDetailPresenter from "./RoomsDetailPresenter";
-import ModifyPresenter from "../SearchDetail/ModifyPresenter";
+import SearchDetailPresenter from "./SearchDetailPresenter";
 import { ME } from "../../SharedQueries";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
+import ModifyPresenter from "./ModifyPresenter";
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
@@ -124,12 +124,15 @@ const LOCAL_LOG_IN = gql`
 `;
 
 const Wrapper = styled.div``;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-export default withRouter(props => {
-  const id = props.history.location.pathname.split("/")[2];
-  const { data, loading } = useQuery(GETPOST, {
-    variables: { id }
-  });
+const RoomsDetail = ({ props, data, loading, searchData }) => {
+  console.log(data, loading, props, "in the searchDeatil");
+  const id = props && props.history.location.pathname.split(" / ")[2];
+  console.log(id, "id? in the search Detail");
   //구글지도
 
   const [center, setCenter] = useState({});
@@ -137,8 +140,8 @@ export default withRouter(props => {
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(15);
 
-  const lat = Number(data && data.detailPost && data.detailPost.places[0].lat);
-  const lng = Number(data && data.detailPost && data.detailPost.places[0].lng);
+  const lat = Number(data && data && data.places[0].lat);
+  const lng = Number(data && data && data.places[0].lng);
   const forCenter = { lat, lng };
 
   const localLoginMutation = useMutation(LOCAL_LOG_IN);
@@ -160,6 +163,7 @@ export default withRouter(props => {
 
   const _getQueryVariables = () => {
     const isNewPage =
+      props &&
       props.location &&
       props.location.pathname &&
       props.location.pathname.includes("new");
@@ -174,17 +178,13 @@ export default withRouter(props => {
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
   useEffect(() => {}, [getQueryVariables]);
 
-  let herrrr = props.history;
+  let herrrr = props && props.history;
   const token = localStorage.getItem("token");
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  //  const { data: data2 } = useQuery(FEED_QUERY, {
-  //    variables: { first, skip }
-  //  });
-  //  console.log(data2, "ㅇㅁㅅㅁ2");
 
   const data2 = props && props.location && props.location.state.data;
-  console.log(data2, "니미씨발 데이터");
+
   //http://127.0.0.1:4000
 
   const onClick = props => {
@@ -199,7 +199,7 @@ export default withRouter(props => {
   };
   const onClick2 = props => {
     if (dataOfMe && dataOfMe.me && dataOfMe.me.id) {
-      return herrrr && herrrr.push(`/edit/${data && data.detailPost.id}`);
+      return herrrr && herrrr.push(`/edit/${data && data.searchRoom.id}`);
     } else {
       return false;
     }
@@ -256,9 +256,7 @@ export default withRouter(props => {
   let posts = [];
   let getPath = [];
   const pathData =
-    data.detailPost &&
-    data.detailPost.files &&
-    data.detailPost.files.map(item => posts.push(item.url));
+    data && data.files && data.files.map(item => posts.push(item.url));
 
   const s = posts.reduce((s, a) => {
     {
@@ -273,7 +271,7 @@ export default withRouter(props => {
   }, {});
 
   //토글 룸스디테일 & 수정하기
-  const checker = props.match.path.includes("roomsdetail");
+  const checker = props && props.match.path.includes("detail");
   const deletePost = useMutation(DELETEPOST);
 
   const deletePostForData =
@@ -330,7 +328,7 @@ export default withRouter(props => {
         console.error(e);
       }
     })();
-  }, [props.match.params]);
+  }, [props && props.match.params]);
 
   //좋아요 클릭했을때 로직인데 음
   const toggleLike = async () => {
@@ -373,7 +371,8 @@ export default withRouter(props => {
   return (
     <Wrapper>
       {checker ? (
-        <RoomsDetailPresenter
+        <SearchDetailPresenter
+          searchData={searchData}
           beforeCheck={beforeCheck}
           checkLikeLoading={checkLikeLoading}
           setJoayo={setJoayo}
@@ -403,22 +402,10 @@ export default withRouter(props => {
           dataOfMe={dataOfMe}
         />
       ) : (
-        <ModifyPresenter
-          token={token}
-          path={getPath}
-          page={page}
-          props={props}
-          data={data}
-          data2={data2}
-          loading={loading}
-          logIn={logIns}
-          onClick={onClick}
-          onClick2={onClick2}
-          _nextPage={_nextPage}
-          _previousPage={_previousPage}
-          dataOfMe={dataOfMe}
-        />
+        false
       )}
     </Wrapper>
   );
-});
+};
+
+export default RoomsDetail;

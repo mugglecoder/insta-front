@@ -14,6 +14,7 @@ import { withRouter } from "react-router-dom";
 import Main from "../Routes/Main";
 import Fullmap2 from "../Routes/Fullmap2";
 import Preloading from "./Preloading";
+import SearchDetail from "../Routes/SearchDetail";
 const LoggedInRoutes = withRouter((props, { match }) => {
   return (
     <Switch>
@@ -29,9 +30,8 @@ const LoggedInRoutes = withRouter((props, { match }) => {
         render={() => <Redirect to="/fullmap" />}
         component={LinkPage}
       />
-      <Route path="/fullmap/roomsdetail/:id" component={FullmapDivide} />
-      <Route path="/roomsdetail/:id" component={RoomsDetail} />
-      <Route exact path="/edit/:id" component={RoomsDetail} />
+      <Route path="/new/detail/:id" component={Search} />
+      <Route exact path="/new/edit/:id" component={Search} />
       <Route path="/writeboard/:id" component={WritePost} />
       <Route path="/board" component={Feed} />
       <Route path="/uploading" component={Loading} />

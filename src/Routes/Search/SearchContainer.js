@@ -604,8 +604,19 @@ export default withRouter(props => {
     searchData.searchRoom &&
     searchData.searchRoom.post.map(item => item);
 
+  //디테일페이지에 관한 모든것
+  const detail =
+    props.location.pathname.split("/")[2] === "detail" ? true : false;
+
+  const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
+
+  const matchDetail = props.location.pathname.split("/")[3];
+
   return (
     <SearchPresenter
+      edit={edit}
+      matchDetail={matchDetail}
+      detail={detail}
       itemsCountPerPage={itemsCountPerPage}
       totalCount={totalCount}
       activePage={activePage}

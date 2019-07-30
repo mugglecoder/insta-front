@@ -134,7 +134,6 @@ export default ({
   const AnyReactComponent = ({ item, searchData }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
-        {console.log(searchData, "serched data in google maps main")}
         <MapPartsImageGall
           data={data}
           item={item}
