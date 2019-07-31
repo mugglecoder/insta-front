@@ -5,7 +5,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80vh;
   display: flex;
   flex-direction: row;
   flex-flow: row wrap;
@@ -76,7 +76,7 @@ const ContainerS = styled.section`
   }
 `;
 
-export default ({ token, data, onDeletePost, loading }) => {
+export default ({ token, data, loading }) => {
   return (
     <Container>
       <Wrap>

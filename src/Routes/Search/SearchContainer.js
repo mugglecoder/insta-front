@@ -2,11 +2,70 @@ import React, { useState, useEffect } from "react";
 import SearchPresenter from "./SearchPresenter";
 import { withRouter } from "react-router-dom";
 import { gql } from "apollo-boost";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
+const GETPOST = gql`
+  query detailPost($id: String!) {
+    detailPost(id: $id) {
+      id
+      places {
+        lat
+        lng
+      }
+      count
+      numberOfFoors
+      MLSnumber
+      deposit
+      money
+      content
+      caption
+      airConditioner
+      washer
+      refrigerator
+      internet
+      microwave
+      wifi
+      bed
+      desk
+      induction
+      gasRange
+      doorLock
+      CCTV
+      pets
+      elevator
+      parking
+      electricHeating
+      cityGasHeating
+      nightElectric
+      wateTax
+      includingElectricity
+      cityGasIncluded
+      selectType
+      comments {
+        id
+      }
+      files {
+        id
+        url
+      }
+      user {
+        id
+        username
+      }
+      likes {
+        id
+        post {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const SEARCH = gql`
-  query searchRoom(
+  mutation searchRoom(
+    $id: String
     $first: Int
     $skip: Int
     $lat: Float
@@ -46,6 +105,7 @@ const SEARCH = gql`
     $MLSnumber: String
   ) {
     searchRoom(
+      id: $id
       first: $first
       skip: $skip
       lat: $lat
@@ -84,6 +144,64 @@ const SEARCH = gql`
       numberOfFoors: $numberOfFoors
       MLSnumber: $MLSnumber
     ) {
+      preData {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        count
+        content
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        numberOfFoors
+        MLSnumber
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
+        }
+      }
       post {
         id
         caption
@@ -530,9 +648,11 @@ export default withRouter(props => {
   }, []);
   //검색하는 데이터 쿼리
   /////
-
-  const { data: searchData, loading } = useQuery(SEARCH, {
+  const id = props && props.location.pathname.split("/")[3];
+  const loading = false;
+  const searchData = useMutation(SEARCH, {
     variables: {
+      id,
       first,
       skip,
       lat: latS,
@@ -569,7 +689,7 @@ export default withRouter(props => {
       //  MLSnumber
     }
   });
-
+  console.log(searchData, "실험적이야");
   const searching = e => {
     e.preventDefault();
   };
@@ -607,10 +727,11 @@ export default withRouter(props => {
   //디테일페이지에 관한 모든것
   const detail =
     props.location.pathname.split("/")[2] === "detail" ? true : false;
-
   const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
 
   const matchDetail = props.location.pathname.split("/")[3];
+
+  //다이렉트로 주소로 접근할때 디테일에 대한 로직
 
   return (
     <SearchPresenter

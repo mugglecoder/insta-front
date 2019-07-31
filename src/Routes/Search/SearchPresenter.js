@@ -19,7 +19,7 @@ import {
   ProgressBar
 } from "react-fetch-progressbar";
 import SearchDetail from "../SearchDetail/SearchDetail";
-import ModifyPresenter from "../SearchDetail/ModifyPresenter";
+import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
 
 // Let react-fetch-progressbar know what the original fetch is.
 setOriginalFetch(window.fetch);
@@ -229,6 +229,8 @@ const PaginationDiv = styled.div`
 `;
 
 export default ({
+  wwwData,
+  wwwLoading,
   edit,
   matchDetail,
   detail,
@@ -682,24 +684,6 @@ export default ({
     }
   };
 
-  //getpath
-  let posts = [];
-  let getPath = [];
-  const pathData =
-    data && data.files && data.files.map(item => posts.push(item.url));
-
-  const s = posts.reduce((s, a) => {
-    {
-      for (var i = 0; i < posts.lengsh; i++);
-      let get;
-      get = {
-        original: `http://localhost:4000/${a}`,
-        thumbnail: `http://localhost:4000/${a}`
-      };
-      return getPath.push(get);
-    }
-  }, {});
-
   return (
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
@@ -711,6 +695,7 @@ export default ({
         searchData.searchRoom.post.map(item =>
           item.id === matchDetail ? (
             <SearchDetail
+              edit={edit}
               token={token}
               dataOfMe={dataOfMe}
               data={item}
@@ -723,23 +708,23 @@ export default ({
           )
         )
       ) : edit ? (
-        //모디파이에 정보를 보내줘야한다
-
-        <ModifyPresenter
-          token={token}
-          path={getPath}
-          page={page}
-          props={props}
-          data={data}
-          data2={data2}
-          loading={loading}
-          logIn={logIns}
-          onClick={onClick}
-          onClick2={onClick2}
-          _nextPage={_nextPage}
-          _previousPage={_previousPage}
-          dataOfMe={dataOfMe}
-        />
+        searchData.searchRoom &&
+        searchData.searchRoom.post &&
+        searchData.searchRoom.post.map(item =>
+          item.id === matchDetail ? (
+            <SearchDetail
+              edit={edit}
+              token={token}
+              dataOfMe={dataOfMe}
+              data={item}
+              loading={loading}
+              props={props}
+              searchData={searchData}
+            />
+          ) : (
+            false
+          )
+        )
       ) : (
         <Wrapper>
           {

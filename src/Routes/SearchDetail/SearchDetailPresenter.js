@@ -293,14 +293,7 @@ const RoomsDetailPresenter = ({
   onDeletePost
 }) => (
   <Wrapper>
-    {loading && (
-      <DetailLoader
-        token={token}
-        data={data}
-        onDeletePost={onDeletePost}
-        loading={loading}
-      />
-    )}
+    {loading && <DetailLoader token={token} data={data} loading={loading} />}
     {!loading && token && data ? (
       <LogInButtonWrap>
         <Link

@@ -6,6 +6,7 @@ import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
 import { relative } from "path";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { set } from "immutable";
 
 // 메인 맵
 
@@ -189,7 +190,10 @@ export default ({
     console.log("마우스 온 더 잇");
   };
 
-  const setItems = () => {};
+  const setItems = async () => {
+    const { data } = await searchData();
+    console.log(data, "inthe googlemapsmain");
+  };
 
   return (
     <Container>

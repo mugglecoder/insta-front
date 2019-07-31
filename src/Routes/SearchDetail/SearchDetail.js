@@ -59,64 +59,6 @@ const FEED_QUERY = gql`
 
 const LINKS_PER_PAGE = 12;
 
-const GETPOST = gql`
-  query detailPost($id: String!) {
-    detailPost(id: $id) {
-      id
-      places {
-        lat
-        lng
-      }
-      count
-      numberOfFoors
-      MLSnumber
-      deposit
-      money
-      content
-      caption
-      airConditioner
-      washer
-      refrigerator
-      internet
-      microwave
-      wifi
-      bed
-      desk
-      induction
-      gasRange
-      doorLock
-      CCTV
-      pets
-      elevator
-      parking
-      electricHeating
-      cityGasHeating
-      nightElectric
-      wateTax
-      includingElectricity
-      cityGasIncluded
-      selectType
-      comments {
-        id
-      }
-      files {
-        id
-        url
-      }
-      user {
-        id
-        username
-      }
-      likes {
-        id
-        post {
-          id
-        }
-      }
-    }
-  }
-`;
-
 const LOCAL_LOG_IN = gql`
   mutation logUserIn($token: String!) {
     logUserIn(token: $token) @client
@@ -130,9 +72,8 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const RoomsDetail = ({ props, data, loading, searchData }) => {
-  console.log(data, loading, props, "in the searchDeatil");
-  const id = props && props.history.location.pathname.split(" / ")[2];
-  console.log(id, "id? in the search Detail");
+  const id = props && props.location.pathname.split("/")[3];
+
   //구글지도
 
   const [center, setCenter] = useState({});
@@ -366,31 +307,19 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
     }
   };
 
-  ////여기는 modifyPresenter ///////////////////////////////////////////
+  ////만약 주소로 다이렉트로 접근할때?///////////////////////////////////////////
+
+  const edit =
+    props && props.location.pathname.split("/")[2] === "edit" ? true : false;
 
   return (
     <Wrapper>
-      {checker ? (
-        <SearchDetailPresenter
-          searchData={searchData}
-          beforeCheck={beforeCheck}
-          checkLikeLoading={checkLikeLoading}
-          setJoayo={setJoayo}
-          toggleButton={toggleButton}
-          props={props}
-          id={id}
-          checkLike={checkLike}
-          responsive={responsive}
-          joayo={joayo}
-          toggleLike={toggleLike}
-          lng={lng}
-          lat={lat}
-          center={center}
-          zoom={zoom}
-          onDeletePost={onDeletePost}
+      {edit ? (
+        <ModifyPresenter
           token={token}
           path={getPath}
           page={page}
+          props={props}
           data={data}
           data2={data2}
           loading={loading}
@@ -402,7 +331,38 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
           dataOfMe={dataOfMe}
         />
       ) : (
-        false
+        !loading && (
+          <SearchDetailPresenter
+            searchData={searchData}
+            beforeCheck={beforeCheck}
+            checkLikeLoading={checkLikeLoading}
+            setJoayo={setJoayo}
+            toggleButton={toggleButton}
+            props={props}
+            id={id}
+            checkLike={checkLike}
+            responsive={responsive}
+            joayo={joayo}
+            toggleLike={toggleLike}
+            lng={lng}
+            lat={lat}
+            center={center}
+            zoom={zoom}
+            onDeletePost={onDeletePost}
+            token={token}
+            path={getPath}
+            page={page}
+            data={data}
+            data2={data2}
+            loading={loading}
+            logIn={logIns}
+            onClick={onClick}
+            onClick2={onClick2}
+            _nextPage={_nextPage}
+            _previousPage={_previousPage}
+            dataOfMe={dataOfMe}
+          />
+        )
       )}
     </Wrapper>
   );

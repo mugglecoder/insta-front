@@ -166,10 +166,10 @@ const OptionCheckBox = styled.div`
   }
 `;
 
-export default (props, data) => {
+export default props => {
   ///////////////////////////////////////////////////////////////////////////////////////
-  console.log(props, data, "data in the modify");
-  const preData = data && data.detailPost;
+  console.log(props, "data in the modify");
+  const preData = props.data;
   const [select, setSelect] = useState("월세");
   const [imageUploadMulter, setImageUploadMulter] = useState(
     preData && preData.files
