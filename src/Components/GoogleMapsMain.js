@@ -90,6 +90,7 @@ const Button = styled.button`
 `;
 
 const H1 = styled.div`
+  cursor: pointer;
   position: absolute;
   padding: 8px 15px;
   background: #e57070;
@@ -113,6 +114,7 @@ const H12 = styled.div`
 `;
 
 export default ({
+  findRoom,
   data,
   dataOfMe,
   searchData,
@@ -190,11 +192,6 @@ export default ({
     console.log("마우스 온 더 잇");
   };
 
-  const setItems = async () => {
-    const { data } = await searchData();
-    console.log(data, "inthe googlemapsmain");
-  };
-
   return (
     <Container>
       <Mapdiv style={{ height, width, position: "relative" }}>
@@ -226,13 +223,7 @@ export default ({
               )
             )}
         </GoogleMapReact>
-        <Link to="/new/search">
-          {loading ? (
-            <H12 onClick={setItems}>좋은집 찾는중!</H12>
-          ) : (
-            <H1 onClick={setItems}>지도안의 매물만 나옵니다</H1>
-          )}
-        </Link>
+        <H1 onClick={findRoom}>여기에 있는 매물 재검색</H1>
       </Mapdiv>
     </Container>
   );

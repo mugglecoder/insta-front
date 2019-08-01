@@ -268,7 +268,7 @@ const BoardParts = ({
           </LikeContainer>
           <Link
             to={{
-              pathname: `/roomsdetail/${data.id}`,
+              pathname: `/new/detail/${data.id}`,
               state: { data: data2 }
             }}
             key={data.id}

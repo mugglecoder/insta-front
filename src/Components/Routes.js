@@ -15,7 +15,7 @@ import Main from "../Routes/Main";
 import Fullmap2 from "../Routes/Fullmap2";
 import Preloading from "./Preloading";
 import SearchDetail from "../Routes/SearchDetail";
-const LoggedInRoutes = withRouter((props, { match }) => {
+const LoggedInRoutes = () => {
   return (
     <Switch>
       <Route exact path="/" render={Main} />
@@ -37,7 +37,7 @@ const LoggedInRoutes = withRouter((props, { match }) => {
       <Route path="/uploading" component={Loading} />
     </Switch>
   );
-});
+};
 
 const LoggedOutRoutes = ({ history }) => (
   <Switch>

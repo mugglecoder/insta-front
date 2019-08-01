@@ -72,6 +72,8 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const RoomsDetail = ({ props, data, loading, searchData }) => {
+  console.log(searchData, "in the searchDetail");
+
   const id = props && props.location.pathname.split("/")[3];
 
   //구글지도
@@ -124,7 +126,11 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-  const data2 = props && props.location && props.location.state.data;
+  const data2 =
+    props &&
+    props.location &&
+    props.location.state &&
+    props.location.state.data;
 
   //http://127.0.0.1:4000
 

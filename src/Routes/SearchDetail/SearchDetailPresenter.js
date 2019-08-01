@@ -480,15 +480,15 @@ const RoomsDetailPresenter = ({
           itemClass="carousel-item-padding-40-px"
         >
           {searchData &&
-            searchData.searchRoom &&
-            searchData.searchRoom.post.map((item, key) => {
+            searchData.post &&
+            searchData.post.map((item, key) => {
               let arrayOfPath = [];
               let test = [];
               let path = [];
               if (
-                searchData.searchRoom &&
-                searchData.searchRoom.post[key] &&
-                searchData.searchRoom.post[key].files.length === 0
+                searchData.post &&
+                searchData.post[key] &&
+                searchData.post[key].files.length === 0
               ) {
                 /// 임시로 메인에 보일 이미지 주소
                 arrayOfPath.push(
@@ -511,9 +511,9 @@ const RoomsDetailPresenter = ({
               } else {
                 /////// 이미지 있을때
 
-                searchData.searchRoom &&
-                  searchData.searchRoom.post[key] &&
-                  searchData.searchRoom.post[key].files.map(item => {
+                searchData.post &&
+                  searchData.post[key] &&
+                  searchData.post[key].files.map(item => {
                     return arrayOfPath.push(item.url);
                   });
                 arrayOfPath.map((item, key) => test.push(item));

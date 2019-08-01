@@ -184,7 +184,7 @@ export default withRouter(props => {
   //  console.log(data2, "ㅇㅁㅅㅁ2");
 
   const data2 = props && props.location && props.location.state.data;
-  console.log(data2, "니미씨발 데이터");
+
   //http://127.0.0.1:4000
 
   const onClick = props => {

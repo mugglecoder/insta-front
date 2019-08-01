@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import NewLinkPage from "../../Components/NewLinkPage";
@@ -128,7 +128,7 @@ const SliderDiv = styled.div`
   width: 30%;
 `;
 
-const ButtonSearch = styled.div`
+const ButtonSearch = styled.button`
   cursor: pointer;
   margin: 10px;
   width: 72px;
@@ -229,8 +229,7 @@ const PaginationDiv = styled.div`
 `;
 
 export default ({
-  wwwData,
-  wwwLoading,
+  newData,
   edit,
   matchDetail,
   detail,
@@ -309,13 +308,14 @@ export default ({
   setInputValue,
   setSelectValue3,
   setSelectValue4,
-  searching,
+  getTheMotherFuckingData,
   deposit,
   deposit2,
   money,
   money2,
   searchData,
-  setFixCenter
+  setFixCenter,
+  findRoom
 }) => {
   /// 마커 아이콘에 대한 로직
   const passing = props;
@@ -690,9 +690,9 @@ export default ({
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
       {detail ? (
-        searchData.searchRoom &&
-        searchData.searchRoom.post &&
-        searchData.searchRoom.post.map(item =>
+        newData &&
+        newData.post &&
+        newData.post.map(item =>
           item.id === matchDetail ? (
             <SearchDetail
               edit={edit}
@@ -701,16 +701,16 @@ export default ({
               data={item}
               loading={loading}
               props={props}
-              searchData={searchData}
+              searchData={newData}
             />
           ) : (
             false
           )
         )
       ) : edit ? (
-        searchData.searchRoom &&
-        searchData.searchRoom.post &&
-        searchData.searchRoom.post.map(item =>
+        newData &&
+        newData.post &&
+        newData.post.map(item =>
           item.id === matchDetail ? (
             <SearchDetail
               edit={edit}
@@ -729,7 +729,8 @@ export default ({
         <Wrapper>
           {
             <GoogleMapsMain
-              data={data}
+              findRoom={findRoom}
+              data={newData}
               dataOfMe={dataOfMe}
               searchData={searchData}
               loading={loading}
@@ -847,8 +848,9 @@ export default ({
                 }
               }}
             >
-              <ButtonSearch>검색</ButtonSearch>
+              <ButtonSearch onClick={setActiveClass}>검색</ButtonSearch>
             </Link>
+            <ButtonSearch onClick={findRoom}>검색2</ButtonSearch>
           </SearchBox>
           {isOpen ? (
             <ToggleDetail>
@@ -1184,7 +1186,7 @@ export default ({
             <NewLinkPage
               dataOfMe={dataOfMe}
               props={props}
-              searchData={searchData}
+              searchData={newData}
               loading={loading}
               page={page}
             />

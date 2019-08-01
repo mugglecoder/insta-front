@@ -238,7 +238,9 @@ export default item => {
   }
   //////////
 
-  const onclick = () => {};
+  const onclick = () => {
+    item.props.history.push(`/new/detail/${item.item.id}`);
+  };
   //좋아요 로직
 
   let joayo = false;
@@ -355,25 +357,19 @@ export default item => {
                   </LikeToggle>
                 </Like>
               </LikeContainer>
-              <Link
-                to={{
-                  pathname: `/new/detail/${item.item.id}/${page}`,
-                  state: { data: item.searchData }
-                }}
-              >
-                <ImageGallery
-                  additionalClass={`inTheMap`}
-                  items={path}
-                  showFullscreenButton={false}
-                  useBrowserFullscreen={false}
-                  showThumbnails={false}
-                  showPlayButton={false}
-                  showBullets={false}
-                  lazyLoad={true}
-                  showIndex={false}
-                  onClick={onclick}
-                />
-              </Link>
+
+              <ImageGallery
+                additionalClass={`inTheMap`}
+                items={path}
+                showFullscreenButton={false}
+                useBrowserFullscreen={false}
+                showThumbnails={false}
+                showPlayButton={false}
+                showBullets={false}
+                lazyLoad={true}
+                showIndex={false}
+                onClick={onclick}
+              />
             </SubColumn>
           </Column>
           <ContentMain>

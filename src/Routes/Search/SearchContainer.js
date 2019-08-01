@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchPresenter from "./SearchPresenter";
 import { withRouter } from "react-router-dom";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
@@ -267,7 +267,7 @@ const SEARCH = gql`
 
 const LINKS_PER_PAGE = 16;
 
-export default withRouter(props => {
+export default props => {
   ///체크박스 스테이트
   const [airConditioner, setAirConditioner] = useState("");
   const [washer, setWasher] = useState("");
@@ -648,7 +648,10 @@ export default withRouter(props => {
   }, []);
   //검색하는 데이터 쿼리
   /////
-  const id = props && props.location.pathname.split("/")[3];
+  const id =
+    props.location.pathname.split("/")[3].length > 4
+      ? props.location.pathname.split("/")[3]
+      : props.location.pathname.split("/")[3];
   const loading = false;
   const searchData = useMutation(SEARCH, {
     variables: {
@@ -689,12 +692,17 @@ export default withRouter(props => {
       //  MLSnumber
     }
   });
-  console.log(searchData, "실험적이야");
-  const searching = e => {
-    e.preventDefault();
+  const [newData, setNewData] = useState();
+
+  const findRoom = async () => {
+    const {
+      data: { searchRoom }
+    } = await searchData();
+    setNewData(searchRoom);
   };
 
   const [activePage, setActivePage] = useState(page);
+
   useEffect(() => {}, [activePage]);
   //new 페이지네이션
   const handlePageChange = pageNumber => {
@@ -714,15 +722,9 @@ export default withRouter(props => {
   };
   const itemsCountPerPage = () => {};
 
-  const totalCount =
-    searchData.searchRoom && searchData.searchRoom.counts
-      ? searchData.searchRoom && searchData.searchRoom.counts
-      : 10;
+  const totalCount = newData && newData.counts ? newData && newData.counts : 10;
   //주소를 가져온다
-  const latAndlng =
-    searchData &&
-    searchData.searchRoom &&
-    searchData.searchRoom.post.map(item => item);
+  const latAndlng = newData && newData.post.map(item => item);
 
   //디테일페이지에 관한 모든것
   const detail =
@@ -732,9 +734,29 @@ export default withRouter(props => {
   const matchDetail = props.location.pathname.split("/")[3];
 
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
+  useEffect(() => {
+    const id =
+      props.location.pathname.split("/")[3].length > 4
+        ? props.location.pathname.split("/")[3]
+        : false;
+    console.log(id);
+    if (id) {
+      (async function() {
+        const {
+          data: { searchRoom }
+        } = await searchData({ variables: { id } });
+        console.log(searchRoom, "in the searchContainer id");
+        setNewData(searchRoom);
+      })();
+    } else {
+      console.log("no id");
+    }
+  }, []);
 
   return (
     <SearchPresenter
+      newData={newData}
+      findRoom={findRoom}
       edit={edit}
       matchDetail={matchDetail}
       detail={detail}
@@ -812,11 +834,10 @@ export default withRouter(props => {
       cityGasIncludedS={cityGasIncludedS}
       setSelectValue3={setSelectValue3}
       setSelectValue4={setSelectValue4}
-      searching={searching}
       deposit={deposit}
       deposit2={deposit2}
       money={money}
       money2={money2}
     />
   );
-});
+};

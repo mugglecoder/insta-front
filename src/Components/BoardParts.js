@@ -109,11 +109,12 @@ const StyledLink = styled(Link)`
 let url = [];
 
 const BoardParts = ({
+  props,
+  newData,
   searchData,
   loading,
   dataOfMe,
   data,
-  onclick,
   id,
   page,
   path,
@@ -126,6 +127,7 @@ const BoardParts = ({
   money,
   deposit
 }) => {
+  console.log(newData, "in the boardParts");
   let joayo = false;
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
@@ -160,6 +162,7 @@ const BoardParts = ({
         }
       });
   }
+  const onclick = () => props.history.push(`/new/detail/${id}`);
   return (
     <Container>
       <Column>
@@ -219,25 +222,19 @@ const BoardParts = ({
               </LikeToggle>
             </Like>
           </LikeContainer>
-          <StyledLink
-            to={{
-              pathname: `/new/detail/${data.id}`,
-              state: { data: searchData }
-            }}
-          >
-            <File
-              items={path}
-              showFullscreenButton={false}
-              useBrowserFullscreen={false}
-              showThumbnails={false}
-              showPlayButton={false}
-              showBullets={true}
-              lazyLoad={true}
-              showIndex={false}
-              sizes={500}
-              onClick={onclick}
-            />
-          </StyledLink>
+
+          <File
+            items={path}
+            showFullscreenButton={false}
+            useBrowserFullscreen={false}
+            showThumbnails={false}
+            showPlayButton={false}
+            showBullets={true}
+            lazyLoad={true}
+            showIndex={false}
+            sizes={500}
+            onClick={onclick}
+          />
         </Files>
       </Column>
       <SubColumn>
