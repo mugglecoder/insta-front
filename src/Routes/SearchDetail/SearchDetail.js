@@ -8,6 +8,7 @@ import { ME } from "../../SharedQueries";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
 import ModifyPresenter from "./ModifyPresenter";
+import Loading from "../../Components/PlaceHolderForLoader/Loading";
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
@@ -72,8 +73,6 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const RoomsDetail = ({ props, data, loading, searchData }) => {
-  console.log(searchData, "in the searchDetail");
-
   const id = props && props.location.pathname.split("/")[3];
 
   //구글지도
@@ -83,15 +82,9 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(15);
 
-  const lat = Number(data && data && data.places[0].lat);
-  const lng = Number(data && data && data.places[0].lng);
+  const lat = Number(data && data && data.lat);
+  const lng = Number(data && data && data.lng);
   const forCenter = { lat, lng };
-
-  const localLoginMutation = useMutation(LOCAL_LOG_IN);
-
-  const logIns = localLoginMutation({
-    variables: { token: localStorage.getItem("token") }
-  });
 
   ////////////////////////////////
 
@@ -219,7 +212,7 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
 
   //토글 룸스디테일 & 수정하기
   const checker = props && props.match.path.includes("detail");
-  const deletePost = useMutation(DELETEPOST);
+  const [deletePost] = useMutation(DELETEPOST);
 
   const deletePostForData =
     data2 &&
@@ -249,9 +242,9 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
     loading: checkLikeLoading
   } = useQuery(CHECK_LIKE, { variables: { postId: id } });
 
-  const toggleButton = useMutation(TOGGLE_LIKE);
+  const [toggleButton] = useMutation(TOGGLE_LIKE);
 
-  const beforeCheck = useMutation(BEFORE_CHECK);
+  const [beforeCheck] = useMutation(BEFORE_CHECK);
   //
 
   //
@@ -275,6 +268,7 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
         console.error(e);
       }
     })();
+    window.scrollTo(0, 0);
   }, [props && props.match.params]);
 
   //좋아요 클릭했을때 로직인데 음
@@ -320,6 +314,7 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
 
   return (
     <Wrapper>
+      {loading ? <Loading /> : false}
       {edit ? (
         <ModifyPresenter
           token={token}
@@ -329,7 +324,6 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
           data={data}
           data2={data2}
           loading={loading}
-          logIn={logIns}
           onClick={onClick}
           onClick2={onClick2}
           _nextPage={_nextPage}
@@ -361,7 +355,6 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
             data={data}
             data2={data2}
             loading={loading}
-            logIn={logIns}
             onClick={onClick}
             onClick2={onClick2}
             _nextPage={_nextPage}

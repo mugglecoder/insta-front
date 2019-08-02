@@ -1,6 +1,6 @@
 import React, { useQuery } from "react";
 import styled from "styled-components";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import { withRouter } from "react-router-dom";
 
 //그라프큐엘

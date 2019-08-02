@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import "../css/image-gallery.css";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useQuery, useMutation } from "react-apollo-hooks";
@@ -137,7 +137,7 @@ const BoardParts = ({
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
 
-  const toggleJoayo = useMutation(TOGGLE_LIKE);
+  const [toggleJoayo] = useMutation(TOGGLE_LIKE);
   const toggleLikeS = () => {
     setJoayoS(true);
     toggleJoayo({ variables: { postId: data.id } });

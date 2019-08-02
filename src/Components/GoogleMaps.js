@@ -135,7 +135,7 @@ export default ({
         />
         <Link
           to={{
-            pathname: `/fullmap/roomsdetail/${item.id}/new/1`,
+            pathname: `/new/detail/${item.id}/new/1`,
             data: { item }
           }}
         />
@@ -190,7 +190,7 @@ export default ({
   };
 
   const onChildMouseEnter = () => {};
-
+  const findRoom = () => findRoom();
   return (
     <Container>
       <Mapdiv style={{ height, width, position: "relative" }}>
@@ -224,7 +224,7 @@ export default ({
               );
             })}
         </GoogleMapReact>
-        <Link to="/new/search">
+        <Link to={{ pathname: "/new/search/1" }}>
           <H1>여기에 있는 매물 상세검색!</H1>
         </Link>
       </Mapdiv>

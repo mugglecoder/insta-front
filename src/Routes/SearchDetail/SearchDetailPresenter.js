@@ -456,9 +456,7 @@ const RoomsDetailPresenter = ({
         </MapContainer>
       </ContentWrap>
     )}
-    {loading ? (
-      false
-    ) : (
+    {searchData ? (
       <MoreRooms>
         <h1>비슷한 매물이 더 있습니다!</h1>
         <hr />
@@ -479,93 +477,97 @@ const RoomsDetailPresenter = ({
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px"
         >
-          {searchData &&
-            searchData.post &&
-            searchData.post.map((item, key) => {
-              let arrayOfPath = [];
-              let test = [];
-              let path = [];
-              if (
-                searchData.post &&
-                searchData.post[key] &&
-                searchData.post[key].files.length === 0
-              ) {
-                /// 임시로 메인에 보일 이미지 주소
-                arrayOfPath.push(
-                  `http://127.0.0.1:4000/images/preImage/no-image.jpg`
-                );
-                arrayOfPath.map((item, key) => {
-                  return test.push(item);
-                });
-                const s = test.reduce((s, a) => {
-                  {
-                    for (var i = 0; i < test.length; i++);
-                    let get;
-                    get = {
-                      original: `${a}`,
-                      thumbnail: `${a}`
-                    };
-                    return path.push(get);
-                  }
-                }, {});
-              } else {
-                /////// 이미지 있을때
-
-                searchData.post &&
+          {searchData
+            ? searchData &&
+              searchData.post &&
+              searchData.post.map((item, key) => {
+                let arrayOfPath = [];
+                let test = [];
+                let path = [];
+                if (
+                  searchData.post &&
                   searchData.post[key] &&
-                  searchData.post[key].files.map(item => {
-                    return arrayOfPath.push(item.url);
+                  searchData.post[key].files.length === 0
+                ) {
+                  /// 임시로 메인에 보일 이미지 주소
+                  arrayOfPath.push(
+                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
+                  );
+                  arrayOfPath.map((item, key) => {
+                    return test.push(item);
                   });
-                arrayOfPath.map((item, key) => test.push(item));
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `${a}`,
+                        thumbnail: `${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                } else {
+                  /////// 이미지 있을때
 
-                const s = test.reduce((s, a) => {
-                  {
-                    for (var i = 0; i < test.length; i++);
-                    let get;
-                    get = {
-                      original: `http://127.0.0.1:4000/${a}`,
-                      thumbnail: `http://127.0.0.1:4000/${a}`
-                    };
-                    return path.push(get);
-                  }
-                }, {});
-              }
+                  searchData.post &&
+                    searchData.post[key] &&
+                    searchData.post[key].files.map(item => {
+                      return arrayOfPath.push(item.url);
+                    });
+                  arrayOfPath.map((item, key) => test.push(item));
 
-              const onclick = () => {};
-              return (
-                <BoardPartsSlide
-                  beforeCheck={beforeCheck}
-                  checkLikeLoading={checkLikeLoading}
-                  setJoayo={setJoayo}
-                  toggleButton={toggleButton}
-                  joayo={joayo}
-                  props={props}
-                  token={token}
-                  toggleLike={toggleLike}
-                  checkLike={checkLike}
-                  dataOfMe={dataOfMe}
-                  loading={loading}
-                  data2={data2}
-                  onclick={onclick}
-                  path={path}
-                  id={id}
-                  page={page}
-                  data={item}
-                  database={data}
-                  key={key}
-                  selectType={item.selectType}
-                  caption={item.caption}
-                  username={item.user.username}
-                  createdAt={item.createdAt.slice(0, 10)}
-                  count={item.count}
-                  url={item.files}
-                  deposit={item.deposit}
-                  money={item.money}
-                />
-              );
-            })}
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `http://127.0.0.1:4000/${a}`,
+                        thumbnail: `http://127.0.0.1:4000/${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                }
+
+                const onclick = () => {};
+                return (
+                  <BoardPartsSlide
+                    beforeCheck={beforeCheck}
+                    checkLikeLoading={checkLikeLoading}
+                    setJoayo={setJoayo}
+                    toggleButton={toggleButton}
+                    joayo={joayo}
+                    props={props}
+                    token={token}
+                    toggleLike={toggleLike}
+                    checkLike={checkLike}
+                    dataOfMe={dataOfMe}
+                    loading={loading}
+                    data2={data2}
+                    onclick={onclick}
+                    path={path}
+                    id={id}
+                    page={page}
+                    data={item}
+                    database={data}
+                    key={key}
+                    selectType={item.selectType}
+                    caption={item.caption}
+                    username={item.user.username}
+                    createdAt={item.createdAt.slice(0, 10)}
+                    count={item.count}
+                    url={item.files}
+                    deposit={item.deposit}
+                    money={item.money}
+                  />
+                );
+              })
+            : console.log("기회")}
         </Carousel>
       </MoreRooms>
+    ) : (
+      false
     )}
   </Wrapper>
 );

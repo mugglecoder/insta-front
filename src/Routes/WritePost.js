@@ -367,7 +367,7 @@ export default props => {
   //  };
 
   // 업로드 뮤테이션
-  const test = useMutation(UPLOAD);
+  const [test] = useMutation(UPLOAD);
 
   const noClick = e => {
     e.preventDefault();
@@ -598,7 +598,7 @@ export default props => {
 
   /// 주소 찾는 로직 //////////////////////////////////////////////////////
 
-  const saveAddressS = useMutation(SAVEADDRESS);
+  const [saveAddressS] = useMutation(SAVEADDRESS);
   const findAddress = e => {
     console.log(e.target, "target");
   };
@@ -696,7 +696,7 @@ export default props => {
     await saveAddressS({ variables: { id, lat, lng } });
     if (id && onSubmit) {
       setFuckAround(false);
-      props.history.push(`/roomsdetail/${id}/new/1`);
+      props.history.push(`/new/detail/${id}`);
       window.location.reload();
       return false;
     }

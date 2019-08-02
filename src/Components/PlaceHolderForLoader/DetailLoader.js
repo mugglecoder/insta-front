@@ -46,10 +46,18 @@ const ColumnL = styled.div`
 `;
 const ColumnR = styled.div`
   width: 75%;
-  background-color: #efefef;
   border-radius: 5px;
-  margin: 0px 15px;
+  margin: 0 auto;
   height: 580px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const H1 = styled.h1`
+  color: #7ec092;
+  font-weight: 900;
+  font-size: 200px;
 `;
 
 const Files = styled.div`
@@ -90,11 +98,8 @@ export default ({ token, data, loading }) => {
           <ContainerS>
             {token && data ? <LogInButtonWrap /> : false}
             <WrapTheColumn>
-              <ColumnL>
-                <Files />
-              </ColumnL>
               <ColumnR>
-                <Files />
+                <H1>Loading</H1>
               </ColumnR>
             </WrapTheColumn>
           </ContainerS>

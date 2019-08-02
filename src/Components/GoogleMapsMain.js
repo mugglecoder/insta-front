@@ -223,7 +223,11 @@ export default ({
               )
             )}
         </GoogleMapReact>
-        <H1 onClick={findRoom}>여기에 있는 매물 재검색</H1>
+        {loading ? (
+          <H1 onClick={findRoom}>좋은집 찾는중!</H1>
+        ) : (
+          <H1 onClick={findRoom}>여기에 있는 매물 재검색</H1>
+        )}
       </Mapdiv>
     </Container>
   );

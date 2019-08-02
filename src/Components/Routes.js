@@ -28,7 +28,7 @@ const LoggedInRoutes = () => {
       <Route
         path="/fullmap"
         render={() => <Redirect to="/fullmap" />}
-        component={LinkPage}
+        component={Fullmap}
       />
       <Route path="/new/detail/:id" component={Search} />
       <Route exact path="/new/edit/:id" component={Search} />

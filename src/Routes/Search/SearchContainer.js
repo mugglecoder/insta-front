@@ -63,6 +63,86 @@ const GETPOST = gql`
   }
 `;
 
+const CURRENTDATA = gql`
+  query currentData(
+    $first: Int
+    $skip: Int
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
+  ) {
+    currentData(
+      first: $first
+      skip: $skip
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
+    ) {
+      post {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        count
+        content
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        numberOfFoors
+        MLSnumber
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
+        }
+      }
+      count
+    }
+  }
+`;
+
 const SEARCH = gql`
   mutation searchRoom(
     $id: String
@@ -646,14 +726,14 @@ export default props => {
     setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
     setSelectValue4(JSON.parse(localStorage.getItem("월세")));
   }, []);
-  //검색하는 데이터 쿼리
+  //검색하는 데이터 쿼
+
   /////
   const id =
     props.location.pathname.split("/")[3].length > 4
       ? props.location.pathname.split("/")[3]
       : props.location.pathname.split("/")[3];
-  const loading = false;
-  const searchData = useMutation(SEARCH, {
+  const [searchData, { loading }] = useMutation(SEARCH, {
     variables: {
       id,
       first,
@@ -692,8 +772,10 @@ export default props => {
       //  MLSnumber
     }
   });
+
   const [newData, setNewData] = useState();
 
+  //찾기 버튼 눌렀을때!
   const findRoom = async () => {
     const {
       data: { searchRoom }
@@ -701,6 +783,11 @@ export default props => {
     setNewData(searchRoom);
   };
 
+  //
+
+  //맨처음 접속 했을때 디폴트 데이터
+
+  //
   const [activePage, setActivePage] = useState(page);
 
   useEffect(() => {}, [activePage]);
@@ -724,7 +811,7 @@ export default props => {
 
   const totalCount = newData && newData.counts ? newData && newData.counts : 10;
   //주소를 가져온다
-  const latAndlng = newData && newData.post.map(item => item);
+  let latAndlng = newData && newData.post.map(item => item);
 
   //디테일페이지에 관한 모든것
   const detail =
@@ -743,18 +830,31 @@ export default props => {
     if (id) {
       (async function() {
         const {
-          data: { searchRoom }
-        } = await searchData({ variables: { id } });
-        console.log(searchRoom, "in the searchContainer id");
-        setNewData(searchRoom);
+          data: { searchRoom: fuckData }
+        } = await searchData();
+        setNewData(fuckData);
       })();
     } else {
       console.log("no id");
     }
   }, []);
 
+  //firstData
+  const {
+    data: { currentData: firstData },
+    loading: firstLoading
+  } = useQuery(CURRENTDATA, {
+    variables: { first, skip, lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
+  });
+  if (firstData) {
+    latAndlng = firstData && firstData.post.map(item => item);
+  }
+  console.log(firstData, "firstData", firstLoading, "firstLoading");
+
   return (
     <SearchPresenter
+      firstData={firstData}
+      firstLoading={firstLoading}
       newData={newData}
       findRoom={findRoom}
       edit={edit}

@@ -229,6 +229,8 @@ const PaginationDiv = styled.div`
 `;
 
 export default ({
+  firstData,
+  firstLoading,
   newData,
   edit,
   matchDetail,
@@ -262,7 +264,6 @@ export default ({
   first,
   token,
   onClick,
-
   airConditioner,
   washer,
   refrigerator,
@@ -317,6 +318,8 @@ export default ({
   setFixCenter,
   findRoom
 }) => {
+  console.log(loading, " loading in the ");
+
   /// 마커 아이콘에 대한 로직
   const passing = props;
   const AnyReactComponent = ({ item }) => (
@@ -690,21 +693,36 @@ export default ({
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
       {detail ? (
-        newData &&
-        newData.post &&
-        newData.post.map(item =>
-          item.id === matchDetail ? (
-            <SearchDetail
-              edit={edit}
-              token={token}
-              dataOfMe={dataOfMe}
-              data={item}
-              loading={loading}
-              props={props}
-              searchData={newData}
-            />
-          ) : (
-            false
+        loading ? (
+          <DetailLoader token={token} data={data} loading={loading} />
+        ) : newData && newData.post.length === 0 ? (
+          <SearchDetail
+            edit={edit}
+            token={token}
+            dataOfMe={dataOfMe}
+            data={newData.preData}
+            loading={loading}
+            props={props}
+          />
+        ) : firstData ? (
+          false
+        ) : (
+          newData &&
+          newData.post &&
+          newData.post.map(item =>
+            item.id === matchDetail ? (
+              <SearchDetail
+                edit={edit}
+                token={token}
+                dataOfMe={dataOfMe}
+                data={item}
+                loading={loading}
+                props={props}
+                searchData={newData}
+              />
+            ) : (
+              false
+            )
           )
         )
       ) : edit ? (
@@ -727,7 +745,21 @@ export default ({
         )
       ) : (
         <Wrapper>
-          {
+          {firstData ? (
+            <GoogleMapsMain
+              findRoom={findRoom}
+              data={firstData}
+              dataOfMe={dataOfMe}
+              searchData={firstData}
+              loading={loading}
+              onBoundsChange={onBoundsChange}
+              latAndlng={latAndlng}
+              props={props}
+              center={center}
+              zoom={zoom}
+              setCenter={setCenter}
+            />
+          ) : (
             <GoogleMapsMain
               findRoom={findRoom}
               data={newData}
@@ -741,7 +773,7 @@ export default ({
               zoom={zoom}
               setCenter={setCenter}
             />
-          }
+          )}
 
           <PaginationDiv>
             <Pagination
