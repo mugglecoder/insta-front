@@ -127,7 +127,6 @@ const BoardParts = ({
   money,
   deposit
 }) => {
-  console.log(newData, "in the boardParts");
   let joayo = false;
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);

@@ -190,7 +190,6 @@ export default ({
   };
 
   const onChildMouseEnter = () => {};
-  const findRoom = () => findRoom();
   return (
     <Container>
       <Mapdiv style={{ height, width, position: "relative" }}>

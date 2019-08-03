@@ -272,7 +272,7 @@ export default item => {
   if (item.loading === false) {
     item &&
       item.item.likes.map(items => {
-        if (items.user.id === item.dataOfMe.me.id) {
+        if (items && items.user.id === item && item.dataOfMe.me.id) {
           joayo = true;
         } else {
           console.log("2");

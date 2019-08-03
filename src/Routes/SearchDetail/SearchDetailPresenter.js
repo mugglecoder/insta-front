@@ -456,11 +456,11 @@ const RoomsDetailPresenter = ({
         </MapContainer>
       </ContentWrap>
     )}
+    {console.log(searchData, "searchData in searchDetailPresenter")}
     {searchData ? (
       <MoreRooms>
         <h1>비슷한 매물이 더 있습니다!</h1>
         <hr />
-
         <Carousel
           swipeable={true}
           draggable={true}

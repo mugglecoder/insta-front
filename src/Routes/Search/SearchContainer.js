@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const GETPOST = gql`
   query detailPost($id: String!) {
@@ -59,86 +60,6 @@ const GETPOST = gql`
           id
         }
       }
-    }
-  }
-`;
-
-const CURRENTDATA = gql`
-  query currentData(
-    $first: Int
-    $skip: Int
-    $lat: Float
-    $lng: Float
-    $lat2: Float
-    $lng2: Float
-  ) {
-    currentData(
-      first: $first
-      skip: $skip
-      lat: $lat
-      lng: $lng
-      lat2: $lat2
-      lng2: $lng2
-    ) {
-      post {
-        id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        lat
-        lng
-        count
-        content
-        airConditioner
-        washer
-        refrigerator
-        internet
-        microwave
-        wifi
-        bed
-        desk
-        induction
-        gasRange
-        doorLock
-        CCTV
-        pets
-        elevator
-        parking
-        electricHeating
-        cityGasHeating
-        nightElectric
-        wateTax
-        includingElectricity
-        cityGasIncluded
-        numberOfFoors
-        MLSnumber
-        deposit
-        money
-        selectType
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-        likes {
-          post {
-            id
-            caption
-          }
-          user {
-            id
-            username
-          }
-        }
-      }
-      count
     }
   }
 `;
@@ -345,7 +266,7 @@ const SEARCH = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 16;
+const LINKS_PER_PAGE = 8;
 
 export default props => {
   ///체크박스 스테이트
@@ -569,6 +490,8 @@ export default props => {
   //페이지네이션
   const [skip, setSkip] = useState(0);
   const [first, setFrist] = useState(0);
+  useEffect(() => {}, [skip]);
+  useEffect(() => {}, [first]);
 
   //셀렉트 박스
   const [select, setSelect] = useState("");
@@ -626,7 +549,6 @@ export default props => {
   //구글지도
   const getInitialState = () => {
     const value = { lat: 35.8898463607061, lng: 128.61687976455687 };
-
     return {
       key: value
     };
@@ -644,23 +566,17 @@ export default props => {
 
   //구글지도 줌 레벨
   const [zoom, setZoom] = useState(parseInt(localStorage.getItem("zoom")));
+
   const page = parseInt(
     props && props.match && props.match.params && props.match.params.page
   );
+
   const { data: dataOfMe } = useQuery(ME);
 
   const _getQueryVariables = () => {
-    const isNewPage =
-      props.location &&
-      props.location.pathname &&
-      props.location.pathname.includes("new");
-
     //페이지네이션
-    const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage || props ? LINKS_PER_PAGE : 100;
+    const first = LINKS_PER_PAGE;
     setFrist(first);
-    setSkip(skip);
-    return skip;
   };
 
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
@@ -680,45 +596,13 @@ export default props => {
     }
   };
 
-  const [set, setSet] = useState(false);
-  const [set2, setSet2] = useState(false);
-
-  useEffect(() => {
-    if (set === true) {
-      setSet(false);
-    }
-    _getQueryVariables();
-  }, [set]);
-
-  useEffect(() => {
-    if (set2 === true) {
-      setSet2(false);
-    }
-    _getQueryVariables();
-  }, [set2]);
-
   ////
   //온 바운드 체인지
-  const [latS, setLatS] = useState(0);
-  const [lat2S, setLat2S] = useState(0);
-  const [lngS, setLngS] = useState(0);
-  const [lng2S, seLng2S] = useState(0);
-
-  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
-    const centerS = center;
-    const latS = bounds && bounds[0];
-    const lat2S = bounds && bounds[4];
-    const lngS = bounds && bounds[1];
-    const lng2S = bounds && bounds[3];
-    setLatS(latS);
-    setLat2S(lat2S);
-    setLngS(lngS);
-    seLng2S(lng2S);
-    setCenter(centerS);
-    localStorage.setItem("map", JSON.stringify(centerS));
-
-    return centerS;
-  };
+  const [bound, setTheBounds] = useState(1);
+  const latS = bound && bound[0];
+  const lat2S = bound && bound[4];
+  const lngS = bound && bound[1];
+  const lng2S = bound && bound[3];
   ////////////////////메뉴 고정하는 로직
   useEffect(() => {
     setSelectValue1(localStorage.getItem("종류"));
@@ -733,6 +617,7 @@ export default props => {
     props.location.pathname.split("/")[3].length > 4
       ? props.location.pathname.split("/")[3]
       : props.location.pathname.split("/")[3];
+
   const [searchData, { loading }] = useMutation(SEARCH, {
     variables: {
       id,
@@ -775,50 +660,99 @@ export default props => {
 
   const [newData, setNewData] = useState();
 
+  const onBoundsChange = (center, zoom, bounds, marginBounds) => {
+    const centerLat = center.lat;
+    const centerLng = center.lng;
+
+    setTheBounds(bounds);
+
+    localStorage.setItem(
+      "map",
+      JSON.stringify({
+        lat: parseFloat(centerLat),
+        lng: parseFloat(centerLng)
+      })
+    );
+  };
   //찾기 버튼 눌렀을때!
   const findRoom = async () => {
     const {
       data: { searchRoom }
     } = await searchData();
+    console.log(searchRoom, "in the searchContainer");
     setNewData(searchRoom);
+    setActivePage(1);
+    props.history.push(`/new/search/1`);
+    setFrist(8);
+    setSkip(0);
   };
 
   //
+  const [theChange, setTheChange] = useState(setTimeout(() => {}, 500));
 
   //맨처음 접속 했을때 디폴트 데이터
+  useEffect(() => {
+    findRoom();
+    setTheChange(true);
+  }, [theChange]);
 
   //
   const [activePage, setActivePage] = useState(page);
+  const [pageNumber2, setPageNumber2] = useState(1);
 
   useEffect(() => {}, [activePage]);
   //new 페이지네이션
-  const handlePageChange = pageNumber => {
-    const isNewPage =
-      props.location &&
-      props.location.pathname &&
-      props.location.pathname.includes("new");
-
+  const handlePageChange = async pageNumber => {
     //페이지네이션
-    const skip = isNewPage || props ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage || props ? LINKS_PER_PAGE : 100;
+    setPageNumber2(pageNumber);
+    const skip = (pageNumber - 1) * LINKS_PER_PAGE;
+    const first = LINKS_PER_PAGE;
     setFrist(first);
     setSkip(skip);
-    props.history.push(`/new/search/${pageNumber}`);
+
+    console.log(skip, first, pageNumber, "skip first");
     setActivePage(pageNumber);
-    setSet(true);
+
+    const {
+      data: { searchRoom }
+    } = await searchData({ variables: { first, skip } });
+    setNewData(searchRoom);
+
+    props.history.push(`/new/search/${pageNumber}`);
   };
-  const itemsCountPerPage = () => {};
-
-  const totalCount = newData && newData.counts ? newData && newData.counts : 10;
-  //주소를 가져온다
-  let latAndlng = newData && newData.post.map(item => item);
-
-  //디테일페이지에 관한 모든것
   const detail =
     props.location.pathname.split("/")[2] === "detail" ? true : false;
   const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
 
   const matchDetail = props.location.pathname.split("/")[3];
+  useEffect(() => {
+    const id =
+      props.location.pathname.split("/")[3].length > 4
+        ? props.location.pathname.split("/")[3]
+        : false;
+    if (id) {
+    } else {
+      (async function() {
+        const skip = (pageNumber2 - 1) * LINKS_PER_PAGE;
+        const first = LINKS_PER_PAGE;
+        setFrist(first);
+        setSkip(skip);
+        const {
+          data: { searchRoom }
+        } = await searchData({ variables: { first, skip } });
+        setNewData(searchRoom);
+        props.history.push(`/new/search/${pageNumber2}`);
+      })();
+    }
+  }, [pageNumber2]);
+
+  //
+  const itemsCountPerPage = () => {};
+  const totalCount = newData && newData.counts ? newData && newData.counts : 10;
+  //주소를 가져온다
+  const latAndlng = newData && newData.post.map(item => item);
+
+  //디테일페이지에 관한 모든것
 
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
   useEffect(() => {
@@ -828,10 +762,12 @@ export default props => {
         : false;
     console.log(id);
     if (id) {
+      console.log("이거 뜨는가?");
       (async function() {
         const {
           data: { searchRoom: fuckData }
         } = await searchData();
+        console.log(fuckData, "fuckData");
         setNewData(fuckData);
       })();
     } else {
@@ -839,22 +775,8 @@ export default props => {
     }
   }, []);
 
-  //firstData
-  const {
-    data: { currentData: firstData },
-    loading: firstLoading
-  } = useQuery(CURRENTDATA, {
-    variables: { first, skip, lat: latS, lat2: lat2S, lng: lngS, lng2: lng2S }
-  });
-  if (firstData) {
-    latAndlng = firstData && firstData.post.map(item => item);
-  }
-  console.log(firstData, "firstData", firstLoading, "firstLoading");
-
   return (
     <SearchPresenter
-      firstData={firstData}
-      firstLoading={firstLoading}
       newData={newData}
       findRoom={findRoom}
       edit={edit}

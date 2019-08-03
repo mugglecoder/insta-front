@@ -229,8 +229,6 @@ const PaginationDiv = styled.div`
 `;
 
 export default ({
-  firstData,
-  firstLoading,
   newData,
   edit,
   matchDetail,
@@ -318,8 +316,6 @@ export default ({
   setFixCenter,
   findRoom
 }) => {
-  console.log(loading, " loading in the ");
-
   /// 마커 아이콘에 대한 로직
   const passing = props;
   const AnyReactComponent = ({ item }) => (
@@ -704,8 +700,6 @@ export default ({
             loading={loading}
             props={props}
           />
-        ) : firstData ? (
-          false
         ) : (
           newData &&
           newData.post &&
@@ -745,21 +739,7 @@ export default ({
         )
       ) : (
         <Wrapper>
-          {firstData ? (
-            <GoogleMapsMain
-              findRoom={findRoom}
-              data={firstData}
-              dataOfMe={dataOfMe}
-              searchData={firstData}
-              loading={loading}
-              onBoundsChange={onBoundsChange}
-              latAndlng={latAndlng}
-              props={props}
-              center={center}
-              zoom={zoom}
-              setCenter={setCenter}
-            />
-          ) : (
+          {
             <GoogleMapsMain
               findRoom={findRoom}
               data={newData}
@@ -773,7 +753,7 @@ export default ({
               zoom={zoom}
               setCenter={setCenter}
             />
-          )}
+          }
 
           <PaginationDiv>
             <Pagination
