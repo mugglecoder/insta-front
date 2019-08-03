@@ -489,9 +489,9 @@ export default props => {
 
   //페이지네이션
   const [skip, setSkip] = useState(0);
-  const [first, setFrist] = useState(0);
+  let first = LINKS_PER_PAGE;
+  console.log(first, "inthe first");
   useEffect(() => {}, [skip]);
-  useEffect(() => {}, [first]);
 
   //셀렉트 박스
   const [select, setSelect] = useState("");
@@ -575,8 +575,7 @@ export default props => {
 
   const _getQueryVariables = () => {
     //페이지네이션
-    const first = LINKS_PER_PAGE;
-    setFrist(first);
+    first = LINKS_PER_PAGE;
   };
 
   const [getQueryVariables, teset2] = useState(_getQueryVariables);
@@ -603,13 +602,7 @@ export default props => {
   const lat2S = bound && bound[4];
   const lngS = bound && bound[1];
   const lng2S = bound && bound[3];
-  ////////////////////메뉴 고정하는 로직
-  useEffect(() => {
-    setSelectValue1(localStorage.getItem("종류"));
-    setSelectValue2(localStorage.getItem("종류2"));
-    setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
-    setSelectValue4(JSON.parse(localStorage.getItem("월세")));
-  }, []);
+
   //검색하는 데이터 쿼
 
   /////
@@ -676,75 +669,69 @@ export default props => {
   };
   //찾기 버튼 눌렀을때!
   const findRoom = async () => {
-    const {
-      data: { searchRoom }
-    } = await searchData();
-    console.log(searchRoom, "in the searchContainer");
-    setNewData(searchRoom);
     setActivePage(1);
-    props.history.push(`/new/search/1`);
-    setFrist(8);
+    first = LINKS_PER_PAGE;
     setSkip(0);
-  };
-
-  //
-  const [theChange, setTheChange] = useState(setTimeout(() => {}, 500));
-
-  //맨처음 접속 했을때 디폴트 데이터
-  useEffect(() => {
-    findRoom();
-    setTheChange(true);
-  }, [theChange]);
-
-  //
-  const [activePage, setActivePage] = useState(page);
-  const [pageNumber2, setPageNumber2] = useState(1);
-
-  useEffect(() => {}, [activePage]);
-  //new 페이지네이션
-  const handlePageChange = async pageNumber => {
-    //페이지네이션
-    setPageNumber2(pageNumber);
-    const skip = (pageNumber - 1) * LINKS_PER_PAGE;
-    const first = LINKS_PER_PAGE;
-    setFrist(first);
-    setSkip(skip);
-
-    console.log(skip, first, pageNumber, "skip first");
-    setActivePage(pageNumber);
-
     const {
       data: { searchRoom }
     } = await searchData({ variables: { first, skip } });
-    setNewData(searchRoom);
+    await setNewData(searchRoom);
+    console.log(searchRoom, "in the searchContainer");
+    props.history.push(`/new/search/1`);
+  };
+
+  //
+  const [theChange, setTheChange] = useState(setTimeout(() => {}, 50));
+  const detail =
+    props.location.pathname.split("/")[2] === "detail" ? true : false;
+
+  //맨처음 접속 했을때 디폴트 데이터
+  useEffect(() => {
+    if (detail) {
+      console.log("");
+    } else {
+      findRoom();
+      setTheChange(true);
+    }
+  }, [theChange]);
+
+  //
+  const [activePage, setActivePage] = useState(1);
+  const [pageNumber2, setPageNumber2] = useState(1);
+  console.log(pageNumber2, "pagenumber2?");
+
+  //new 페이지네이션
+
+  const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
+  const matchDetail = props.location.pathname.split("/")[3];
+
+  const handlePageChange = async pageNumber => {
+    //페이지네이션
+    const skip = (pageNumber - 1) * LINKS_PER_PAGE;
+    first = LINKS_PER_PAGE;
+
+    setSkip(skip);
+    setPageNumber2(pageNumber);
+    setActivePage(pageNumber);
+
+    console.log(skip, first, pageNumber, "skip first");
 
     props.history.push(`/new/search/${pageNumber}`);
   };
-  const detail =
-    props.location.pathname.split("/")[2] === "detail" ? true : false;
-  const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
 
-  const matchDetail = props.location.pathname.split("/")[3];
   useEffect(() => {
-    const id =
-      props.location.pathname.split("/")[3].length > 4
-        ? props.location.pathname.split("/")[3]
-        : false;
-    if (id) {
+    if (detail) {
+      console.log("detail");
     } else {
       (async function() {
-        const skip = (pageNumber2 - 1) * LINKS_PER_PAGE;
-        const first = LINKS_PER_PAGE;
-        setFrist(first);
-        setSkip(skip);
         const {
           data: { searchRoom }
         } = await searchData({ variables: { first, skip } });
-        setNewData(searchRoom);
+        await setNewData(searchRoom);
         props.history.push(`/new/search/${pageNumber2}`);
       })();
     }
-  }, [pageNumber2]);
+  }, [activePage]);
 
   //
   const itemsCountPerPage = () => {};
@@ -756,13 +743,7 @@ export default props => {
 
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
   useEffect(() => {
-    const id =
-      props.location.pathname.split("/")[3].length > 4
-        ? props.location.pathname.split("/")[3]
-        : false;
-    console.log(id);
-    if (id) {
-      console.log("이거 뜨는가?");
+    if (props.location.pathname.split("/")[3].length > 4) {
       (async function() {
         const {
           data: { searchRoom: fuckData }
@@ -773,6 +754,10 @@ export default props => {
     } else {
       console.log("no id");
     }
+    setSelectValue1(localStorage.getItem("종류"));
+    setSelectValue2(localStorage.getItem("종류2"));
+    setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
+    setSelectValue4(JSON.parse(localStorage.getItem("월세")));
   }, []);
 
   return (

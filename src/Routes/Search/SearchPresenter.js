@@ -688,6 +688,7 @@ export default ({
     ////////////////////////////////////////////////////////////////////
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
+      {console.log(newData && newData.post.length, "newData.post.length")}
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />

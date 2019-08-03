@@ -154,9 +154,9 @@ const BoardParts = ({
   if (loading === false) {
     data &&
       data.likes.map(item => {
-        if (item.user.id === dataOfMe.me.id) {
+        if (item && item.user.id === dataOfMe && dataOfMe.me.id) {
           joayo = true;
-        } else if (item.user.id !== dataOfMe.me.id) {
+        } else if (item && item.user.id !== dataOfMe && dataOfMe.me.id) {
           joayo = false;
         }
       });
