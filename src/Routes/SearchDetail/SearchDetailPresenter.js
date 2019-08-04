@@ -456,11 +456,11 @@ const RoomsDetailPresenter = ({
         </MapContainer>
       </ContentWrap>
     )}
-    {console.log(searchData, "searchData in searchDetailPresenter")}
     {searchData ? (
       <MoreRooms>
         <h1>비슷한 매물이 더 있습니다!</h1>
         <hr />
+
         <Carousel
           swipeable={true}
           draggable={true}
@@ -538,9 +538,9 @@ const RoomsDetailPresenter = ({
                     setJoayo={setJoayo}
                     toggleButton={toggleButton}
                     joayo={joayo}
-                    toggleLike={toggleLike}
                     props={props}
                     token={token}
+                    toggleLike={toggleLike}
                     checkLike={checkLike}
                     dataOfMe={dataOfMe}
                     loading={loading}

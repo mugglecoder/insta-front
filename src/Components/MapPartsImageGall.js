@@ -191,7 +191,7 @@ const H1Bottom = styled.div`
   margin-top: 17px;
 `;
 
-export default item => {
+export default (item, dataOfMe) => {
   const page = item.props.match && item.props.match.params.page;
   ///////////
   const urls = item.item.files && item.item.files.map(item => item);
@@ -269,15 +269,23 @@ export default item => {
     }
   };
 
-  if (item.loading === false) {
-    item &&
+  if (item.item.likes.length >= 1) {
+    item.item &&
       item.item.likes.map(items => {
-        if (items && items.user.id === item && item.dataOfMe.me.id) {
+        if (
+          String(items && items.user.id) ===
+          String(item && item.dataOfMe && item.dataOfMe.me.id)
+        ) {
           joayo = true;
-        } else {
-          console.log("2");
+        } else if (
+          String(items && items.user.id) !==
+          String(item && item.dataOfMe && item.dataOfMe.me.id)
+        ) {
+          joayo = false;
         }
       });
+  } else {
+    console.log("없음");
   }
 
   //  console.log(items.user.id, "1");

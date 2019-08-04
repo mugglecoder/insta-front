@@ -151,16 +151,23 @@ const BoardParts = ({
       }
     }
   };
-  if (loading === false) {
+  if (data.likes.length >= 1) {
     data &&
       data.likes.map(item => {
-        if (item && item.user.id === dataOfMe && dataOfMe.me.id) {
+        if (
+          String(item && item.user.id) === String(dataOfMe && dataOfMe.me.id)
+        ) {
           joayo = true;
-        } else if (item && item.user.id !== dataOfMe && dataOfMe.me.id) {
+        } else if (
+          String(item && item.user.id) !== String(dataOfMe && dataOfMe.me.id)
+        ) {
           joayo = false;
         }
       });
+  } else {
+    console.log("없음");
   }
+
   const onclick = () => props.history.push(`/new/detail/${id}`);
   return (
     <Container>

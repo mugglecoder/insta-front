@@ -169,11 +169,15 @@ const BoardParts = ({
         String(item && item.user && item.user.id) ===
         String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
       ) {
+        console.log("좋아요");
+
         joayoy = true;
       } else if (
         String(item && item.user && item.user.id) !==
         String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
       ) {
+        console.log("싫어요");
+
         joayoy = false;
       }
     });

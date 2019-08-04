@@ -114,8 +114,6 @@ const H12 = styled.div`
 `;
 
 export default ({
-  joayo,
-  toggleLike,
   findRoom,
   data,
   dataOfMe,
@@ -136,12 +134,10 @@ export default ({
   const searchDataS = searchData;
   const loadingS = loading;
 
-  const AnyReactComponent = ({ item, searchData, joayo, toggleLike }) => {
+  const AnyReactComponent = ({ item, searchData }) => {
     const CustomFloater = ({ closeFn }) => (
       <Wrapper>
         <MapPartsImageGall
-          joayo={joayo}
-          toggleLike={toggleLike}
           data={data}
           item={item}
           props={passing}
@@ -215,8 +211,6 @@ export default ({
             latAndlng.map((item, key) =>
               item.places[0] ? (
                 <AnyReactComponent
-                  joayo={joayo}
-                  toggleLike={toggleLike}
                   searchData={searchDataS}
                   setDivide={setDivide}
                   key={key}
