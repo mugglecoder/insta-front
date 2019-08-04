@@ -209,11 +209,9 @@ const Container = styled.section`
     width: 250px;
     height: 200px;
   }
-
   &.example-appear {
     opacity: 0.01;
   }
-
   &.example-appear-active {
     opacity: 1;
     transition: opacity ${1000}ms ease-out;

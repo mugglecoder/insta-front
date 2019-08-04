@@ -72,7 +72,14 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const RoomsDetail = ({ props, data, loading, searchData }) => {
+const RoomsDetail = ({
+  props,
+  data,
+  loading,
+  searchData,
+  joayo,
+  toggleLike
+}) => {
   const id = props && props.location.pathname.split("/")[3];
 
   //구글지도
@@ -236,57 +243,16 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
     console.log(axiosData, "axios data");
   };
 
-  // 좋아요
-  const {
-    data: { checkLike },
-    loading: checkLikeLoading
-  } = useQuery(CHECK_LIKE, { variables: { postId: id } });
-
-  const [toggleButton] = useMutation(TOGGLE_LIKE);
-
-  const [beforeCheck] = useMutation(BEFORE_CHECK);
   //
-
-  //
-
-  const [joayo, setJoayo] = useState(false);
 
   //default 좋아요를 셋팅함
-  useEffect(() => {
-    setJoayo(checkLike);
-  }, [checkLikeLoading]);
 
   //페이지 넘길때 좋아요 미리 표시해줌
   useEffect(() => {
-    (async function() {
-      try {
-        const {
-          data: { beforeLike }
-        } = await beforeCheck({ variables: { postId: id } });
-        setJoayo(beforeLike);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
     window.scrollTo(0, 0);
   }, [props && props.match.params]);
 
   //좋아요 클릭했을때 로직인데 음
-  const toggleLike = async () => {
-    if (token) {
-      if (joayo === true) {
-        setJoayo(false);
-      } else if (joayo === false) {
-        setJoayo(true);
-      }
-      const {
-        data: { toggleLike }
-      } = await toggleButton({ variables: { postId: id } });
-      setJoayo(toggleLike);
-    } else {
-      console.log("로그인 후 이용가능 합니다");
-    }
-  };
 
   //하단
   const responsive = {
@@ -333,17 +299,12 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
       ) : (
         !loading && (
           <SearchDetailPresenter
-            searchData={searchData}
-            beforeCheck={beforeCheck}
-            checkLikeLoading={checkLikeLoading}
-            setJoayo={setJoayo}
-            toggleButton={toggleButton}
-            props={props}
-            id={id}
-            checkLike={checkLike}
-            responsive={responsive}
             joayo={joayo}
             toggleLike={toggleLike}
+            searchData={searchData}
+            props={props}
+            id={id}
+            responsive={responsive}
             lng={lng}
             lat={lat}
             center={center}

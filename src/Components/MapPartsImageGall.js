@@ -247,7 +247,7 @@ export default item => {
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
 
-  const toggleJoayo = useMutation(TOGGLE_LIKE);
+  const [toggleJoayo] = useMutation(TOGGLE_LIKE);
 
   const toggleLike = () => {
     toggleJoayo({ variables: { postId: item.item.id } });

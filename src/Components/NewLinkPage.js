@@ -36,6 +36,8 @@ const P = styled.p`
 `;
 
 export default ({
+  joayo,
+  toggleLike,
   pageData,
   props,
   data,
@@ -105,6 +107,8 @@ export default ({
                 props.history.push(`/new/detail/${item.id}`);
               return (
                 <BoardParts
+                  joayo={joayo}
+                  toggleLike={toggleLike}
                   props={props}
                   searchData={searchData}
                   loading={loading}
