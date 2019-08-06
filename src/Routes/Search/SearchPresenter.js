@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import NewLinkPage from "../../Components/NewLinkPage";
@@ -227,6 +227,7 @@ const PaginationDiv = styled.div`
 `;
 
 export default ({
+  joayoChanged,
   newData,
   edit,
   matchDetail,
@@ -692,6 +693,7 @@ export default ({
           <DetailLoader token={token} data={data} loading={loading} />
         ) : newData && newData.post.length === 0 ? (
           <SearchDetail
+            joayoChanged={joayoChanged}
             edit={edit}
             token={token}
             dataOfMe={dataOfMe}
@@ -705,6 +707,7 @@ export default ({
           newData.post.map(item =>
             item.id === matchDetail ? (
               <SearchDetail
+                joayoChanged={joayoChanged}
                 edit={edit}
                 token={token}
                 dataOfMe={dataOfMe}
@@ -724,6 +727,7 @@ export default ({
         newData.post.map(item =>
           item.id === matchDetail ? (
             <SearchDetail
+              joayoChanged={joayoChanged}
               edit={edit}
               token={token}
               dataOfMe={dataOfMe}
@@ -1195,6 +1199,7 @@ export default ({
 
           {!loading && (
             <NewLinkPage
+              joayoChanged={joayoChanged}
               dataOfMe={dataOfMe}
               props={props}
               searchData={newData}

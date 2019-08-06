@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import GoogleMapReact from "google-map-react";
 import Marker from "./Marker";
 import MapPartsImageGall from "./MapPartsImageGall";
 import Floater from "react-floater";
-import { relative } from "path";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { set } from "immutable";
 
 // 메인 맵
 
@@ -135,22 +132,6 @@ export default ({
   const loadingS = loading;
 
   const AnyReactComponent = ({ item, searchData }) => {
-    const CustomFloater = ({ closeFn }) => (
-      <Wrapper>
-        <MapPartsImageGall
-          data={data}
-          item={item}
-          props={passing}
-          dataOfMe={dataOfMeS}
-          searchData={searchData}
-          loading={loadingS}
-        />
-        <Button onClick={closeFn} style={{ marginTop: 10 }}>
-          colse
-        </Button>
-      </Wrapper>
-    );
-
     return (
       <MarkerContainer>
         <Floater
@@ -169,8 +150,24 @@ export default ({
               filter: "drop-shadow(0 0 1px rgba(0, 0, 0, 0.3))"
             }
           }}
-          hideArrow={true}
-          component={CustomFloater}
+          hideArrow={false}
+          component={({ closeFn }) => {
+            return (
+              <Wrapper>
+                <MapPartsImageGall
+                  data={data}
+                  item={item}
+                  props={passing}
+                  dataOfMe={dataOfMeS}
+                  searchData={searchData}
+                  loading={loadingS}
+                />
+                <Button onClick={closeFn} style={{ marginTop: 10 }}>
+                  colse
+                </Button>
+              </Wrapper>
+            );
+          }}
         >
           <WrapperS>
             <MarkerIcon>
@@ -184,13 +181,9 @@ export default ({
 
   const createMapOptions = maps => console.log(maps, "createMapOptions");
 
-  const onChildClick = (a, b) => {
-    console.log(a, b, "onChildClick");
-  };
+  const onChildClick = (a, b) => {};
 
-  const onChildMouseEnter = () => {
-    console.log("마우스 온 더 잇");
-  };
+  const onChildMouseEnter = () => {};
 
   return (
     <Container>

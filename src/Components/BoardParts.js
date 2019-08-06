@@ -6,6 +6,13 @@ import "../css/image-gallery.css";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import { set } from "immutable";
+
+const CHECK_LIKE = gql`
+  query checkLike($postId: String!) {
+    checkLike(postId: $postId)
+  }
+`;
 
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
@@ -131,9 +138,16 @@ const BoardParts = ({
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
 
-  const [toggleJoayo] = useMutation(TOGGLE_LIKE);
-  const toggleLike = () => {
-    toggleJoayo({ variables: { postId: data.id } });
+  const [toggleJoayo, { loading: toggleJoayoLoading }] = useMutation(
+    TOGGLE_LIKE,
+    { variables: { postId: data.id } }
+  );
+
+  const toggleLike = async () => {
+    const {
+      data: { toggleLike }
+    } = await toggleJoayo();
+    console.log(toggleLike, "togglelike!!");
     if (joayo) {
       setJoayoS(true);
     } else {
@@ -141,25 +155,21 @@ const BoardParts = ({
       setJoayoSS(true);
     }
     if (joayoS === true) {
-      if (joayoSS === false) {
-        setJoayoSS(true);
-      }
-      if (joayoSS === true) {
-        setJoayoSS(false);
-      } else {
-        setJoayoSS(true);
-      }
+      setJoayoSS(toggleLike);
     }
   };
+
   if (data.likes.length >= 1) {
     data &&
       data.likes.map(item => {
         if (
-          String(item && item.user.id) === String(dataOfMe && dataOfMe.me.id)
+          String(item && item.user && item.user.id) ===
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
           joayo = true;
         } else if (
-          String(item && item.user.id) !== String(dataOfMe && dataOfMe.me.id)
+          String(item && item.user && item.user.id) !==
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
           joayo = false;
         }
@@ -176,7 +186,20 @@ const BoardParts = ({
           <LikeContainer>
             <Like>
               <LikeToggle onClick={toggleLike}>
-                {joayoS ? (
+                {toggleJoayoLoading ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="34"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="#ff3422"
+                    fill-opacity="0.4"
+                    stroke="white"
+                    stroke-width="3"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : joayoS ? (
                   joayoSS ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

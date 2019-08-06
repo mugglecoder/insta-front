@@ -36,6 +36,8 @@ const P = styled.p`
 `;
 
 export default ({
+  stateChecker,
+  setStateChecker,
   pageData,
   props,
   data,

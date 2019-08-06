@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ReactDOM from "react-dom";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import SearchDetailPresenter from "./SearchDetailPresenter";
 import { ME } from "../../SharedQueries";
 import Axios from "axios";
-import { withRouter } from "react-router-dom";
 import ModifyPresenter from "./ModifyPresenter";
 import Loading from "../../Components/PlaceHolderForLoader/Loading";
 
@@ -242,7 +240,9 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
     loading: checkLikeLoading
   } = useQuery(CHECK_LIKE, { variables: { postId: id } });
 
-  const [toggleButton] = useMutation(TOGGLE_LIKE);
+  const [toggleButton, { loading: toggleJoayoLoading }] = useMutation(
+    TOGGLE_LIKE
+  );
 
   const [beforeCheck] = useMutation(BEFORE_CHECK);
   //
@@ -254,7 +254,7 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
   //default 좋아요를 셋팅함
   useEffect(() => {
     setJoayo(checkLike);
-  }, [checkLikeLoading]);
+  }, []);
 
   //페이지 넘길때 좋아요 미리 표시해줌
   useEffect(() => {
@@ -333,9 +333,10 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
       ) : (
         !loading && (
           <SearchDetailPresenter
+            checkLikeLoading={checkLikeLoading}
+            toggleJoayoLoading={toggleJoayoLoading}
             searchData={searchData}
             beforeCheck={beforeCheck}
-            checkLikeLoading={checkLikeLoading}
             setJoayo={setJoayo}
             toggleButton={toggleButton}
             props={props}

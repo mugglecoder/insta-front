@@ -6,6 +6,12 @@ import { gql } from "apollo-boost";
 import "../css/image-gallery.css";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 
+const CHECK_LIKE = gql`
+  query checkLike($postId: String!) {
+    checkLike(postId: $postId)
+  }
+`;
+
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
     toggleLike(postId: $postId)
@@ -191,7 +197,7 @@ const H1Bottom = styled.div`
   margin-top: 17px;
 `;
 
-export default (item, dataOfMe) => {
+const MapPartsImageGall = item => {
   const page = item.props.match && item.props.match.params.page;
   ///////////
   const urls = item.item.files && item.item.files.map(item => item);
@@ -219,10 +225,10 @@ export default (item, dataOfMe) => {
     /////// 이미지 있을때
 
     item.item.files &&
-      item.item.files.map(item => {
-        return arrayOfPath.push(item.url);
+      item.item.files.map(items => {
+        return arrayOfPath.push(items.url);
       });
-    arrayOfPath.map((item, key) => test.push(item));
+    arrayOfPath.map((items, key) => test.push(items));
 
     const s = test.reduce((s, a) => {
       {
@@ -247,10 +253,18 @@ export default (item, dataOfMe) => {
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
 
-  const [toggleJoayo] = useMutation(TOGGLE_LIKE);
+  const [toggleJoayo, { loading: toggleJoayoLoading }] = useMutation(
+    TOGGLE_LIKE,
+    {
+      variables: { postId: item.item.id }
+    }
+  );
 
-  const toggleLike = () => {
-    toggleJoayo({ variables: { postId: item.item.id } });
+  const toggleLike = async () => {
+    const {
+      data: { toggleLike }
+    } = await toggleJoayo();
+
     if (joayo) {
       setJoayoS(true);
     } else {
@@ -258,14 +272,7 @@ export default (item, dataOfMe) => {
       setJoayoSS(true);
     }
     if (joayoS === true) {
-      if (joayoSS === false) {
-        setJoayoSS(true);
-      }
-      if (joayoSS === true) {
-        setJoayoSS(false);
-      } else {
-        setJoayoSS(true);
-      }
+      setJoayoSS(toggleLike);
     }
   };
 
@@ -273,13 +280,15 @@ export default (item, dataOfMe) => {
     item.item &&
       item.item.likes.map(items => {
         if (
-          String(items && items.user.id) ===
+          String(items && items.user && items.user.id) ===
           String(item && item.dataOfMe && item.dataOfMe.me.id)
         ) {
           joayo = true;
         } else if (
-          String(items && items.user.id) !==
-          String(item && item.dataOfMe && item.dataOfMe.me.id)
+          String(items && items.user && items.user.id) !==
+          String(
+            item && item.dataOfMe && item.dataOfMe.me && item.dataOfMe.me.id
+          )
         ) {
           joayo = false;
         }
@@ -310,62 +319,6 @@ export default (item, dataOfMe) => {
         <Files>
           <Column>
             <SubColumn>
-              <LikeContainer>
-                <Like>
-                  <LikeToggle onClick={toggleLike}>
-                    {joayoS ? (
-                      joayoSS ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="34"
-                          height="30"
-                          viewBox="0 0 30 30"
-                          fill="#ED4956"
-                        >
-                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="34"
-                          height="30"
-                          viewBox="0 0 30 30"
-                          fill="#000000"
-                          fill-opacity="0.2"
-                          stroke="white"
-                          stroke-width="3"
-                        >
-                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                        </svg>
-                      )
-                    ) : joayo ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="34"
-                        height="30"
-                        viewBox="0 0 30 30"
-                        fill="#ED4956"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="34"
-                        height="30"
-                        viewBox="0 0 30 30"
-                        fill="#000000"
-                        fill-opacity="0.2"
-                        stroke="white"
-                        stroke-width="3"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    )}
-                  </LikeToggle>
-                </Like>
-              </LikeContainer>
-
               <ImageGallery
                 additionalClass={`inTheMap`}
                 items={path}
@@ -462,3 +415,75 @@ export default (item, dataOfMe) => {
     </>
   );
 };
+
+export default MapPartsImageGall;
+
+////좋아용
+//<LikeContainer>
+//<Like>
+//  <LikeToggle onClick={toggleLike}>
+//    {toggleJoayoLoading ? (
+//      <svg
+//        xmlns="http://www.w3.org/2000/svg"
+//        width="34"
+//        height="30"
+//        viewBox="0 0 30 30"
+//        fill="#ff3422"
+//        fill-opacity="0.4"
+//        stroke="white"
+//        stroke-width="3"
+//      >
+//        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+//      </svg>
+//    ) : joayoS ? (
+//      joayoSS ? (
+//        <svg
+//          xmlns="http://www.w3.org/2000/svg"
+//          width="34"
+//          height="30"
+//          viewBox="0 0 30 30"
+//          fill="#ED4956"
+//        >
+//          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+//        </svg>
+//      ) : (
+//        <svg
+//          xmlns="http://www.w3.org/2000/svg"
+//          width="34"
+//          height="30"
+//          viewBox="0 0 30 30"
+//          fill="#000000"
+//          fill-opacity="0.2"
+//          stroke="white"
+//          stroke-width="3"
+//        >
+//          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+//        </svg>
+//      )
+//    ) : joayo ? (
+//      <svg
+//        xmlns="http://www.w3.org/2000/svg"
+//        width="34"
+//        height="30"
+//        viewBox="0 0 30 30"
+//        fill="#ED4956"
+//      >
+//        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+//      </svg>
+//    ) : (
+//      <svg
+//        xmlns="http://www.w3.org/2000/svg"
+//        width="34"
+//        height="30"
+//        viewBox="0 0 30 30"
+//        fill="#000000"
+//        fill-opacity="0.2"
+//        stroke="white"
+//        stroke-width="3"
+//      >
+//        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+//      </svg>
+//    )}
+//  </LikeToggle>
+//</Like>
+//</LikeContainer>

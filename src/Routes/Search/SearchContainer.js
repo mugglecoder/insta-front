@@ -668,6 +668,7 @@ export default props => {
     );
   };
   //찾기 버튼 눌렀을때!
+
   const findRoom = async () => {
     setActivePage(1);
     first = LINKS_PER_PAGE;
@@ -681,7 +682,7 @@ export default props => {
   };
 
   //
-  const [theChange, setTheChange] = useState(setTimeout(() => {}, 50));
+  const [theChange, setTheChange] = useState(setTimeout(() => {}, 60));
   const detail =
     props.location.pathname.split("/")[2] === "detail" ? true : false;
 

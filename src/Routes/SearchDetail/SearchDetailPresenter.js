@@ -263,14 +263,14 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  checkLikeLoading,
+  toggleJoayoLoading,
   searchData,
   beforeCheck,
-  checkLikeLoading,
   setJoayo,
   toggleButton,
   id,
   beforeLike,
-  checkLike,
   responsive,
   joayo,
   toggleLike,
@@ -324,7 +324,33 @@ const RoomsDetailPresenter = ({
             <LikeContainer>
               <Like>
                 <LikeToggle onClick={toggleLike}>
-                  {joayo ? (
+                  {checkLikeLoading ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="35"
+                      viewBox="0 0 30 30"
+                      fill="#ff3422"
+                      fill-opacity="0.4"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : toggleJoayoLoading ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="35"
+                      viewBox="0 0 30 30"
+                      fill="#ff3422"
+                      fill-opacity="0.4"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                    </svg>
+                  ) : joayo ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="40"
@@ -534,20 +560,17 @@ const RoomsDetailPresenter = ({
                 return (
                   <BoardPartsSlide
                     beforeCheck={beforeCheck}
-                    checkLikeLoading={checkLikeLoading}
-                    setJoayo={setJoayo}
                     toggleButton={toggleButton}
                     joayo={joayo}
                     props={props}
                     token={token}
                     toggleLike={toggleLike}
-                    checkLike={checkLike}
                     dataOfMe={dataOfMe}
                     loading={loading}
                     data2={data2}
                     onclick={onclick}
                     path={path}
-                    id={id}
+                    id={item.id}
                     page={page}
                     data={item}
                     database={data}
@@ -563,11 +586,13 @@ const RoomsDetailPresenter = ({
                   />
                 );
               })
-            : console.log("기회")}
+            : false}
         </Carousel>
       </MoreRooms>
     ) : (
-      false
+      console.log(
+        "기회,로컬스토리지아이템을 불러오거나 새로 접속한것이라면 새로운 매물들을 보여주기"
+      )
     )}
   </Wrapper>
 );
