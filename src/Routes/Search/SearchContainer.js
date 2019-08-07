@@ -145,64 +145,6 @@ const SEARCH = gql`
       numberOfFoors: $numberOfFoors
       MLSnumber: $MLSnumber
     ) {
-      preData {
-        id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        lat
-        lng
-        count
-        content
-        airConditioner
-        washer
-        refrigerator
-        internet
-        microwave
-        wifi
-        bed
-        desk
-        induction
-        gasRange
-        doorLock
-        CCTV
-        pets
-        elevator
-        parking
-        electricHeating
-        cityGasHeating
-        nightElectric
-        wateTax
-        includingElectricity
-        cityGasIncluded
-        numberOfFoors
-        MLSnumber
-        deposit
-        money
-        selectType
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-        likes {
-          post {
-            id
-            caption
-          }
-          user {
-            id
-            username
-          }
-        }
-      }
       post {
         id
         caption
@@ -598,6 +540,7 @@ export default props => {
   ////
   //온 바운드 체인지
   const [bound, setTheBounds] = useState(1);
+
   const latS = bound && bound[0];
   const lat2S = bound && bound[4];
   const lngS = bound && bound[1];
@@ -611,45 +554,7 @@ export default props => {
       ? props.location.pathname.split("/")[3]
       : props.location.pathname.split("/")[3];
 
-  const [searchData, { loading }] = useMutation(SEARCH, {
-    variables: {
-      id,
-      first,
-      skip,
-      lat: latS,
-      lat2: lat2S,
-      lng: lngS,
-      lng2: lng2S,
-      deposit,
-      deposit2,
-      money,
-      money2,
-      selectType: select,
-      airConditioner,
-      washer,
-      refrigerator,
-      internet,
-      microwave,
-      wifi,
-      bed,
-      desk,
-      induction,
-      gasRange,
-      doorLock,
-      CCTV,
-      pets,
-      elevator,
-      parking,
-      electricHeating,
-      cityGasHeating,
-      nightElectric,
-      wateTax,
-      includingElectricity,
-      cityGasIncluded
-      // numberOfFoors,
-      //  MLSnumber
-    }
-  });
+  const [searchData, { loading }] = useMutation(SEARCH);
 
   const [newData, setNewData] = useState();
 
@@ -658,7 +563,15 @@ export default props => {
     const centerLng = center.lng;
 
     setTheBounds(bounds);
-
+    localStorage.setItem(
+      "bound",
+      JSON.stringify({
+        lat: parseFloat(bound && bound[0]),
+        lat2S: parseFloat(bound && bound[4]),
+        lng: parseFloat(bound && bound[1]),
+        lng2S: parseFloat(bound && bound[3])
+      })
+    );
     localStorage.setItem(
       "map",
       JSON.stringify({
@@ -675,7 +588,45 @@ export default props => {
     setSkip(0);
     const {
       data: { searchRoom }
-    } = await searchData({ variables: { first, skip } });
+    } = await searchData({
+      variables: {
+        id,
+        first,
+        skip,
+        lat: latS,
+        lat2: lat2S,
+        lng: lngS,
+        lng2: lng2S,
+        deposit,
+        deposit2,
+        money,
+        money2,
+        selectType: select,
+        airConditioner,
+        washer,
+        refrigerator,
+        internet,
+        microwave,
+        wifi,
+        bed,
+        desk,
+        induction,
+        gasRange,
+        doorLock,
+        CCTV,
+        pets,
+        elevator,
+        parking,
+        electricHeating,
+        cityGasHeating,
+        nightElectric,
+        wateTax,
+        includingElectricity,
+        cityGasIncluded
+        // numberOfFoors,
+        //  MLSnumber
+      }
+    });
     await setNewData(searchRoom);
     console.log(searchRoom, "in the searchContainer");
     props.history.push(`/new/search/1`);
@@ -699,7 +650,6 @@ export default props => {
   //
   const [activePage, setActivePage] = useState(1);
   const [pageNumber2, setPageNumber2] = useState(1);
-  console.log(pageNumber2, "pagenumber2?");
 
   //new 페이지네이션
 
@@ -727,7 +677,45 @@ export default props => {
       (async function() {
         const {
           data: { searchRoom }
-        } = await searchData({ variables: { first, skip } });
+        } = await searchData({
+          variables: {
+            id,
+            first,
+            skip,
+            lat: latS,
+            lat2: lat2S,
+            lng: lngS,
+            lng2: lng2S,
+            deposit,
+            deposit2,
+            money,
+            money2,
+            selectType: select,
+            airConditioner,
+            washer,
+            refrigerator,
+            internet,
+            microwave,
+            wifi,
+            bed,
+            desk,
+            induction,
+            gasRange,
+            doorLock,
+            CCTV,
+            pets,
+            elevator,
+            parking,
+            electricHeating,
+            cityGasHeating,
+            nightElectric,
+            wateTax,
+            includingElectricity,
+            cityGasIncluded
+            // numberOfFoors,
+            //  MLSnumber
+          }
+        });
         await setNewData(searchRoom);
         props.history.push(`/new/search/${pageNumber2}`);
       })();
@@ -741,24 +729,77 @@ export default props => {
   const latAndlng = newData && newData.post.map(item => item);
 
   //디테일페이지에 관한 모든것
-
+  const [newLatandLng, setNewLatandLng] = useState();
+  console.log(parseFloat(newLatandLng && newLatandLng.lat), "newLatandLng");
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
   useEffect(() => {
-    if (props.location.pathname.split("/")[3].length > 4) {
-      (async function() {
-        const {
-          data: { searchRoom: fuckData }
-        } = await searchData();
-        console.log(fuckData, "fuckData");
-        setNewData(fuckData);
-      })();
-    } else {
-      console.log("no id");
-    }
     setSelectValue1(localStorage.getItem("종류"));
     setSelectValue2(localStorage.getItem("종류2"));
     setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
     setSelectValue4(JSON.parse(localStorage.getItem("월세")));
+    setNewLatandLng(JSON.parse(localStorage.getItem("bound")));
+
+    if (detail) {
+      (async function() {
+        const {
+          data: { searchRoom }
+        } = await searchData({
+          variables: {
+            id,
+            first,
+            skip,
+            lat: parseFloat(newLatandLng && newLatandLng.lat),
+            lat2: parseFloat(newLatandLng && newLatandLng.lat2S),
+            lng: parseFloat(newLatandLng && newLatandLng.lng),
+            lng2: parseFloat(newLatandLng && newLatandLng.lng2S),
+            deposit,
+            deposit2,
+            money,
+            money2,
+            selectType: select,
+            airConditioner,
+            washer,
+            refrigerator,
+            internet,
+            microwave,
+            wifi,
+            bed,
+            desk,
+            induction,
+            gasRange,
+            doorLock,
+            CCTV,
+            pets,
+            elevator,
+            parking,
+            electricHeating,
+            cityGasHeating,
+            nightElectric,
+            wateTax,
+            includingElectricity,
+            cityGasIncluded
+            // numberOfFoors,
+            //  MLSnumber
+          }
+        });
+        console.log(searchRoom, "searchRoom");
+        console.log(
+          first,
+          "first",
+          lat,
+
+          lng,
+
+          deposit,
+          deposit2,
+          money,
+          money2
+        );
+        props.history.push(`/new/detail/${id}`);
+      })();
+    } else {
+      console.log("no id");
+    }
   }, []);
 
   return (
