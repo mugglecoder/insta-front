@@ -687,17 +687,18 @@ export default ({
     ////////////////////////////////////////////////////////////////////
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
-      {console.log(newData && newData.post.length, "newData.post.length")}
+      {console.log(newData, "newData ininnnn")}
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
-        ) : newData && newData.post.length === 0 ? (
+        ) : newData && newData.preData ? (
           <SearchDetail
             joayoChanged={joayoChanged}
             edit={edit}
             token={token}
             dataOfMe={dataOfMe}
             data={newData.preData}
+            newData={newData.post}
             loading={loading}
             props={props}
           />

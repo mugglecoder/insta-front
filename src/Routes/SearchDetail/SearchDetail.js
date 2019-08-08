@@ -70,7 +70,7 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const RoomsDetail = ({ props, data, loading, searchData }) => {
+const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   const id = props && props.location.pathname.split("/")[3];
 
   //구글지도
@@ -333,6 +333,7 @@ const RoomsDetail = ({ props, data, loading, searchData }) => {
       ) : (
         !loading && (
           <SearchDetailPresenter
+            newData={newData}
             checkLikeLoading={checkLikeLoading}
             toggleJoayoLoading={toggleJoayoLoading}
             searchData={searchData}

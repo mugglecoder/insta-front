@@ -263,6 +263,7 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  newData,
   checkLikeLoading,
   toggleJoayoLoading,
   searchData,
@@ -482,6 +483,7 @@ const RoomsDetailPresenter = ({
         </MapContainer>
       </ContentWrap>
     )}
+    {console.log(newData, searchData, "서치드데이터 이건 뜨는감")}
     {searchData ? (
       <MoreRooms>
         <h1>비슷한 매물이 더 있습니다!</h1>
@@ -556,7 +558,6 @@ const RoomsDetailPresenter = ({
                   }, {});
                 }
 
-                const onclick = () => {};
                 return (
                   <BoardPartsSlide
                     beforeCheck={beforeCheck}
@@ -589,10 +590,112 @@ const RoomsDetailPresenter = ({
             : false}
         </Carousel>
       </MoreRooms>
+    ) : newData ? (
+      <MoreRooms>
+        <h1>매물이 더 있습니다!</h1>
+        <hr />
+
+        <Carousel
+          swipeable={true}
+          draggable={true}
+          showDots={false}
+          responsive={responsive}
+          ssr={true} // means to render carousel on server-side.
+          infinite={false}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          deviceType={props && props.deviceType}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          {newData
+            ? newData &&
+              newData.map((item, key) => {
+                let arrayOfPath = [];
+                let test = [];
+                let path = [];
+                if (
+                  newData &&
+                  newData[key] &&
+                  newData[key].files.length === 0
+                ) {
+                  /// 임시로 메인에 보일 이미지 주소
+                  arrayOfPath.push(
+                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
+                  );
+                  arrayOfPath.map((item, key) => {
+                    return test.push(item);
+                  });
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `${a}`,
+                        thumbnail: `${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                } else {
+                  /////// 이미지 있을때
+
+                  newData &&
+                    newData[key] &&
+                    newData[key].files.map(item => {
+                      return arrayOfPath.push(item.url);
+                    });
+                  arrayOfPath.map((item, key) => test.push(item));
+
+                  const s = test.reduce((s, a) => {
+                    {
+                      for (var i = 0; i < test.length; i++);
+                      let get;
+                      get = {
+                        original: `http://127.0.0.1:4000/${a}`,
+                        thumbnail: `http://127.0.0.1:4000/${a}`
+                      };
+                      return path.push(get);
+                    }
+                  }, {});
+                }
+
+                return (
+                  <BoardPartsSlide
+                    beforeCheck={beforeCheck}
+                    toggleButton={toggleButton}
+                    joayo={joayo}
+                    props={props}
+                    token={token}
+                    toggleLike={toggleLike}
+                    dataOfMe={dataOfMe}
+                    loading={loading}
+                    data2={data2}
+                    path={path}
+                    id={item.id}
+                    page={page}
+                    data={item}
+                    database={data}
+                    key={key}
+                    selectType={item.selectType}
+                    caption={item.caption}
+                    username={item.user.username}
+                    createdAt={item.createdAt.slice(0, 10)}
+                    count={item.count}
+                    url={item.files}
+                    deposit={item.deposit}
+                    money={item.money}
+                  />
+                );
+              })
+            : false}
+        </Carousel>
+      </MoreRooms>
     ) : (
-      console.log(
-        "기회,로컬스토리지아이템을 불러오거나 새로 접속한것이라면 새로운 매물들을 보여주기"
-      )
+      console.log("what the hell")
     )}
   </Wrapper>
 );

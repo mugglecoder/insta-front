@@ -277,7 +277,8 @@ const MapPartsImageGall = item => {
   };
 
   if (item.item.likes.length >= 1) {
-    item.item &&
+    item &&
+      item.item &&
       item.item.likes.map(items => {
         if (
           String(items && items.user && items.user.id) ===

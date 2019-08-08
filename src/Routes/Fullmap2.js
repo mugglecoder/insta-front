@@ -62,7 +62,25 @@ const Maps = styled.h1`
 
 export default props => {
   //구글지도 줌 레벨
+  localStorage.setItem(
+    "map",
+    JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
+  );
+  localStorage.setItem("zoom", JSON.stringify(16));
+  localStorage.setItem("종류", "");
+  localStorage.setItem("종류2", "");
+  localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
+  localStorage.setItem("월세", JSON.stringify([0, 1000000]));
 
+  localStorage.setItem(
+    "bound",
+    JSON.stringify({
+      lat: 35.89345342480104,
+      lat2S: 35.886239132284146,
+      lng: 128.60552865600584,
+      lng2S: 128.6282308731079
+    })
+  );
   const { data, loading } = useQuery(FEED_QUERY);
 
   return (

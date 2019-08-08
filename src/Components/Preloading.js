@@ -38,7 +38,7 @@ const Maps = styled.h1`
 
 export default props => {
   setTimeout(() => {
-    props.history.push(`/new/search`);
+    props.history.push(`/new/search/1`);
   }, 2000);
   return (
     <FullMapContainer>

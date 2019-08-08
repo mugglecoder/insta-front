@@ -19,6 +19,8 @@ const LoggedInRoutes = () => {
   return (
     <Switch>
       <Route exact path="/" render={Main} />
+      <Route exact path="/search" render={Preloading} />
+
       <Route
         exact
         path="/new/search"

@@ -156,7 +156,6 @@ const BoardParts = ({
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
   const [something, setSomething] = useState(false);
-  console.log(data, "data :: something");
 
   useEffect(() => {}, [props && props.match.params]);
 
