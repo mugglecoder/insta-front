@@ -691,17 +691,6 @@ export default ({
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
-        ) : newData && newData.preData ? (
-          <SearchDetail
-            joayoChanged={joayoChanged}
-            edit={edit}
-            token={token}
-            dataOfMe={dataOfMe}
-            data={newData.preData}
-            newData={newData.post}
-            loading={loading}
-            props={props}
-          />
         ) : (
           newData &&
           newData.post &&

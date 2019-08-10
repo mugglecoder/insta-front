@@ -622,15 +622,14 @@ export default props => {
   const onBoundsChange = (center, zoom, bounds, marginBounds) => {
     const centerLat = center.lat;
     const centerLng = center.lng;
-
     setTheBounds(bounds);
     localStorage.setItem(
       "bound",
       JSON.stringify({
-        lat: parseFloat(bound && bound[0]),
-        lat2S: parseFloat(bound && bound[4]),
-        lng: parseFloat(bound && bound[1]),
-        lng2S: parseFloat(bound && bound[3])
+        lat: parseFloat(bounds && bounds[0]),
+        lat2S: parseFloat(bounds && bounds[4]),
+        lng: parseFloat(bounds && bounds[1]),
+        lng2S: parseFloat(bounds && bounds[3])
       })
     );
     localStorage.setItem(
@@ -647,6 +646,7 @@ export default props => {
     setActivePage(1);
     first = LINKS_PER_PAGE;
     setSkip(0);
+    props.history.push(`/new/search/1`);
     const {
       data: { searchRoom }
     } = await searchData({
@@ -690,7 +690,6 @@ export default props => {
     });
     await setNewData(searchRoom);
     console.log(searchRoom, "in the searchContainer");
-    props.history.push(`/new/search/1`);
   };
 
   //
@@ -794,29 +793,7 @@ export default props => {
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
   useEffect(() => {
     const newLatandLng = JSON.parse(localStorage.getItem("bound"));
-    console.log(newLatandLng && newLatandLng.lat === null, "?");
-    if (newLatandLng === null) {
-      localStorage.setItem(
-        "bound",
-        JSON.stringify({
-          lat: 35.89345342480104,
-          lat2S: 35.886239132284146,
-          lng: 128.60552865600584,
-          lng2S: 128.6282308731079
-        })
-      );
-      window.location.reload();
-    } else {
-      localStorage.setItem(
-        "bound",
-        JSON.stringify({
-          lat: newLatandLng.lat,
-          lat2S: newLatandLng.lat2S,
-          lng: newLatandLng.lng,
-          lng2S: newLatandLng.lng2S
-        })
-      );
-    }
+
     if (JSON.parse(localStorage.getItem("보증금")) === null) {
       localStorage.setItem("zoom", JSON.stringify(16));
       localStorage.setItem("종류", "");
@@ -827,6 +804,10 @@ export default props => {
         "map",
         JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
       );
+
+      window.location.reload();
+    } else {
+      console.log("이게 찍히려나");
     }
     if (detail) {
       let deposit = JSON.parse(localStorage.getItem("보증금"))[0];
@@ -884,7 +865,43 @@ export default props => {
             //  MLSnumber
           }
         });
-
+        if (newLatandLng === null) {
+          const yseCenter = JSON.parse(localStorage.getItem("map"));
+          console.log(yseCenter, "Yescenter");
+          localStorage.setItem(
+            "bound",
+            JSON.stringify({
+              lat2S: yseCenter.lat - 0.001516634371,
+              lat: yseCenter.lat + 0.0020903087423,
+              lng2S: yseCenter.lng + 0.0058364868164,
+              lng: yseCenter.lng - 0.00551462173462
+            })
+          );
+          if (detail) {
+            console.log("1");
+            localStorage.setItem(
+              "bound",
+              JSON.stringify({
+                lat2S: searchRoom.preData.lat - 0.001516634371,
+                lat: searchRoom.preData.lat + 0.0020903087423,
+                lng2S: searchRoom.preData.lng + 0.0058364868164,
+                lng: searchRoom.preData.lng - 0.00551462173462
+              })
+            );
+            window.location.reload();
+          }
+        } else {
+          localStorage.setItem(
+            "bound",
+            JSON.stringify({
+              lat2S: searchRoom.preData.lat - 0.001516634371,
+              lat: searchRoom.preData.lat + 0.0020903087423,
+              lng2S: searchRoom.preData.lng + 0.0058364868164,
+              lng: searchRoom.preData.lng - 0.00551462173462
+            })
+          );
+          props.history.push(`/new/detail/${id}`);
+        }
         console.log(searchRoom, "searchRoom");
         localStorage.setItem("zoom", JSON.stringify(16));
         localStorage.setItem("종류", "");
@@ -904,16 +921,26 @@ export default props => {
             lng: searchRoom.preData.lng
           })
         );
-
+        console.log("null!!!!!!!!!!!!!!!");
         localStorage.setItem(
           "bound",
           JSON.stringify({
-            lat2S: searchRoom.preData.lat - 0.001516634371,
-            lat: searchRoom.preData.lat + 0.0020903087423,
-            lng2S: searchRoom.preData.lng + 0.0058364868164,
-            lng: searchRoom.preData.lng - 0.00551462173462
+            lat2S: center.lat - 0.001516634371,
+            lat: center.lat + 0.0020903087423,
+            lng2S: center.lng + 0.0058364868164,
+            lng: center.lng - 0.00551462173462
           })
         );
+
+        //        localStorage.setItem(
+        //          "bound",
+        //          JSON.stringify({
+        //            lat2S: searchRoom.preData.lat - 0.001516634371,
+        //            lat: searchRoom.preData.lat + 0.0020903087423,
+        //            lng2S: searchRoom.preData.lng + 0.0058364868164,
+        //            lng: searchRoom.preData.lng - 0.00551462173462
+        //          })
+        //        );
 
         await setNewData(searchRoom);
         props.history.push(`/new/detail/${id}`);

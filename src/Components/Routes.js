@@ -19,13 +19,8 @@ const LoggedInRoutes = () => {
   return (
     <Switch>
       <Route exact path="/" render={Main} />
-      <Route exact path="/search" render={Preloading} />
 
-      <Route
-        exact
-        path="/new/search"
-        render={() => <Redirect to="/new/search/1" />}
-      />
+      <Route exact path="/new/search" render={Preloading} />
       <Route exact path="/new/search/:page" component={Search} />
       <Route
         path="/fullmap"

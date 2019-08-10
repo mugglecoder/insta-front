@@ -37,8 +37,13 @@ const Maps = styled.h1`
 `;
 
 export default props => {
+  localStorage.setItem(
+    "map",
+    JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
+  );
   setTimeout(() => {
     props.history.push(`/new/search/1`);
+    window.location.reload();
   }, 2000);
   return (
     <FullMapContainer>
