@@ -807,7 +807,6 @@ export default props => {
 
       window.location.reload();
     } else {
-      console.log("이게 찍히려나");
     }
     if (detail) {
       let deposit = JSON.parse(localStorage.getItem("보증금"))[0];
