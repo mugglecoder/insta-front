@@ -292,412 +292,421 @@ const RoomsDetailPresenter = ({
   _previousPage,
   _nextPage,
   onDeletePost
-}) => (
-  <Wrapper>
-    {loading && <DetailLoader token={token} data={data} loading={loading} />}
-    {!loading && token && data ? (
-      <LogInButtonWrap>
-        <Link
-          key={data.id}
-          to={{
-            pathname: `/new/edit/${data && data.id}`,
-            state: {
-              fromNotifications: true,
-              data: "tett"
-            }
-          }}
-        >
-          <DeleteButton> 수정하기 </DeleteButton>
-        </Link>
-        <DeleteButton onClick={onDeletePost}>삭제</DeleteButton>
-      </LogInButtonWrap>
-    ) : (
-      false
-    )}
-    {!loading && (
-      <ContentWrap>
-        <Column>
-          <ColumnL>
-            <Username>{data && data.user && data.user.username}</Username>
-            <Caption>{data && data.caption}</Caption>
-          </ColumnL>
-          <ColumnR>
-            <LikeContainer>
-              <Like>
-                <LikeToggle onClick={toggleLike}>
-                  {checkLikeLoading ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="35"
-                      viewBox="0 0 30 30"
-                      fill="#ff3422"
-                      fill-opacity="0.4"
-                      stroke="white"
-                      stroke-width="3"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  ) : toggleJoayoLoading ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="35"
-                      viewBox="0 0 30 30"
-                      fill="#ff3422"
-                      fill-opacity="0.4"
-                      stroke="white"
-                      stroke-width="3"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  ) : joayo ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="35"
-                      viewBox="0 0 30 30"
-                      fill="#ED4956"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="35"
-                      viewBox="0 0 30 30"
-                      fill="#000000"
-                      fill-opacity="0.2"
-                      stroke="white"
-                      stroke-width="3"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  )}
-                </LikeToggle>
-              </Like>
-            </LikeContainer>
-            <File
-              src={
-                data && data.files && data.files[0] && data.files[0].url
-                  ? `http://localhost:4000/${data.files[0].url}`
-                  : "http://localhost:4000/images/preImage/no-image.jpg"
+}) => {
+  console.log("여기도 실행이 2 되었다");
+  return (
+    <Wrapper>
+      {loading && <DetailLoader token={token} data={data} loading={loading} />}
+      {!loading && token && data ? (
+        <LogInButtonWrap>
+          <Link
+            key={data.id}
+            to={{
+              pathname: `/new/edit/${data && data.id}`,
+              state: {
+                fromNotifications: true,
+                data: "tett"
               }
-            />
-          </ColumnR>
-        </Column>
-        <ContentMain>
-          <ContentMainWrap>
-            <Deposit>보증금 {data && data.deposit}</Deposit>
-            <Deposit>월세 {data && data.money}</Deposit>
-            <Deposit>{data && data.numberOfFoors}층</Deposit>
-            <Deposit>매물번호 {data && data.MLSnumber}</Deposit>
-          </ContentMainWrap>
-        </ContentMain>
-        <Content>{data && data.content}</Content>
-        <OptionText>
-          <h1>옵션</h1>
+            }}
+          >
+            <DeleteButton> 수정하기 </DeleteButton>
+          </Link>
+          <DeleteButton onClick={onDeletePost}>삭제</DeleteButton>
+        </LogInButtonWrap>
+      ) : (
+        false
+      )}
+      {!loading && (
+        <ContentWrap>
+          <Column>
+            <ColumnL>
+              <Username>{data && data.user && data.user.username}</Username>
+              <Caption>{data && data.caption}</Caption>
+            </ColumnL>
+            <ColumnR>
+              <LikeContainer>
+                <Like>
+                  <LikeToggle onClick={toggleLike}>
+                    {checkLikeLoading ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="40"
+                        height="35"
+                        viewBox="0 0 30 30"
+                        fill="#ff3422"
+                        fill-opacity="0.4"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : toggleJoayoLoading ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="40"
+                        height="35"
+                        viewBox="0 0 30 30"
+                        fill="#ff3422"
+                        fill-opacity="0.4"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : joayo ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="40"
+                        height="35"
+                        viewBox="0 0 30 30"
+                        fill="#ED4956"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="40"
+                        height="35"
+                        viewBox="0 0 30 30"
+                        fill="#000000"
+                        fill-opacity="0.2"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    )}
+                  </LikeToggle>
+                </Like>
+              </LikeContainer>
+              <File
+                src={
+                  data && data.files && data.files[0] && data.files[0].url
+                    ? `http://localhost:4000/${data.files[0].url}`
+                    : "http://localhost:4000/images/preImage/no-image.jpg"
+                }
+              />
+            </ColumnR>
+          </Column>
+          <ContentMain>
+            <ContentMainWrap>
+              <Deposit>보증금 {data && data.deposit}</Deposit>
+              <Deposit>월세 {data && data.money}</Deposit>
+              <Deposit>{data && data.numberOfFoors}층</Deposit>
+              <Deposit>매물번호 {data && data.MLSnumber}</Deposit>
+            </ContentMainWrap>
+          </ContentMain>
+          <Content>{data && data.content}</Content>
+          <OptionText>
+            <h1>옵션</h1>
+            <hr />
+          </OptionText>
+          <Options>
+            {data && data.airConditioner === "에어컨" && (
+              <Option>airConditioner</Option>
+            )}
+            {data && data.washer === "세탁기" && <Option>washer</Option>}
+            {data && data.refrigerator === "냉장고" && (
+              <Option>refrigerator</Option>
+            )}
+            {data && data.internet === "인터넷" && <Option>internet</Option>}
+            {data && data.microwave === "전자렌지" && (
+              <Option>microwave</Option>
+            )}
+            {data && data.wifi === "wifi" && <Option>wifi</Option>}
+            {data && data.bed === "침대" && <Option>bed</Option>}
+            {data && data.desk === "책상" && <Option>desk</Option>}
+            {data && data.induction === "인덕션" && <Option>induction</Option>}
+            {data && data.gasRange === "가스레인지" && (
+              <Option>gasRange</Option>
+            )}
+            {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
+            {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
+            {data && data.pets === "애완동물" && <Option>pets</Option>}
+            {data && data.elevator === "엘리베이터" && (
+              <Option>elevator</Option>
+            )}
+            {data && data.parking === "주차" && <Option>parking</Option>}
+            {data && data.electricHeating === "전기난방" && (
+              <Option>electricHeating</Option>
+            )}
+            {data && data.cityGasHeating === "도시가스난방" && (
+              <Option>tecityGasHeatingst</Option>
+            )}
+            {data && data.nightElectric === "심야전기" && (
+              <Option>nightElectric</Option>
+            )}
+            {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
+            {data && data.includingElectricity === "전기세포함" && (
+              <Option>includingElectricity</Option>
+            )}
+            {data && data.cityGasIncluded === "도시가스포함" && (
+              <Option>cityGasIncluded</Option>
+            )}
+          </Options>
+
+          {data && data.files && data.files[0] && data.files[0] && (
+            <>
+              <DetailText>
+                <h1>디테일</h1>
+                <hr />
+              </DetailText>
+
+              <ImageGalleryContainer>
+                <FilesA>
+                  <ImageGallery
+                    additionalClass={`test`}
+                    items={path}
+                    showFullscreenButton={false}
+                    useBrowserFullscreen={false}
+                    showThumbnails={true}
+                    showPlayButton={false}
+                    showBullets={true}
+                    lazyLoad={true}
+                    showIndex={false}
+                  />
+                </FilesA>
+              </ImageGalleryContainer>
+            </>
+          )}
+          <MapText>
+            <h1>위치</h1>
+            <hr />
+          </MapText>
+          <MapContainer>
+            <div style={{ height: "35vh", width: "100%" }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
+                }}
+                defaultCenter={{ lat, lng }}
+                defaultZoom={zoom}
+                options={{ maxZoom: 17 }}
+                yesIWantToUseGoogleMapApiInternals={true}
+              >
+                <AnyReactComponent lat={lat} lng={lng} text="" />
+              </GoogleMapReact>
+            </div>
+          </MapContainer>
+        </ContentWrap>
+      )}
+
+      {searchData ? (
+        <MoreRooms>
+          <h1>비슷한 매물이 더 있습니다!</h1>
           <hr />
-        </OptionText>
-        <Options>
-          {data && data.airConditioner === "에어컨" && (
-            <Option>airConditioner</Option>
-          )}
-          {data && data.washer === "세탁기" && <Option>washer</Option>}
-          {data && data.refrigerator === "냉장고" && (
-            <Option>refrigerator</Option>
-          )}
-          {data && data.internet === "인터넷" && <Option>internet</Option>}
-          {data && data.microwave === "전자렌지" && <Option>microwave</Option>}
-          {data && data.wifi === "wifi" && <Option>wifi</Option>}
-          {data && data.bed === "침대" && <Option>bed</Option>}
-          {data && data.desk === "책상" && <Option>desk</Option>}
-          {data && data.induction === "인덕션" && <Option>induction</Option>}
-          {data && data.gasRange === "가스레인지" && <Option>gasRange</Option>}
-          {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
-          {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
-          {data && data.pets === "애완동물" && <Option>pets</Option>}
-          {data && data.elevator === "엘리베이터" && <Option>elevator</Option>}
-          {data && data.parking === "주차" && <Option>parking</Option>}
-          {data && data.electricHeating === "전기난방" && (
-            <Option>electricHeating</Option>
-          )}
-          {data && data.cityGasHeating === "도시가스난방" && (
-            <Option>tecityGasHeatingst</Option>
-          )}
-          {data && data.nightElectric === "심야전기" && (
-            <Option>nightElectric</Option>
-          )}
-          {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
-          {data && data.includingElectricity === "전기세포함" && (
-            <Option>includingElectricity</Option>
-          )}
-          {data && data.cityGasIncluded === "도시가스포함" && (
-            <Option>cityGasIncluded</Option>
-          )}
-        </Options>
 
-        {data && data.files && data.files[0] && data.files[0] && (
-          <>
-            <DetailText>
-              <h1>디테일</h1>
-              <hr />
-            </DetailText>
-
-            <ImageGalleryContainer>
-              <FilesA>
-                <ImageGallery
-                  additionalClass={`test`}
-                  items={path}
-                  showFullscreenButton={false}
-                  useBrowserFullscreen={false}
-                  showThumbnails={true}
-                  showPlayButton={false}
-                  showBullets={true}
-                  lazyLoad={true}
-                  showIndex={false}
-                />
-              </FilesA>
-            </ImageGalleryContainer>
-          </>
-        )}
-        <MapText>
-          <h1>위치</h1>
-          <hr />
-        </MapText>
-        <MapContainer>
-          <div style={{ height: "35vh", width: "100%" }}>
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
-              }}
-              defaultCenter={{ lat, lng }}
-              defaultZoom={zoom}
-              options={{ maxZoom: 17 }}
-              yesIWantToUseGoogleMapApiInternals={true}
-            >
-              <AnyReactComponent lat={lat} lng={lng} text="" />
-            </GoogleMapReact>
-          </div>
-        </MapContainer>
-      </ContentWrap>
-    )}
-    {console.log(newData, searchData, "서치드데이터 이건 뜨는감")}
-    {searchData ? (
-      <MoreRooms>
-        <h1>비슷한 매물이 더 있습니다!</h1>
-        <hr />
-
-        <Carousel
-          swipeable={true}
-          draggable={true}
-          showDots={false}
-          responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
-          infinite={false}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["tablet", "mobile"]}
-          deviceType={props && props.deviceType}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
-          {searchData
-            ? searchData &&
-              searchData.post &&
-              searchData.post.map((item, key) => {
-                let arrayOfPath = [];
-                let test = [];
-                let path = [];
-                if (
-                  searchData.post &&
-                  searchData.post[key] &&
-                  searchData.post[key].files.length === 0
-                ) {
-                  /// 임시로 메인에 보일 이미지 주소
-                  arrayOfPath.push(
-                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
-                  );
-                  arrayOfPath.map((item, key) => {
-                    return test.push(item);
-                  });
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `${a}`,
-                        thumbnail: `${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                } else {
-                  /////// 이미지 있을때
-
-                  searchData.post &&
+          <Carousel
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            responsive={responsive}
+            ssr={true} // means to render carousel on server-side.
+            infinite={false}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            deviceType={props && props.deviceType}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
+            {searchData
+              ? searchData &&
+                searchData.post &&
+                searchData.post.map((item, key) => {
+                  let arrayOfPath = [];
+                  let test = [];
+                  let path = [];
+                  if (
+                    searchData.post &&
                     searchData.post[key] &&
-                    searchData.post[key].files.map(item => {
-                      return arrayOfPath.push(item.url);
+                    searchData.post[key].files.length === 0
+                  ) {
+                    /// 임시로 메인에 보일 이미지 주소
+                    arrayOfPath.push(
+                      `http://127.0.0.1:4000/images/preImage/no-image.jpg`
+                    );
+                    arrayOfPath.map((item, key) => {
+                      return test.push(item);
                     });
-                  arrayOfPath.map((item, key) => test.push(item));
+                    const s = test.reduce((s, a) => {
+                      {
+                        for (var i = 0; i < test.length; i++);
+                        let get;
+                        get = {
+                          original: `${a}`,
+                          thumbnail: `${a}`
+                        };
+                        return path.push(get);
+                      }
+                    }, {});
+                  } else {
+                    /////// 이미지 있을때
 
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `http://127.0.0.1:4000/${a}`,
-                        thumbnail: `http://127.0.0.1:4000/${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                }
+                    searchData.post &&
+                      searchData.post[key] &&
+                      searchData.post[key].files.map(item => {
+                        return arrayOfPath.push(item.url);
+                      });
+                    arrayOfPath.map((item, key) => test.push(item));
 
-                return (
-                  <BoardPartsSlide
-                    beforeCheck={beforeCheck}
-                    toggleButton={toggleButton}
-                    joayo={joayo}
-                    props={props}
-                    token={token}
-                    toggleLike={toggleLike}
-                    dataOfMe={dataOfMe}
-                    loading={loading}
-                    data2={data2}
-                    onclick={onclick}
-                    path={path}
-                    id={item.id}
-                    page={page}
-                    data={item}
-                    database={data}
-                    key={key}
-                    selectType={item.selectType}
-                    caption={item.caption}
-                    username={item.user.username}
-                    createdAt={item.createdAt.slice(0, 10)}
-                    count={item.count}
-                    url={item.files}
-                    deposit={item.deposit}
-                    money={item.money}
-                  />
-                );
-              })
-            : false}
-        </Carousel>
-      </MoreRooms>
-    ) : newData ? (
-      <MoreRooms>
-        <h1>매물이 더 있습니다!</h1>
-        <hr />
+                    const s = test.reduce((s, a) => {
+                      {
+                        for (var i = 0; i < test.length; i++);
+                        let get;
+                        get = {
+                          original: `http://127.0.0.1:4000/${a}`,
+                          thumbnail: `http://127.0.0.1:4000/${a}`
+                        };
+                        return path.push(get);
+                      }
+                    }, {});
+                  }
 
-        <Carousel
-          swipeable={true}
-          draggable={true}
-          showDots={false}
-          responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
-          infinite={false}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["tablet", "mobile"]}
-          deviceType={props && props.deviceType}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
-          {newData
-            ? newData &&
-              newData.map((item, key) => {
-                let arrayOfPath = [];
-                let test = [];
-                let path = [];
-                if (
-                  newData &&
-                  newData[key] &&
-                  newData[key].files.length === 0
-                ) {
-                  /// 임시로 메인에 보일 이미지 주소
-                  arrayOfPath.push(
-                    `http://127.0.0.1:4000/images/preImage/no-image.jpg`
+                  return (
+                    <BoardPartsSlide
+                      beforeCheck={beforeCheck}
+                      toggleButton={toggleButton}
+                      joayo={joayo}
+                      props={props}
+                      token={token}
+                      toggleLike={toggleLike}
+                      dataOfMe={dataOfMe}
+                      loading={loading}
+                      data2={data2}
+                      onclick={onclick}
+                      path={path}
+                      id={item.id}
+                      page={page}
+                      data={item}
+                      database={data}
+                      key={key}
+                      selectType={item.selectType}
+                      caption={item.caption}
+                      username={item.user.username}
+                      createdAt={item.createdAt.slice(0, 10)}
+                      count={item.count}
+                      url={item.files}
+                      deposit={item.deposit}
+                      money={item.money}
+                    />
                   );
-                  arrayOfPath.map((item, key) => {
-                    return test.push(item);
-                  });
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `${a}`,
-                        thumbnail: `${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                } else {
-                  /////// 이미지 있을때
+                })
+              : false}
+          </Carousel>
+        </MoreRooms>
+      ) : newData ? (
+        <MoreRooms>
+          <h1>매물이 더 있습니다!</h1>
+          <hr />
 
-                  newData &&
+          <Carousel
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            responsive={responsive}
+            ssr={true} // means to render carousel on server-side.
+            infinite={false}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            deviceType={props && props.deviceType}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
+            {newData
+              ? newData &&
+                newData.map((item, key) => {
+                  let arrayOfPath = [];
+                  let test = [];
+                  let path = [];
+                  if (
+                    newData &&
                     newData[key] &&
-                    newData[key].files.map(item => {
-                      return arrayOfPath.push(item.url);
+                    newData[key].files.length === 0
+                  ) {
+                    /// 임시로 메인에 보일 이미지 주소
+                    arrayOfPath.push(
+                      `http://127.0.0.1:4000/images/preImage/no-image.jpg`
+                    );
+                    arrayOfPath.map((item, key) => {
+                      return test.push(item);
                     });
-                  arrayOfPath.map((item, key) => test.push(item));
+                    const s = test.reduce((s, a) => {
+                      {
+                        for (var i = 0; i < test.length; i++);
+                        let get;
+                        get = {
+                          original: `${a}`,
+                          thumbnail: `${a}`
+                        };
+                        return path.push(get);
+                      }
+                    }, {});
+                  } else {
+                    /////// 이미지 있을때
 
-                  const s = test.reduce((s, a) => {
-                    {
-                      for (var i = 0; i < test.length; i++);
-                      let get;
-                      get = {
-                        original: `http://127.0.0.1:4000/${a}`,
-                        thumbnail: `http://127.0.0.1:4000/${a}`
-                      };
-                      return path.push(get);
-                    }
-                  }, {});
-                }
+                    newData &&
+                      newData[key] &&
+                      newData[key].files.map(item => {
+                        return arrayOfPath.push(item.url);
+                      });
+                    arrayOfPath.map((item, key) => test.push(item));
 
-                return (
-                  <BoardPartsSlide
-                    beforeCheck={beforeCheck}
-                    toggleButton={toggleButton}
-                    joayo={joayo}
-                    props={props}
-                    token={token}
-                    toggleLike={toggleLike}
-                    dataOfMe={dataOfMe}
-                    loading={loading}
-                    data2={data2}
-                    path={path}
-                    id={item.id}
-                    page={page}
-                    data={item}
-                    database={data}
-                    key={key}
-                    selectType={item.selectType}
-                    caption={item.caption}
-                    username={item.user.username}
-                    createdAt={item.createdAt.slice(0, 10)}
-                    count={item.count}
-                    url={item.files}
-                    deposit={item.deposit}
-                    money={item.money}
-                  />
-                );
-              })
-            : false}
-        </Carousel>
-      </MoreRooms>
-    ) : (
-      console.log("what the hell")
-    )}
-  </Wrapper>
-);
+                    const s = test.reduce((s, a) => {
+                      {
+                        for (var i = 0; i < test.length; i++);
+                        let get;
+                        get = {
+                          original: `http://127.0.0.1:4000/${a}`,
+                          thumbnail: `http://127.0.0.1:4000/${a}`
+                        };
+                        return path.push(get);
+                      }
+                    }, {});
+                  }
+
+                  return (
+                    <BoardPartsSlide
+                      beforeCheck={beforeCheck}
+                      toggleButton={toggleButton}
+                      joayo={joayo}
+                      props={props}
+                      token={token}
+                      toggleLike={toggleLike}
+                      dataOfMe={dataOfMe}
+                      loading={loading}
+                      data2={data2}
+                      path={path}
+                      id={item.id}
+                      page={page}
+                      data={item}
+                      database={data}
+                      key={key}
+                      selectType={item.selectType}
+                      caption={item.caption}
+                      username={item.user.username}
+                      createdAt={item.createdAt.slice(0, 10)}
+                      count={item.count}
+                      url={item.files}
+                      deposit={item.deposit}
+                      money={item.money}
+                    />
+                  );
+                })
+              : false}
+          </Carousel>
+        </MoreRooms>
+      ) : (
+        console.log("what the hell")
+      )}
+    </Wrapper>
+  );
+};
 
 export default RoomsDetailPresenter;

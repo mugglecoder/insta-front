@@ -310,11 +310,15 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   ////만약 주소로 다이렉트로 접근할때?///////////////////////////////////////////
 
   const edit =
-    props && props.location.pathname.split("/")[2] === "edit" ? true : false;
-
+    props &&
+    props.location.pathname &&
+    props.location.pathname.split("/")[2] === "edit"
+      ? true
+      : false;
+  console.log(edit, "edit ", "and 여기가 실행되었는가?");
   return (
     <Wrapper>
-      {loading ? <Loading /> : false}
+      {loading && <Loading />}
       {edit ? (
         <ModifyPresenter
           token={token}
@@ -331,39 +335,37 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
           dataOfMe={dataOfMe}
         />
       ) : (
-        !loading && (
-          <SearchDetailPresenter
-            newData={newData}
-            checkLikeLoading={checkLikeLoading}
-            toggleJoayoLoading={toggleJoayoLoading}
-            searchData={searchData}
-            beforeCheck={beforeCheck}
-            setJoayo={setJoayo}
-            toggleButton={toggleButton}
-            props={props}
-            id={id}
-            checkLike={checkLike}
-            responsive={responsive}
-            joayo={joayo}
-            toggleLike={toggleLike}
-            lng={lng}
-            lat={lat}
-            center={center}
-            zoom={zoom}
-            onDeletePost={onDeletePost}
-            token={token}
-            path={getPath}
-            page={page}
-            data={data}
-            data2={data2}
-            loading={loading}
-            onClick={onClick}
-            onClick2={onClick2}
-            _nextPage={_nextPage}
-            _previousPage={_previousPage}
-            dataOfMe={dataOfMe}
-          />
-        )
+        <SearchDetailPresenter
+          newData={newData}
+          checkLikeLoading={checkLikeLoading}
+          toggleJoayoLoading={toggleJoayoLoading}
+          searchData={searchData}
+          beforeCheck={beforeCheck}
+          setJoayo={setJoayo}
+          toggleButton={toggleButton}
+          props={props}
+          id={id}
+          checkLike={checkLike}
+          responsive={responsive}
+          joayo={joayo}
+          toggleLike={toggleLike}
+          lng={lng}
+          lat={lat}
+          center={center}
+          zoom={zoom}
+          onDeletePost={onDeletePost}
+          token={token}
+          path={getPath}
+          page={page}
+          data={data}
+          data2={data2}
+          loading={loading}
+          onClick={onClick}
+          onClick2={onClick2}
+          _nextPage={_nextPage}
+          _previousPage={_previousPage}
+          dataOfMe={dataOfMe}
+        />
       )}
     </Wrapper>
   );

@@ -9,38 +9,12 @@ const MarkerInner = styled.button`
   font-weight: 700;
   position: relative;
   width: auto;
-  padding: 0.3px 1.5px;
+  padding: 30px;
   margin: 0;
-  border: 3px solid ${props => types(props.type)};
-  color: #333;
-  background: #fff;
-  border-radius: 7px;
-  :focus {
-    outline: 0;
-    font-size: 15px;
-    font-weight: 700;
-    border: 5px solid ${props => types(props.type)};
-  }
-  :hover {
-    border: 5px solid ${props => types(props.type)};
-
-    font-weight: 700;
-    font-size: 15px;
-  }
-  :after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-top-color: ${props => types(props.type)};
-    border-bottom: 0;
-    border-left: 0;
-    margin-left: -5px;
-    margin-bottom: -10px;
-  }
+  border: 3px solid #ff9b9a;
+  background: #ff9b9a;
+  border-radius: 50%;
+  opacity: 0.3;
 `;
 
 const types = type => {
@@ -91,7 +65,7 @@ const types = type => {
 const Marker = ({ type = "원룸 월세", value }) => {
   return (
     <Wrapper>
-      <MarkerInner type={type}>{value}</MarkerInner>
+      <MarkerInner type={type} />
     </Wrapper>
   );
 };

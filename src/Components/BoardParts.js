@@ -20,14 +20,30 @@ const TOGGLE_LIKE = gql`
   }
 `;
 
+const SnapContainer = styled.div`
+  border: 1px solid #dfdfdf;
+  padding: 15px;
+  border-radius: 5px;
+  width: 23%;
+  margin: 1%;
+  margin-bottom: 24px;
+  background-color: #f8f8f8;
+`;
+
+const SnapContainerInn = styled.div`
+  background-color: white;
+`;
+
 const Container = styled.div`
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
   max-width: 386px;
-  width: 25%;
-  height: 100%;
+  width: 100%;
+  height: 200px;
+  overflow: scroll;
 `;
 
 const Column = styled.div`
-  margin: 0px 15px;
   height: 200px;
 `;
 
@@ -39,6 +55,33 @@ const SubColumn = styled.div`
 
 const Files = styled.div`
   position: relative;
+`;
+
+const SelectTypeS = styled.div`
+  color: black;
+  opacity: 0.5;
+  margin: 10px 0px 5px 5px;
+`;
+const SubjectS = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  margin: 7px 0px 5px 5px;
+`;
+const DepositS = styled.div`
+  color: red;
+  margin: 5px;
+`;
+
+const BottomFiles = styled.div`
+  position: relative;
+  width: 100%;
+  height: 70px;
+`;
+
+const BottomFilesContainer = styled.div`
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
 `;
 
 // 좋아요
@@ -85,6 +128,43 @@ const SmallSub = styled.div`
   margin: 7px 0px;
 `;
 
+const Content = styled.div`
+  padding: 7px;
+  width: 100%;
+  overflow: scroll;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: start;
+`;
+
+const OptionText = styled.div`
+  margin-bottom: 20px;
+  h1 {
+    text-align: start;
+    margin-top: 20px;
+    padding: 5px;
+    font-size: 13px;
+    color: grey;
+  }
+`;
+const Option = styled.div`
+  height: 130px;
+  width: 20%;
+  padding: 1%;
+  background-color: #c5bfea;
+`;
+const Options = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: pink;
+  margin-top: -10px;
+  margin-bottom: 30px;
+`;
+
 const Deposit = styled.span`
   display: inline-block;
   margin-right: 5px;
@@ -116,6 +196,7 @@ const StyledLink = styled(Link)`
 let url = [];
 
 const BoardParts = ({
+  content,
   props,
   newData,
   searchData,
@@ -178,104 +259,175 @@ const BoardParts = ({
     console.log("없음");
   }
 
-  const onclick = () => props.history.push(`/new/detail/${id}`);
-  return (
-    <Container>
-      <Column>
-        <Files>
-          <LikeContainer>
-            <Like>
-              <LikeToggle onClick={toggleLike}>
-                {toggleJoayoLoading ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="34"
-                    height="30"
-                    viewBox="0 0 30 30"
-                    fill="#ff3422"
-                    fill-opacity="0.4"
-                    stroke="white"
-                    stroke-width="3"
-                  >
-                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                  </svg>
-                ) : joayoS ? (
-                  joayoSS ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="34"
-                      height="30"
-                      viewBox="0 0 30 30"
-                      fill="#ED4956"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="34"
-                      height="30"
-                      viewBox="0 0 30 30"
-                      fill="#000000"
-                      fill-opacity="0.2"
-                      stroke="white"
-                      stroke-width="3"
-                    >
-                      <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                    </svg>
-                  )
-                ) : joayo ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="34"
-                    height="30"
-                    viewBox="0 0 30 30"
-                    fill="#ED4956"
-                  >
-                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="34"
-                    height="30"
-                    viewBox="0 0 30 30"
-                    fill="#000000"
-                    fill-opacity="0.2"
-                    stroke="white"
-                    stroke-width="3"
-                  >
-                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                  </svg>
-                )}
-              </LikeToggle>
-            </Like>
-          </LikeContainer>
+  const onclick = event => {
+    event.preventDefault();
+    window.open(`/new/detail/${id}`);
+  };
 
-          <File
-            items={path}
-            showFullscreenButton={false}
-            useBrowserFullscreen={false}
-            showThumbnails={false}
-            showPlayButton={false}
-            showBullets={true}
-            lazyLoad={true}
-            showIndex={false}
-            sizes={500}
-            onClick={onclick}
-          />
-        </Files>
-      </Column>
-      <SubColumn>
-        <SmallSub>
-          <SelectType>{selectType}</SelectType>
-          <Deposit>보증금 {deposit}</Deposit>
-          {" / "}
-          <Money> 월세 {money}</Money>
-        </SmallSub>
-        <Subject>{caption}</Subject>
-      </SubColumn>
-    </Container>
+  return (
+    <SnapContainer>
+      <Container>
+        <SnapContainerInn>
+          <Column>
+            <Files>
+              <LikeContainer>
+                <Like>
+                  <LikeToggle onClick={toggleLike}>
+                    {toggleJoayoLoading ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="34"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="#ff3422"
+                        fill-opacity="0.4"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : joayoS ? (
+                      joayoSS ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="34"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="#ED4956"
+                        >
+                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="34"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="#000000"
+                          fill-opacity="0.2"
+                          stroke="white"
+                          stroke-width="3"
+                        >
+                          <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                        </svg>
+                      )
+                    ) : joayo ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="34"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="#ED4956"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="34"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="#000000"
+                        fill-opacity="0.2"
+                        stroke="white"
+                        stroke-width="3"
+                      >
+                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                      </svg>
+                    )}
+                  </LikeToggle>
+                </Like>
+              </LikeContainer>
+
+              <File
+                items={path}
+                showFullscreenButton={false}
+                useBrowserFullscreen={false}
+                showThumbnails={false}
+                showPlayButton={false}
+                showBullets={true}
+                lazyLoad={true}
+                showIndex={false}
+                sizes={500}
+                onClick={onclick}
+              />
+            </Files>
+          </Column>
+          <SubColumn>
+            <SmallSub>
+              <SelectType>{selectType}</SelectType>
+              <Deposit>보증금 {deposit}</Deposit>
+              {" / "}
+              <Money> 월세 {money}</Money>
+            </SmallSub>
+            <Subject>{caption}</Subject>
+          </SubColumn>
+          <hr />
+          <OptionText>
+            <h1>옵션</h1>
+            <hr />
+          </OptionText>
+
+          <Options>
+            {data && data.airConditioner === "에어컨" && (
+              <Option>airConditioner</Option>
+            )}
+            {data && data.washer === "세탁기" && <Option>washer</Option>}
+            {data && data.refrigerator === true && (
+              <Option>refrigerator</Option>
+            )}
+            {data && data.internet === "인터넷" && <Option>internet</Option>}
+            {data && data.microwave === "전자렌지" && (
+              <Option>microwave</Option>
+            )}
+            {data && data.wifi === "wifi" && <Option>wifi</Option>}
+            {data && data.bed === "침대" && <Option>bed</Option>}
+            {data && data.desk === "책상" && <Option>desk</Option>}
+            {data && data.induction === "인덕션" && <Option>induction</Option>}
+            {data && data.gasRange === "가스레인지" && (
+              <Option>gasRange</Option>
+            )}
+            {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
+            {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
+            {data && data.pets === "애완동물" && <Option>pets</Option>}
+            {data && data.elevator === "엘리베이터" && (
+              <Option>elevator</Option>
+            )}
+            {data && data.parking === "주차" && <Option>parking</Option>}
+            {data && data.electricHeating === "전기난방" && (
+              <Option>electricHeating</Option>
+            )}
+            {data && data.cityGasHeating === "도시가스난방" && (
+              <Option>tecityGasHeatingst</Option>
+            )}
+            {data && data.nightElectric === "심야전기" && (
+              <Option>nightElectric</Option>
+            )}
+            {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
+            {data && data.includingElectricity === "전기세포함" && (
+              <Option>includingElectricity</Option>
+            )}
+            {data && data.cityGasIncluded === "도시가스포함" && (
+              <Option>cityGasIncluded</Option>
+            )}
+          </Options>
+        </SnapContainerInn>
+      </Container>
+      <BottomFiles>
+        <SelectTypeS>{selectType}</SelectTypeS>
+
+        <SubjectS>
+          {caption.length > 25 ? `${caption.substring(0, 25)}...` : caption}
+        </SubjectS>
+        <BottomFilesContainer>
+          <DepositS>
+            ₩ {deposit}
+            {"/"}
+            {money}
+          </DepositS>
+        </BottomFilesContainer>
+      </BottomFiles>
+    </SnapContainer>
   );
 };
 

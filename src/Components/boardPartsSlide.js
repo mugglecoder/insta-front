@@ -140,11 +140,13 @@ const BoardParts = ({
     data &&
       data.likes.map(items => {
         if (
-          String(items && items.user.id) === String(dataOfMe && dataOfMe.me.id)
+          String(items && items.user && items.user.id) ===
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
           joayo = true;
         } else if (
-          String(items && items.user.id) !== String(dataOfMe && dataOfMe.me.id)
+          String(items && items.user && items.user.id) !==
+          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
           joayo = false;
         }
@@ -155,9 +157,6 @@ const BoardParts = ({
 
   const [joayoS, setJoayoS] = useState(false);
   const [joayoSS, setJoayoSS] = useState(false);
-  const [something, setSomething] = useState(false);
-
-  useEffect(() => {}, [props && props.match.params]);
 
   const [toggleJoayo, { loading: toggleJoayoLoading }] = useMutation(
     TOGGLE_LIKE,
@@ -170,7 +169,6 @@ const BoardParts = ({
     const {
       data: { toggleLike }
     } = await toggleJoayo();
-    setSomething(toggleLike);
     if (joayo) {
       setJoayoS(true);
     } else {
@@ -181,8 +179,9 @@ const BoardParts = ({
       setJoayoSS(toggleLike);
     }
   };
-  const onclick = () => {
-    props.history.push(`/new/detail/${data.id}`);
+  const onclick = event => {
+    event.preventDefault();
+    window.open(`/new/detail/${data.id}`);
   };
   return (
     <Container>

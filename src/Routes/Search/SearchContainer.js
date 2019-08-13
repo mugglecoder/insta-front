@@ -266,7 +266,7 @@ const SEARCH = gql`
   }
 `;
 
-const LINKS_PER_PAGE = 8;
+const LINKS_PER_PAGE = 16;
 
 export default props => {
   ///체크박스 스테이트
@@ -714,7 +714,11 @@ export default props => {
   //new 페이지네이션
 
   const edit = props.location.pathname.split("/")[2] === "edit" ? true : false;
-  const matchDetail = props.location.pathname.split("/")[3];
+  const matchDetail =
+    props &&
+    props.location &&
+    props.location.pathname &&
+    props.location.pathname.split("/")[3];
 
   const handlePageChange = async pageNumber => {
     //페이지네이션
@@ -732,7 +736,55 @@ export default props => {
 
   useEffect(() => {
     if (detail) {
-      console.log("detail");
+      const id =
+        props &&
+        props.location &&
+        props.location.pathname &&
+        props.location.pathname.split("/")[3];
+      (async function() {
+        const {
+          data: { searchRoom }
+        } = await searchData({
+          variables: {
+            id,
+            first,
+            skip,
+            lat: latS,
+            lat2: lat2S,
+            lng: lngS,
+            lng2: lng2S,
+            deposit,
+            deposit2,
+            money,
+            money2,
+            selectType: select,
+            airConditioner,
+            washer,
+            refrigerator,
+            internet,
+            microwave,
+            wifi,
+            bed,
+            desk,
+            induction,
+            gasRange,
+            doorLock,
+            CCTV,
+            pets,
+            elevator,
+            parking,
+            electricHeating,
+            cityGasHeating,
+            nightElectric,
+            wateTax,
+            includingElectricity,
+            cityGasIncluded
+            // numberOfFoors,
+            //  MLSnumber
+          }
+        });
+        await setNewData(searchRoom);
+      })();
     } else {
       (async function() {
         const {
@@ -793,7 +845,12 @@ export default props => {
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
   useEffect(() => {
     const newLatandLng = JSON.parse(localStorage.getItem("bound"));
-
+    const id =
+      props &&
+      props.location &&
+      props.location.pathname &&
+      props.location.pathname.split("/")[3];
+    console.log(id, "니미시벌 id");
     if (JSON.parse(localStorage.getItem("보증금")) === null) {
       localStorage.setItem("zoom", JSON.stringify(16));
       localStorage.setItem("종류", "");
@@ -807,6 +864,7 @@ export default props => {
 
       window.location.reload();
     } else {
+      console.log("else");
     }
     if (detail) {
       let deposit = JSON.parse(localStorage.getItem("보증금"))[0];
@@ -818,10 +876,7 @@ export default props => {
       let lat2 = parseFloat(newLatandLng && newLatandLng.lat2S);
       let lng = parseFloat(newLatandLng && newLatandLng.lng);
       let lng2 = parseFloat(newLatandLng && newLatandLng.lng2S);
-      const id =
-        props.location.pathname.split("/")[3].length > 4
-          ? props.location.pathname.split("/")[3]
-          : props.location.pathname.split("/")[3];
+
       (async function() {
         const {
           data: { searchRoom }
@@ -864,9 +919,10 @@ export default props => {
             //  MLSnumber
           }
         });
+        console.log(searchRoom, "서 치 룸");
         if (newLatandLng === null) {
           const yseCenter = JSON.parse(localStorage.getItem("map"));
-          console.log(yseCenter, "Yescenter");
+
           localStorage.setItem(
             "bound",
             JSON.stringify({

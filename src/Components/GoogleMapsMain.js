@@ -96,7 +96,7 @@ const H1 = styled.div`
   font-weight: 600;
   font-size: 14px;
   top: 8%;
-  left: 43%;
+  left: 44%;
 `;
 const H12 = styled.div`
   position: absolute;
@@ -198,7 +198,7 @@ export default ({
           defaultZoom={zoom}
           onBoundsChange={onBoundsChange}
           yesIWantToUseGoogleMapApiInternals
-          options={{ maxZoom: 18, createMapOptions }}
+          options={{ maxZoom: 20, createMapOptions }}
         >
           {latAndlng &&
             latAndlng.map((item, key) =>
@@ -217,9 +217,9 @@ export default ({
             )}
         </GoogleMapReact>
         {loading ? (
-          <H1 onClick={findRoom}>좋은집 찾는중!</H1>
+          <H12 onClick={findRoom}>매물 검색중</H12>
         ) : (
-          <H1 onClick={findRoom}>여기에 있는 매물 재검색</H1>
+          <H1 onClick={findRoom}>여기에 있는 매물 검색</H1>
         )}
       </Mapdiv>
     </Container>

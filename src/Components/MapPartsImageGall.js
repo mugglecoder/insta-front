@@ -292,6 +292,9 @@ const MapPartsImageGall = item => {
           )
         ) {
           joayo = false;
+        } else {
+          console.log("에러 방지용 윈도우 리로딩");
+          window.location.reload();
         }
       });
   } else {

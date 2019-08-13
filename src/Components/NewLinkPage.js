@@ -126,6 +126,7 @@ export default ({
                       url={item.files}
                       deposit={item.deposit}
                       money={item.money}
+                      content={item.content}
                     />
                   );
                 })}

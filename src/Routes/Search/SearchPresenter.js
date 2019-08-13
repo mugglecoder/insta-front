@@ -687,15 +687,17 @@ export default ({
     ////////////////////////////////////////////////////////////////////
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
-      {console.log(newData, "newData ininnnn")}
+
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
         ) : (
           newData &&
           newData.post &&
-          newData.post.map(item =>
-            item.id === matchDetail ? (
+          newData.post.map(item => {
+            console.log(item.id, "id,,", matchDetail, "matchDetail mm,,,,,,");
+            console.log(item && item.id === matchDetail, "씨발 이거 고장남");
+            return String(item && item.id) === String(matchDetail) ? (
               <SearchDetail
                 joayoChanged={joayoChanged}
                 edit={edit}
@@ -707,9 +709,9 @@ export default ({
                 searchData={newData}
               />
             ) : (
-              false
-            )
-          )
+              console.log("false e e e e e e e")
+            );
+          })
         )
       ) : edit ? (
         newData &&
@@ -820,42 +822,8 @@ export default ({
             )}
 
             <ButtonSearchB onClick={setActiveClass}>세부옵션</ButtonSearchB>
-            <Link
-              to={{
-                pathname: "/new/search",
-                state: {
-                  depositSS: deposit,
-                  deposit2SS: deposit2,
-                  moneySS: money,
-                  money2SS: money2,
-                  selectTypeSS: select,
-                  airConditionerSS: airConditioner,
-                  washerSS: washer,
-                  refrigeratorSS: refrigerator,
-                  internetSS: internet,
-                  microwaveSS: microwave,
-                  wifiSS: wifi,
-                  bedSS: bed,
-                  deskSS: desk,
-                  inductionSS: induction,
-                  gasRangeSS: gasRange,
-                  doorLockSS: doorLock,
-                  CCTVSS: CCTV,
-                  petsSS: pets,
-                  elevatorSS: elevator,
-                  parkingSS: parking,
-                  electricHeatingSS: electricHeating,
-                  cityGasHeatingSS: cityGasHeating,
-                  nightElectricSS: nightElectric,
-                  wateTaxSS: wateTax,
-                  includingElectricitySS: includingElectricity,
-                  cityGasIncludedSS: cityGasIncluded
-                }
-              }}
-            >
-              <ButtonSearch onClick={setActiveClass}>검색</ButtonSearch>
-            </Link>
-            <ButtonSearch onClick={findRoom}>검색2</ButtonSearch>
+
+            <ButtonSearch onClick={findRoom}>검색</ButtonSearch>
           </SearchBox>
           {isOpen ? (
             <ToggleDetail>
