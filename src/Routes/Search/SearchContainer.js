@@ -736,55 +736,6 @@ export default props => {
 
   useEffect(() => {
     if (detail) {
-      const id =
-        props &&
-        props.location &&
-        props.location.pathname &&
-        props.location.pathname.split("/")[3];
-      (async function() {
-        const {
-          data: { searchRoom }
-        } = await searchData({
-          variables: {
-            id,
-            first,
-            skip,
-            lat: latS,
-            lat2: lat2S,
-            lng: lngS,
-            lng2: lng2S,
-            deposit,
-            deposit2,
-            money,
-            money2,
-            selectType: select,
-            airConditioner,
-            washer,
-            refrigerator,
-            internet,
-            microwave,
-            wifi,
-            bed,
-            desk,
-            induction,
-            gasRange,
-            doorLock,
-            CCTV,
-            pets,
-            elevator,
-            parking,
-            electricHeating,
-            cityGasHeating,
-            nightElectric,
-            wateTax,
-            includingElectricity,
-            cityGasIncluded
-            // numberOfFoors,
-            //  MLSnumber
-          }
-        });
-        await setNewData(searchRoom);
-      })();
     } else {
       (async function() {
         const {
@@ -867,6 +818,11 @@ export default props => {
       console.log("else");
     }
     if (detail) {
+      const id =
+        props &&
+        props.location &&
+        props.location.pathname &&
+        props.location.pathname.split("/")[3];
       let deposit = JSON.parse(localStorage.getItem("보증금"))[0];
       let deposit2 = JSON.parse(localStorage.getItem("보증금"))[1];
 
@@ -933,7 +889,6 @@ export default props => {
             })
           );
           if (detail) {
-            console.log("1");
             localStorage.setItem(
               "bound",
               JSON.stringify({
@@ -957,7 +912,6 @@ export default props => {
           );
           props.history.push(`/new/detail/${id}`);
         }
-        console.log(searchRoom, "searchRoom");
         localStorage.setItem("zoom", JSON.stringify(16));
         localStorage.setItem("종류", "");
         localStorage.setItem("종류2", "");
@@ -976,7 +930,6 @@ export default props => {
             lng: searchRoom.preData.lng
           })
         );
-        console.log("null!!!!!!!!!!!!!!!");
         localStorage.setItem(
           "bound",
           JSON.stringify({

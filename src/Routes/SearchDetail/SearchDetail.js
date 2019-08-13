@@ -71,7 +71,7 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
-  const id = props && props.location.pathname.split("/")[3];
+  const id = props && props.location && props.location.pathname.split("/")[3];
 
   //구글지도
 

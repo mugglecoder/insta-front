@@ -687,7 +687,7 @@ export default ({
     ////////////////////////////////////////////////////////////////////
     <>
       <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
-
+      {console.log(newData, "이게 문제야 뉴 데 이 타 ")}
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
