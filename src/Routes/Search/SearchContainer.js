@@ -801,7 +801,7 @@ export default props => {
       props.location &&
       props.location.pathname &&
       props.location.pathname.split("/")[3];
-    console.log(id, "니미시벌 id");
+
     if (JSON.parse(localStorage.getItem("보증금")) === null) {
       localStorage.setItem("zoom", JSON.stringify(16));
       localStorage.setItem("종류", "");
@@ -875,7 +875,18 @@ export default props => {
             //  MLSnumber
           }
         });
-        console.log(searchRoom, "서 치 룸");
+
+        //가끔씩 페이지에 아무것도 안뜨는것을 고친 로직
+        let checker = [];
+        searchRoom.post.map(item => {
+          checker.push(item.id === searchRoom.preData.id);
+        });
+        if (checker && checker.includes(true)) {
+        } else {
+          window.location.reload();
+        }
+        console.log(checker, "checkercheckerchecker");
+
         if (newLatandLng === null) {
           const yseCenter = JSON.parse(localStorage.getItem("map"));
 
@@ -917,11 +928,12 @@ export default props => {
         localStorage.setItem("종류2", "");
         localStorage.setItem(
           "보증금",
-          JSON.stringify([0, searchRoom.preData.deposit + 100])
+          JSON.stringify([0, searchRoom.preData.deposit])
         );
+
         localStorage.setItem(
           "월세",
-          JSON.stringify([0, searchRoom.preData.money + 10])
+          JSON.stringify([0, searchRoom.preData.money + 3])
         );
         localStorage.setItem(
           "map",
@@ -939,21 +951,6 @@ export default props => {
             lng: center.lng - 0.00551462173462
           })
         );
-
-        //        localStorage.setItem(
-        //          "bound",
-        //          JSON.stringify({
-        //            lat2S: searchRoom.preData.lat - 0.001516634371,
-        //            lat: searchRoom.preData.lat + 0.0020903087423,
-        //            lng2S: searchRoom.preData.lng + 0.0058364868164,
-        //            lng: searchRoom.preData.lng - 0.00551462173462
-        //          })
-        //        );
-
-        await setNewData(searchRoom);
-        props.history.push(`/new/detail/${id}`);
-
-        //reloading!
         //        (function() {
         //          if (window.localStorage) {
         //            if (!localStorage.getItem("firstLoad")) {
@@ -962,6 +959,9 @@ export default props => {
         //            } else localStorage.removeItem("firstLoad");
         //          }
         //        })();
+
+        await setNewData(searchRoom);
+        props.history.push(`/new/detail/${id}`);
       })();
     } else {
       localStorage.setItem("zoom", JSON.stringify(16));

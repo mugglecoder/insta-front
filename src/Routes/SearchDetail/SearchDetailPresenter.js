@@ -7,33 +7,30 @@ import GoogleMapReact from "google-map-react";
 import "../../css/image-gallery.css";
 import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
 import Carousel from "react-multi-carousel";
+import Gallery from "react-grid-gallery";
+import { Parallax, Background } from "react-parallax";
+
 import "react-multi-carousel/lib/styles.css";
+import "../../css/ReactGridGallery_tile.css";
 const Wrapper = styled.div`
-  padding: 10px;
   margin: 0 auto;
-  max-width: 1300px;
   width: 100%;
 `;
 
 const Column = styled.div`
-  height: 600px;
   display: flex;
   flex-direction: row;
 `;
 
 const ColumnL = styled.div`
-  opacity: 0.7;
   padding: 40px;
-  height: 580px;
-  width: 400px;
-  background-color: #bae0db;
+  width: 40%;
   margin-right: 15px;
 `;
 
 const ColumnR = styled.div`
   position: relative;
-  height: 580px;
-  width: 100%;
+  width: 60%;
 `;
 
 const Caption = styled.div`
@@ -41,6 +38,7 @@ const Caption = styled.div`
   overflow-wrap: break-word;
   font-size: 27px;
   font-weight: 500;
+  margin-top: 20px;
 `;
 
 const Username = styled.div`
@@ -124,7 +122,8 @@ const MapText = styled.div`
 `;
 
 const FilesA = styled.div`
-  width: 90%;
+  margin: 0 auto;
+  width: 100%;
   height: 100%;
 `;
 
@@ -138,7 +137,9 @@ const File = styled.img`
 `;
 
 const MoreRooms = styled.div`
-  margin: 30px 0px;
+  max-width: 1370px;
+  width: 90%;
+  margin: 0 auto;
   h1 {
     font-size: 20px;
     color: grey;
@@ -147,7 +148,18 @@ const MoreRooms = styled.div`
 
 const ContentWrap = styled.div`
   position: relative;
-  padding: 20px;
+`;
+
+const ImgIn = styled.img`
+  width: 100vw;
+  height: 100vh;
+  min-height: 500px;
+`;
+
+const WidthContainer = styled.div`
+  margin: 0 auto;
+  max-width: 1370px;
+  width: 90%;
 `;
 
 const LogInButtonWrap = styled.div`
@@ -263,6 +275,7 @@ const AnyReactComponent = ({ text }) => <MarkerIcon>{text}</MarkerIcon>;
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 const RoomsDetailPresenter = ({
+  getPathMainS,
   newData,
   checkLikeLoading,
   toggleJoayoLoading,
@@ -293,10 +306,185 @@ const RoomsDetailPresenter = ({
   _nextPage,
   onDeletePost
 }) => {
-  console.log("여기도 실행이 2 되었다");
+  const backImg =
+    data && data.files && data.files[0] && data.files[0].url
+      ? `http://localhost:4000/${data.files[0].url}`
+      : "http://localhost:4000/images/preImage/no-image.jpg";
+
   return (
     <Wrapper>
       {loading && <DetailLoader token={token} data={data} loading={loading} />}
+
+      {!loading && (
+        <ContentWrap>
+          <Parallax strength={300}>
+            <div style={{ height: "70vh" }} />
+            <Background className="custom-bg">
+              <ImgIn src={backImg} alt="fill murray" />
+            </Background>
+          </Parallax>
+          <LikeContainer>
+            <Like>
+              <LikeToggle onClick={toggleLike}>
+                {checkLikeLoading ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="35"
+                    viewBox="0 0 30 30"
+                    fill="#ff3422"
+                    fill-opacity="0.4"
+                    stroke="white"
+                    stroke-width="3"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : toggleJoayoLoading ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="35"
+                    viewBox="0 0 30 30"
+                    fill="#ff3422"
+                    fill-opacity="0.4"
+                    stroke="white"
+                    stroke-width="3"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : joayo ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="35"
+                    viewBox="0 0 30 30"
+                    fill="#ED4956"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="35"
+                    viewBox="0 0 30 30"
+                    fill="#000000"
+                    fill-opacity="0.2"
+                    stroke="white"
+                    stroke-width="3"
+                  >
+                    <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+                  </svg>
+                )}
+              </LikeToggle>
+            </Like>
+          </LikeContainer>
+          <WidthContainer>
+            <Column>
+              <ColumnL>
+                <Username>{data && data.user && data.user.username}</Username>
+                <Deposit>보증금 {data && data.deposit}</Deposit>
+                <Deposit>월세 {data && data.money}</Deposit>
+                <Deposit>{data && data.numberOfFoors}층</Deposit>
+                <Deposit>매물번호 {data && data.MLSnumber}</Deposit>
+                <Caption>{data && data.caption}</Caption>
+              </ColumnL>
+              <ColumnR>
+                <Content>{data && data.content}</Content>
+              </ColumnR>
+            </Column>
+            <ContentMain />
+            <OptionText>
+              <h1>옵션</h1>
+              <hr />
+            </OptionText>
+            <Options>
+              {data && data.airConditioner === "에어컨" && (
+                <Option>airConditioner</Option>
+              )}
+              {data && data.washer === "세탁기" && <Option>washer</Option>}
+              {data && data.refrigerator === "냉장고" && (
+                <Option>refrigerator</Option>
+              )}
+              {data && data.internet === "인터넷" && <Option>internet</Option>}
+              {data && data.microwave === "전자렌지" && (
+                <Option>microwave</Option>
+              )}
+              {data && data.wifi === "wifi" && <Option>wifi</Option>}
+              {data && data.bed === "침대" && <Option>bed</Option>}
+              {data && data.desk === "책상" && <Option>desk</Option>}
+              {data && data.induction === "인덕션" && (
+                <Option>induction</Option>
+              )}
+              {data && data.gasRange === "가스레인지" && (
+                <Option>gasRange</Option>
+              )}
+              {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
+              {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
+              {data && data.pets === "애완동물" && <Option>pets</Option>}
+              {data && data.elevator === "엘리베이터" && (
+                <Option>elevator</Option>
+              )}
+              {data && data.parking === "주차" && <Option>parking</Option>}
+              {data && data.electricHeating === "전기난방" && (
+                <Option>electricHeating</Option>
+              )}
+              {data && data.cityGasHeating === "도시가스난방" && (
+                <Option>tecityGasHeatingst</Option>
+              )}
+              {data && data.nightElectric === "심야전기" && (
+                <Option>nightElectric</Option>
+              )}
+              {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
+              {data && data.includingElectricity === "전기세포함" && (
+                <Option>includingElectricity</Option>
+              )}
+              {data && data.cityGasIncluded === "도시가스포함" && (
+                <Option>cityGasIncluded</Option>
+              )}
+            </Options>
+
+            {data && data.files && data.files[0] && data.files[0] && (
+              <>
+                <DetailText>
+                  <h1>디테일</h1>
+                  <hr />
+                </DetailText>
+
+                <ImageGalleryContainer>
+                  <FilesA>
+                    <Gallery
+                      images={path}
+                      enableImageSelection={false}
+                      id="test"
+                      rowHeight={300}
+                    />
+                  </FilesA>
+                </ImageGalleryContainer>
+              </>
+            )}
+            <MapText>
+              <h1>위치</h1>
+              <hr />
+            </MapText>
+            <MapContainer>
+              <div style={{ height: "35vh", width: "100%" }}>
+                <GoogleMapReact
+                  bootstrapURLKeys={{
+                    key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
+                  }}
+                  defaultCenter={{ lat, lng }}
+                  defaultZoom={zoom}
+                  options={{ maxZoom: 17 }}
+                  yesIWantToUseGoogleMapApiInternals={true}
+                >
+                  <AnyReactComponent lat={lat} lng={lng} text="" />
+                </GoogleMapReact>
+              </div>
+            </MapContainer>
+          </WidthContainer>
+        </ContentWrap>
+      )}
       {!loading && token && data ? (
         <LogInButtonWrap>
           <Link
@@ -316,182 +504,6 @@ const RoomsDetailPresenter = ({
       ) : (
         false
       )}
-      {!loading && (
-        <ContentWrap>
-          <Column>
-            <ColumnL>
-              <Username>{data && data.user && data.user.username}</Username>
-              <Caption>{data && data.caption}</Caption>
-            </ColumnL>
-            <ColumnR>
-              <LikeContainer>
-                <Like>
-                  <LikeToggle onClick={toggleLike}>
-                    {checkLikeLoading ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="40"
-                        height="35"
-                        viewBox="0 0 30 30"
-                        fill="#ff3422"
-                        fill-opacity="0.4"
-                        stroke="white"
-                        stroke-width="3"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    ) : toggleJoayoLoading ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="40"
-                        height="35"
-                        viewBox="0 0 30 30"
-                        fill="#ff3422"
-                        fill-opacity="0.4"
-                        stroke="white"
-                        stroke-width="3"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    ) : joayo ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="40"
-                        height="35"
-                        viewBox="0 0 30 30"
-                        fill="#ED4956"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="40"
-                        height="35"
-                        viewBox="0 0 30 30"
-                        fill="#000000"
-                        fill-opacity="0.2"
-                        stroke="white"
-                        stroke-width="3"
-                      >
-                        <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
-                      </svg>
-                    )}
-                  </LikeToggle>
-                </Like>
-              </LikeContainer>
-              <File
-                src={
-                  data && data.files && data.files[0] && data.files[0].url
-                    ? `http://localhost:4000/${data.files[0].url}`
-                    : "http://localhost:4000/images/preImage/no-image.jpg"
-                }
-              />
-            </ColumnR>
-          </Column>
-          <ContentMain>
-            <ContentMainWrap>
-              <Deposit>보증금 {data && data.deposit}</Deposit>
-              <Deposit>월세 {data && data.money}</Deposit>
-              <Deposit>{data && data.numberOfFoors}층</Deposit>
-              <Deposit>매물번호 {data && data.MLSnumber}</Deposit>
-            </ContentMainWrap>
-          </ContentMain>
-          <Content>{data && data.content}</Content>
-          <OptionText>
-            <h1>옵션</h1>
-            <hr />
-          </OptionText>
-          <Options>
-            {data && data.airConditioner === "에어컨" && (
-              <Option>airConditioner</Option>
-            )}
-            {data && data.washer === "세탁기" && <Option>washer</Option>}
-            {data && data.refrigerator === "냉장고" && (
-              <Option>refrigerator</Option>
-            )}
-            {data && data.internet === "인터넷" && <Option>internet</Option>}
-            {data && data.microwave === "전자렌지" && (
-              <Option>microwave</Option>
-            )}
-            {data && data.wifi === "wifi" && <Option>wifi</Option>}
-            {data && data.bed === "침대" && <Option>bed</Option>}
-            {data && data.desk === "책상" && <Option>desk</Option>}
-            {data && data.induction === "인덕션" && <Option>induction</Option>}
-            {data && data.gasRange === "가스레인지" && (
-              <Option>gasRange</Option>
-            )}
-            {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
-            {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
-            {data && data.pets === "애완동물" && <Option>pets</Option>}
-            {data && data.elevator === "엘리베이터" && (
-              <Option>elevator</Option>
-            )}
-            {data && data.parking === "주차" && <Option>parking</Option>}
-            {data && data.electricHeating === "전기난방" && (
-              <Option>electricHeating</Option>
-            )}
-            {data && data.cityGasHeating === "도시가스난방" && (
-              <Option>tecityGasHeatingst</Option>
-            )}
-            {data && data.nightElectric === "심야전기" && (
-              <Option>nightElectric</Option>
-            )}
-            {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
-            {data && data.includingElectricity === "전기세포함" && (
-              <Option>includingElectricity</Option>
-            )}
-            {data && data.cityGasIncluded === "도시가스포함" && (
-              <Option>cityGasIncluded</Option>
-            )}
-          </Options>
-
-          {data && data.files && data.files[0] && data.files[0] && (
-            <>
-              <DetailText>
-                <h1>디테일</h1>
-                <hr />
-              </DetailText>
-
-              <ImageGalleryContainer>
-                <FilesA>
-                  <ImageGallery
-                    additionalClass={`test`}
-                    items={path}
-                    showFullscreenButton={false}
-                    useBrowserFullscreen={false}
-                    showThumbnails={true}
-                    showPlayButton={false}
-                    showBullets={true}
-                    lazyLoad={true}
-                    showIndex={false}
-                  />
-                </FilesA>
-              </ImageGalleryContainer>
-            </>
-          )}
-          <MapText>
-            <h1>위치</h1>
-            <hr />
-          </MapText>
-          <MapContainer>
-            <div style={{ height: "35vh", width: "100%" }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: "AIzaSyDQc0xMBQnrOOoj8UkPkN6yeGqkAo_l2hM"
-                }}
-                defaultCenter={{ lat, lng }}
-                defaultZoom={zoom}
-                options={{ maxZoom: 17 }}
-                yesIWantToUseGoogleMapApiInternals={true}
-              >
-                <AnyReactComponent lat={lat} lng={lng} text="" />
-              </GoogleMapReact>
-            </div>
-          </MapContainer>
-        </ContentWrap>
-      )}
-
       {searchData ? (
         <MoreRooms>
           <h1>비슷한 매물이 더 있습니다!</h1>

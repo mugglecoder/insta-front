@@ -196,17 +196,31 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   const pathData =
     data && data.files && data.files.map(item => posts.push(item.url));
 
-  const s = posts.reduce((s, a) => {
+  const s = posts.reduce((s, a, currentIndex) => {
     {
-      for (var i = 0; i < posts.lengsh; i++);
+      for (var i = 0; i < posts.length; i++);
       let get;
-      get = {
-        original: `http://localhost:4000/${a}`,
-        thumbnail: `http://localhost:4000/${a}`
-      };
+      console.log(currentIndex, "currentIndex");
+      if (currentIndex === 0) {
+        get = {
+          src: `http://localhost:4000/${a}`,
+          thumbnail: `http://localhost:4000/${a}`,
+          thumbnailWidth: 400,
+          thumbnailHeight: 250
+        };
+      } else {
+        get = {
+          src: `http://localhost:4000/${a}`,
+          thumbnail: `http://localhost:4000/${a}`,
+          thumbnailWidth: 400,
+          thumbnailHeight: 250
+        };
+      }
       return getPath.push(get);
     }
   }, {});
+
+  ///////////////////////////////
 
   //토글 룸스디테일 & 수정하기
   const checker = props && props.match.path.includes("detail");

@@ -32,8 +32,7 @@ window.fetch = progressBarFetch;
 
 const Wrapper = styled.div`
   margin: 0 auto;
-  max-width: 1300px;
-  padding: 10px;
+  max-width: 1200px;
   width: 100%;
 `;
 const WrapperS = styled.div`
@@ -686,8 +685,8 @@ export default ({
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
     <>
-      <ProgressBar style={{ backgroundColor: "pink", height: "7px" }} />
-      {console.log(newData, "이게 문제야 뉴 데 이 타 ")}
+      <ProgressBar style={{ backgroundColor: "pink", height: "3px" }} />
+
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
@@ -695,8 +694,6 @@ export default ({
           newData &&
           newData.post &&
           newData.post.map(item => {
-            console.log(item.id, "id,,", matchDetail, "matchDetail mm,,,,,,");
-            console.log(item && item.id === matchDetail, "씨발 이거 고장남");
             return String(item && item.id) === String(matchDetail) ? (
               <SearchDetail
                 joayoChanged={joayoChanged}

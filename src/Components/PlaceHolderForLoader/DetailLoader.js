@@ -5,6 +5,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const Container = styled.div`
   width: 100%;
+  padding: 4% 10% 4% 10%;
   height: 80vh;
   display: flex;
   flex-direction: row;
@@ -46,18 +47,10 @@ const ColumnL = styled.div`
 `;
 const ColumnR = styled.div`
   width: 75%;
+  background-color: #efefef;
   border-radius: 5px;
-  margin: 0 auto;
+  margin: 0px 15px;
   height: 580px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const H1 = styled.h1`
-  color: #7ec092;
-  font-weight: 900;
-  font-size: 200px;
 `;
 
 const Files = styled.div`
@@ -73,11 +66,9 @@ const ContainerS = styled.section`
     width: 250px;
     height: 200px;
   }
-
   &.example-appear {
     opacity: 0.01;
   }
-
   &.example-appear-active {
     opacity: 1;
     transition: opacity ${500}ms ease-out;
@@ -98,8 +89,11 @@ export default ({ token, data, loading }) => {
           <ContainerS>
             {token && data ? <LogInButtonWrap /> : false}
             <WrapTheColumn>
+              <ColumnL>
+                <Files />
+              </ColumnL>
               <ColumnR>
-                <H1>Loading</H1>
+                <Files />
               </ColumnR>
             </WrapTheColumn>
           </ContainerS>
