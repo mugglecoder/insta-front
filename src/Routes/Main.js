@@ -93,7 +93,7 @@ export default () => {
     "map",
     JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
   );
-  localStorage.setItem("zoom", JSON.stringify(16));
+  localStorage.setItem("zoom", JSON.stringify(18));
   localStorage.setItem("종류", "");
   localStorage.setItem("종류2", "");
   localStorage.setItem("보증금", JSON.stringify([0, 1000000]));

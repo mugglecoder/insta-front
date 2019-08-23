@@ -4,7 +4,7 @@ const BORDER_RADIUS = "4px";
 export default {
   paginationColor: "#ed9292;",
   maxWidth: "935px",
-  bgColor: "#FAFAFA",
+  bgColor: "#f7f7f7",
   blackColor: "#262626",
   darkGreyColor: "#999",
   lightGreyColor: "#c7c7c7",

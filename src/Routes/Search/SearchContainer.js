@@ -493,7 +493,7 @@ export default props => {
   //페이지네이션
   const [skip, setSkip] = useState(0);
   let first = LINKS_PER_PAGE;
-  console.log(first, "inthe first");
+
   useEffect(() => {}, [skip]);
 
   //셀렉트 박스
@@ -623,6 +623,7 @@ export default props => {
     const centerLat = center.lat;
     const centerLng = center.lng;
     setTheBounds(bounds);
+    localStorage.setItem("zoom", JSON.stringify(zoom));
     localStorage.setItem(
       "bound",
       JSON.stringify({
@@ -689,7 +690,6 @@ export default props => {
       }
     });
     await setNewData(searchRoom);
-    console.log(searchRoom, "in the searchContainer");
   };
 
   //
@@ -698,14 +698,6 @@ export default props => {
     props.location.pathname.split("/")[2] === "detail" ? true : false;
 
   //맨처음 접속 했을때 디폴트 데이터
-  useEffect(() => {
-    if (detail) {
-      console.log("");
-    } else {
-      findRoom();
-      setTheChange(true);
-    }
-  }, [theChange]);
 
   //
   const [activePage, setActivePage] = useState(1);
@@ -728,8 +720,6 @@ export default props => {
     setSkip(skip);
     setPageNumber2(pageNumber);
     setActivePage(pageNumber);
-
-    console.log(skip, first, pageNumber, "skip first");
 
     props.history.push(`/new/search/${pageNumber}`);
   };
@@ -803,7 +793,7 @@ export default props => {
       props.location.pathname.split("/")[3];
 
     if (JSON.parse(localStorage.getItem("보증금")) === null) {
-      localStorage.setItem("zoom", JSON.stringify(16));
+      localStorage.setItem("zoom", JSON.stringify(18));
       localStorage.setItem("종류", "");
       localStorage.setItem("종류2", "");
       localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
@@ -885,7 +875,6 @@ export default props => {
         } else {
           window.location.reload();
         }
-        console.log(checker, "checkercheckerchecker");
 
         if (newLatandLng === null) {
           const yseCenter = JSON.parse(localStorage.getItem("map"));
@@ -964,7 +953,10 @@ export default props => {
         props.history.push(`/new/detail/${id}`);
       })();
     } else {
-      localStorage.setItem("zoom", JSON.stringify(16));
+      (async function() {
+        await findRoom();
+      })();
+      localStorage.setItem("zoom", JSON.stringify(18));
       localStorage.setItem("종류", "");
       localStorage.setItem("종류2", "");
       localStorage.setItem("보증금", JSON.stringify([0, 1000000]));

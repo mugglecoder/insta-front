@@ -12,6 +12,7 @@ import { Parallax, Background } from "react-parallax";
 
 import "react-multi-carousel/lib/styles.css";
 import "../../css/ReactGridGallery_tile.css";
+import BoardPartsInDetail from "../../Components/BoardPartsInDetail";
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
@@ -20,6 +21,7 @@ const Wrapper = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 40px;
 `;
 
 const ColumnL = styled.div`
@@ -50,6 +52,7 @@ const Username = styled.div`
 const ContentMain = styled.div`
   width: 100%;
   display: flex;
+
   flex-direction: row;
   justify-content: space-between;
   padding: 30px;
@@ -95,30 +98,20 @@ const Option = styled.div`
 `;
 
 const OptionText = styled.div`
-  margin-top: -25px;
-  margin-bottom: 20px;
-  h1 {
-    font-size: 20px;
-    color: grey;
-  }
+  margin-top: 40px;
+  border-top: 1px solid #d5d5d5;
 `;
 
 const DetailText = styled.div`
-  margin: 50px 0px;
-  margin-top: 10px;
-  h1 {
-    font-size: 20px;
-    color: grey;
-  }
+  margin: 50px 0px 20px 0px;
+  margin-top: 50px;
+  border-top: 1px solid #d5d5d5;
 `;
 
 const MapText = styled.div`
-  margin: 50px 0px;
-  margin-top: 10px;
-  h1 {
-    font-size: 20px;
-    color: grey;
-  }
+  margin: 50px 0px 20px 0px;
+  margin-top: 50px;
+  border-top: 1px solid #d5d5d5;
 `;
 
 const FilesA = styled.div`
@@ -140,10 +133,22 @@ const MoreRooms = styled.div`
   max-width: 1370px;
   width: 90%;
   margin: 0 auto;
-  h1 {
-    font-size: 20px;
-    color: grey;
-  }
+  border-top: 1px solid #d5d5d5;
+`;
+
+const StyledH1 = styled.h1`
+  font-size: 30px;
+  color: black;
+  margin-top: 70px;
+  margin-bottom: 30px;
+`;
+
+const MoreRoomsContainer = styled.div`
+  display: flex;
+  margin: -15px;
+
+  justify-content: flex-start;
+  flex-wrap: wrap;
 `;
 
 const ContentWrap = styled.div`
@@ -317,10 +322,10 @@ const RoomsDetailPresenter = ({
 
       {!loading && (
         <ContentWrap>
-          <Parallax strength={300}>
-            <div style={{ height: "70vh" }} />
+          <Parallax strength={400}>
+            <div style={{ height: "65vh" }} />
             <Background className="custom-bg">
-              <ImgIn src={backImg} alt="fill murray" />
+              <ImgIn src={backImg} alt="" />
             </Background>
           </Parallax>
           <LikeContainer>
@@ -393,10 +398,8 @@ const RoomsDetailPresenter = ({
                 <Content>{data && data.content}</Content>
               </ColumnR>
             </Column>
-            <ContentMain />
             <OptionText>
-              <h1>옵션</h1>
-              <hr />
+              <StyledH1>옵션</StyledH1>
             </OptionText>
             <Options>
               {data && data.airConditioner === "에어컨" && (
@@ -447,8 +450,7 @@ const RoomsDetailPresenter = ({
             {data && data.files && data.files[0] && data.files[0] && (
               <>
                 <DetailText>
-                  <h1>디테일</h1>
-                  <hr />
+                  <StyledH1>디테일</StyledH1>
                 </DetailText>
 
                 <ImageGalleryContainer>
@@ -464,8 +466,7 @@ const RoomsDetailPresenter = ({
               </>
             )}
             <MapText>
-              <h1>위치</h1>
-              <hr />
+              <StyledH1>위치</StyledH1>
             </MapText>
             <MapContainer>
               <div style={{ height: "35vh", width: "100%" }}>
@@ -506,29 +507,16 @@ const RoomsDetailPresenter = ({
       )}
       {searchData ? (
         <MoreRooms>
-          <h1>비슷한 매물이 더 있습니다!</h1>
-          <hr />
-
-          <Carousel
-            swipeable={true}
-            draggable={true}
-            showDots={false}
-            responsive={responsive}
-            ssr={true} // means to render carousel on server-side.
-            infinite={false}
-            keyBoardControl={true}
-            customTransition="all .5"
-            transitionDuration={500}
-            containerClass="carousel-container"
-            removeArrowOnDeviceType={["tablet", "mobile"]}
-            deviceType={props && props.deviceType}
-            dotListClass="custom-dot-list-style"
-            itemClass="carousel-item-padding-40-px"
-          >
+          <StyledH1>비슷한 매물</StyledH1>
+          <MoreRoomsContainer>
             {searchData
               ? searchData &&
                 searchData.post &&
-                searchData.post.map((item, key) => {
+                searchData.post.slice(0, 9) &&
+                searchData.post.slice(0, 9).map((item, key) => {
+                  if (item.id === id) {
+                    return false;
+                  }
                   let arrayOfPath = [];
                   let test = [];
                   let path = [];
@@ -563,7 +551,9 @@ const RoomsDetailPresenter = ({
                       searchData.post[key].files.map(item => {
                         return arrayOfPath.push(item.url);
                       });
-                    arrayOfPath.map((item, key) => test.push(item));
+                    arrayOfPath.map((item, key) => {
+                      return test.push(item);
+                    });
 
                     const s = test.reduce((s, a) => {
                       {
@@ -579,7 +569,7 @@ const RoomsDetailPresenter = ({
                   }
 
                   return (
-                    <BoardPartsSlide
+                    <BoardPartsInDetail
                       beforeCheck={beforeCheck}
                       toggleButton={toggleButton}
                       joayo={joayo}
@@ -608,7 +598,7 @@ const RoomsDetailPresenter = ({
                   );
                 })
               : false}
-          </Carousel>
+          </MoreRoomsContainer>
         </MoreRooms>
       ) : newData ? (
         <MoreRooms>
@@ -647,6 +637,9 @@ const RoomsDetailPresenter = ({
                       `http://127.0.0.1:4000/images/preImage/no-image.jpg`
                     );
                     arrayOfPath.map((item, key) => {
+                      if (item.id === id) {
+                        return false;
+                      }
                       return test.push(item);
                     });
                     const s = test.reduce((s, a) => {
@@ -668,7 +661,9 @@ const RoomsDetailPresenter = ({
                       newData[key].files.map(item => {
                         return arrayOfPath.push(item.url);
                       });
-                    arrayOfPath.map((item, key) => test.push(item));
+                    arrayOfPath.map((item, key) => {
+                      return test.push(item);
+                    });
 
                     const s = test.reduce((s, a) => {
                       {
@@ -684,7 +679,7 @@ const RoomsDetailPresenter = ({
                   }
 
                   return (
-                    <BoardPartsSlide
+                    <BoardPartsInDetail
                       beforeCheck={beforeCheck}
                       toggleButton={toggleButton}
                       joayo={joayo}

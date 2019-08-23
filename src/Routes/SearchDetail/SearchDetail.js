@@ -200,7 +200,7 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
     {
       for (var i = 0; i < posts.length; i++);
       let get;
-      console.log(currentIndex, "currentIndex");
+
       if (currentIndex === 0) {
         get = {
           src: `http://localhost:4000/${a}`,
@@ -329,7 +329,7 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
     props.location.pathname.split("/")[2] === "edit"
       ? true
       : false;
-  console.log(edit, "edit ", "and 여기가 실행되었는가?");
+
   return (
     <Wrapper>
       {loading && <Loading />}
