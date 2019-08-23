@@ -701,7 +701,6 @@ export default props => {
 
   //
   const [activePage, setActivePage] = useState(1);
-  const [pageNumber2, setPageNumber2] = useState(1);
 
   //new 페이지네이션
 
@@ -718,62 +717,10 @@ export default props => {
     first = LINKS_PER_PAGE;
 
     setSkip(skip);
-    setPageNumber2(pageNumber);
     setActivePage(pageNumber);
 
     props.history.push(`/new/search/${pageNumber}`);
   };
-
-  useEffect(() => {
-    if (detail) {
-    } else {
-      (async function() {
-        const {
-          data: { searchRoom }
-        } = await searchData({
-          variables: {
-            id,
-            first,
-            skip,
-            lat: latS,
-            lat2: lat2S,
-            lng: lngS,
-            lng2: lng2S,
-            deposit,
-            deposit2,
-            money,
-            money2,
-            selectType: select,
-            airConditioner,
-            washer,
-            refrigerator,
-            internet,
-            microwave,
-            wifi,
-            bed,
-            desk,
-            induction,
-            gasRange,
-            doorLock,
-            CCTV,
-            pets,
-            elevator,
-            parking,
-            electricHeating,
-            cityGasHeating,
-            nightElectric,
-            wateTax,
-            includingElectricity,
-            cityGasIncluded
-            // numberOfFoors,
-            //  MLSnumber
-          }
-        });
-        await setNewData(searchRoom);
-        props.history.push(`/new/search/${pageNumber2}`);
-      })();
-    }
-  }, [activePage]);
 
   //
   const itemsCountPerPage = () => {};
@@ -784,197 +731,182 @@ export default props => {
   //디테일페이지에 관한 모든것
 
   //다이렉트로 주소로 접근할때 디테일에 대한 로직
-  useEffect(() => {
-    const newLatandLng = JSON.parse(localStorage.getItem("bound"));
-    const id =
-      props &&
-      props.location &&
-      props.location.pathname &&
-      props.location.pathname.split("/")[3];
-
-    if (JSON.parse(localStorage.getItem("보증금")) === null) {
-      localStorage.setItem("zoom", JSON.stringify(18));
-      localStorage.setItem("종류", "");
-      localStorage.setItem("종류2", "");
-      localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
-      localStorage.setItem("월세", JSON.stringify([0, 1000000]));
-      localStorage.setItem(
-        "map",
-        JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
-      );
-
-      window.location.reload();
-    } else {
-      console.log("else");
-    }
-    if (detail) {
-      const id =
-        props &&
-        props.location &&
-        props.location.pathname &&
-        props.location.pathname.split("/")[3];
-      let deposit = JSON.parse(localStorage.getItem("보증금"))[0];
-      let deposit2 = JSON.parse(localStorage.getItem("보증금"))[1];
-
-      let money = JSON.parse(localStorage.getItem("월세"))[0];
-      let money2 = JSON.parse(localStorage.getItem("월세"))[1];
-      let lat = parseFloat(newLatandLng && newLatandLng.lat);
-      let lat2 = parseFloat(newLatandLng && newLatandLng.lat2S);
-      let lng = parseFloat(newLatandLng && newLatandLng.lng);
-      let lng2 = parseFloat(newLatandLng && newLatandLng.lng2S);
-
-      (async function() {
-        const {
-          data: { searchRoom }
-        } = await searchData({
-          variables: {
-            id,
-            first,
-            skip,
-            lat,
-            lat2,
-            lng,
-            lng2,
-            deposit,
-            deposit2,
-            money,
-            money2,
-            selectType: select,
-            airConditioner,
-            washer,
-            refrigerator,
-            internet,
-            microwave,
-            wifi,
-            bed,
-            desk,
-            induction,
-            gasRange,
-            doorLock,
-            CCTV,
-            pets,
-            elevator,
-            parking,
-            electricHeating,
-            cityGasHeating,
-            nightElectric,
-            wateTax,
-            includingElectricity,
-            cityGasIncluded
-            // numberOfFoors,
-            //  MLSnumber
-          }
-        });
-
-        //가끔씩 페이지에 아무것도 안뜨는것을 고친 로직
-        let checker = [];
-        searchRoom.post.map(item => {
-          checker.push(item.id === searchRoom.preData.id);
-        });
-        if (checker && checker.includes(true)) {
-        } else {
-          window.location.reload();
-        }
-
-        if (newLatandLng === null) {
-          const yseCenter = JSON.parse(localStorage.getItem("map"));
-
-          localStorage.setItem(
-            "bound",
-            JSON.stringify({
-              lat2S: yseCenter.lat - 0.001516634371,
-              lat: yseCenter.lat + 0.0020903087423,
-              lng2S: yseCenter.lng + 0.0058364868164,
-              lng: yseCenter.lng - 0.00551462173462
-            })
-          );
-          if (detail) {
-            localStorage.setItem(
-              "bound",
-              JSON.stringify({
-                lat2S: searchRoom.preData.lat - 0.001516634371,
-                lat: searchRoom.preData.lat + 0.0020903087423,
-                lng2S: searchRoom.preData.lng + 0.0058364868164,
-                lng: searchRoom.preData.lng - 0.00551462173462
-              })
-            );
-            window.location.reload();
-          }
-        } else {
-          localStorage.setItem(
-            "bound",
-            JSON.stringify({
-              lat2S: searchRoom.preData.lat - 0.001516634371,
-              lat: searchRoom.preData.lat + 0.0020903087423,
-              lng2S: searchRoom.preData.lng + 0.0058364868164,
-              lng: searchRoom.preData.lng - 0.00551462173462
-            })
-          );
-          props.history.push(`/new/detail/${id}`);
-        }
-        localStorage.setItem("zoom", JSON.stringify(16));
-        localStorage.setItem("종류", "");
-        localStorage.setItem("종류2", "");
-        localStorage.setItem(
-          "보증금",
-          JSON.stringify([0, searchRoom.preData.deposit])
-        );
-
-        localStorage.setItem(
-          "월세",
-          JSON.stringify([0, searchRoom.preData.money + 3])
-        );
-        localStorage.setItem(
-          "map",
-          JSON.stringify({
-            lat: searchRoom.preData.lat,
-            lng: searchRoom.preData.lng
-          })
-        );
-        localStorage.setItem(
-          "bound",
-          JSON.stringify({
-            lat2S: center.lat - 0.001516634371,
-            lat: center.lat + 0.0020903087423,
-            lng2S: center.lng + 0.0058364868164,
-            lng: center.lng - 0.00551462173462
-          })
-        );
-        //        (function() {
-        //          if (window.localStorage) {
-        //            if (!localStorage.getItem("firstLoad")) {
-        //              localStorage["firstLoad"] = true;
-        //              window.location.reload();
-        //            } else localStorage.removeItem("firstLoad");
-        //          }
-        //        })();
-
-        await setNewData(searchRoom);
-        props.history.push(`/new/detail/${id}`);
-      })();
-    } else {
-      (async function() {
-        await findRoom();
-      })();
-      localStorage.setItem("zoom", JSON.stringify(18));
-      localStorage.setItem("종류", "");
-      localStorage.setItem("종류2", "");
-      localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
-      localStorage.setItem("월세", JSON.stringify([0, 1000000]));
-      localStorage.setItem(
-        "map",
-        JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
-      );
-
-      const first = 100;
-      const skip = 0;
-    }
-
-    setSelectValue1(localStorage.getItem("종류"));
-    setSelectValue2(localStorage.getItem("종류2"));
-    setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
-    setSelectValue4(JSON.parse(localStorage.getItem("월세")));
-  }, []);
+  // useEffect(() => {
+  //   const newLatandLng = JSON.parse(localStorage.getItem("bound"));
+  //   const id =
+  //     props &&
+  //     props.location &&
+  //     props.location.pathname &&
+  //     props.location.pathname.split("/")[3];
+  //
+  //   if (JSON.parse(localStorage.getItem("보증금")) === null) {
+  //     localStorage.setItem("zoom", JSON.stringify(18));
+  //     localStorage.setItem("종류", "");
+  //     localStorage.setItem("종류2", "");
+  //     localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
+  //     localStorage.setItem("월세", JSON.stringify([0, 1000000]));
+  //     localStorage.setItem(
+  //       "map",
+  //       JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
+  //     );
+  //
+  //     window.location.reload();
+  //   } else {
+  //     console.log("else");
+  //   }
+  //   if (detail) {
+  //     const id =
+  //       props &&
+  //       props.location &&
+  //       props.location.pathname &&
+  //       props.location.pathname.split("/")[3];
+  //
+  //     let lat = parseFloat(newLatandLng && newLatandLng.lat);
+  //     let lat2 = parseFloat(newLatandLng && newLatandLng.lat2S);
+  //     let lng = parseFloat(newLatandLng && newLatandLng.lng);
+  //     let lng2 = parseFloat(newLatandLng && newLatandLng.lng2S);
+  //
+  //     (async function() {
+  //       const {
+  //         data: { searchRoom }
+  //       } = await searchData({
+  //         variables: {
+  //           id,
+  //           first,
+  //           skip,
+  //           lat,
+  //           lat2,
+  //           lng,
+  //           lng2,
+  //           deposit,
+  //           deposit2,
+  //           money,
+  //           money2,
+  //           selectType: select,
+  //           airConditioner,
+  //           washer,
+  //           refrigerator,
+  //           internet,
+  //           microwave,
+  //           wifi,
+  //           bed,
+  //           desk,
+  //           induction,
+  //           gasRange,
+  //           doorLock,
+  //           CCTV,
+  //           pets,
+  //           elevator,
+  //           parking,
+  //           electricHeating,
+  //           cityGasHeating,
+  //           nightElectric,
+  //           wateTax,
+  //           includingElectricity,
+  //           cityGasIncluded
+  //           // numberOfFoors,
+  //           //  MLSnumber
+  //         }
+  //       });
+  //
+  //       //가끔씩 페이지에 아무것도 안뜨는것을 고친 로직
+  //       let checker = [];
+  //       searchRoom.post.map(item => {
+  //         checker.push(item.id === searchRoom.preData.id);
+  //       });
+  //       if (checker && checker.includes(true)) {
+  //       } else {
+  //         window.location.reload();
+  //       }
+  //
+  //       if (newLatandLng === null) {
+  //         const yseCenter = JSON.parse(localStorage.getItem("map"));
+  //
+  //         localStorage.setItem(
+  //           "bound",
+  //           JSON.stringify({
+  //             lat2S: yseCenter.lat - 0.001516634371,
+  //             lat: yseCenter.lat + 0.0020903087423,
+  //             lng2S: yseCenter.lng + 0.0058364868164,
+  //             lng: yseCenter.lng - 0.00551462173462
+  //           })
+  //         );
+  //         if (detail) {
+  //           localStorage.setItem(
+  //             "bound",
+  //             JSON.stringify({
+  //               lat2S: searchRoom.preData.lat - 0.001516634371,
+  //               lat: searchRoom.preData.lat + 0.0020903087423,
+  //               lng2S: searchRoom.preData.lng + 0.0058364868164,
+  //               lng: searchRoom.preData.lng - 0.00551462173462
+  //             })
+  //           );
+  //           window.location.reload();
+  //         }
+  //       } else {
+  //         localStorage.setItem(
+  //           "bound",
+  //           JSON.stringify({
+  //             lat2S: searchRoom.preData.lat - 0.001516634371,
+  //             lat: searchRoom.preData.lat + 0.0020903087423,
+  //             lng2S: searchRoom.preData.lng + 0.0058364868164,
+  //             lng: searchRoom.preData.lng - 0.00551462173462
+  //           })
+  //         );
+  //         props.history.push(`/new/detail/${id}`);
+  //       }
+  //       localStorage.setItem("zoom", JSON.stringify(16));
+  //       localStorage.setItem("종류", "");
+  //       localStorage.setItem("종류2", "");
+  //
+  //       localStorage.setItem(
+  //         "map",
+  //         JSON.stringify({
+  //           lat: searchRoom.preData.lat,
+  //           lng: searchRoom.preData.lng
+  //         })
+  //       );
+  //       localStorage.setItem(
+  //         "bound",
+  //         JSON.stringify({
+  //           lat2S: center.lat - 0.001516634371,
+  //           lat: center.lat + 0.0020903087423,
+  //           lng2S: center.lng + 0.0058364868164,
+  //           lng: center.lng - 0.00551462173462
+  //         })
+  //       );
+  //       //        (function() {
+  //       //          if (window.localStorage) {
+  //       //            if (!localStorage.getItem("firstLoad")) {
+  //       //              localStorage["firstLoad"] = true;
+  //       //              window.location.reload();
+  //       //            } else localStorage.removeItem("firstLoad");
+  //       //          }
+  //       //        })();
+  //
+  //       await setNewData(searchRoom);
+  //       props.history.push(`/new/detail/${id}`);
+  //     })();
+  //   } else {
+  //     localStorage.setItem("zoom", JSON.stringify(18));
+  //     localStorage.setItem("종류", "");
+  //     localStorage.setItem("종류2", "");
+  //     localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
+  //     localStorage.setItem("월세", JSON.stringify([0, 1000000]));
+  //     localStorage.setItem(
+  //       "map",
+  //       JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
+  //     );
+  //
+  //     const first = 100;
+  //     const skip = 0;
+  //   }
+  //
+  //   setSelectValue1(localStorage.getItem("종류"));
+  //   setSelectValue2(localStorage.getItem("종류2"));
+  //   setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
+  //   setSelectValue4(JSON.parse(localStorage.getItem("월세")));
+  // }, []);
 
   return (
     <SearchPresenter
