@@ -5,7 +5,17 @@ import Input from "./Input";
 import useInput from "../Hooks/useInput";
 import { Compass, HeartEmpty, User, Logo } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
-import { ME } from "../../src/SharedQueries";
+import gql from "graphql-tag";
+
+const ME = gql`
+  {
+    me {
+      id
+      username
+      email
+    }
+  }
+`;
 
 const Header = styled.header`
   width: 100%;
@@ -64,6 +74,7 @@ const HeaderLink = styled.a`
 export default withRouter(({ history }) => {
   const search = useInput("");
   const { data } = useQuery(ME);
+
   const onSearchSubmit = e => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
@@ -73,7 +84,7 @@ export default withRouter(({ history }) => {
       <HeaderWrapper>
         <HeaderColumn>
           <Link to="/">
-            <h1>this is mark-1</h1>
+            <h1>변냥의 다락방</h1>
           </Link>
         </HeaderColumn>
         <HeaderColumn>
@@ -94,13 +105,13 @@ export default withRouter(({ history }) => {
             <HeartEmpty />
           </Link>
           {!data.me ? (
-            <HeaderLink to="/#">
+            <Link to="/#">
               <User />
-            </HeaderLink>
+            </Link>
           ) : (
-            <HeaderLink to={data.me.username}>
+            <Link to={`/info/${data.me.username}`}>
               <User />
-            </HeaderLink>
+            </Link>
           )}
         </HeaderColumn>
       </HeaderWrapper>

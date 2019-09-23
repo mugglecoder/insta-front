@@ -8,6 +8,29 @@ import { useQuery, useMutation } from "react-apollo-hooks";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { set } from "immutable";
 
+import washerS from "../optionPng/004-laundry.png";
+import airConditionerS from "../optionPng/005-air-conditioner.png";
+import refrigeratorS from "../optionPng/refrigerator.png";
+import wifiS from "../optionPng/001-wifi.png";
+import internetS from "../optionPng/002-domain.png";
+import microwaveS from "../optionPng/003-microwave-oven.png";
+import bedS from "../optionPng/007-bed.png";
+import deskS from "../optionPng/008-desk.png";
+import inductionS from "../optionPng/010-cooking.png";
+import gasRangeS from "../optionPng/011-cooking-1.png";
+import doorLockS from "../optionPng/015-door-knob.png";
+import cctvS from "../optionPng/016-cctv.png";
+import upS from "../optionPng/018-up.png";
+import parkingS from "../optionPng/019-parking.png";
+import cityGasHeatingS from "../optionPng/020-gas-station.png";
+import wateTaxS from "../optionPng/021-raindrop.png";
+import includingElectricityS from "../optionPng/023-light.png";
+import nightElectricS from "../optionPng/023-light.png";
+
+import electricHeatingS from "../optionPng/024-electric-charge.png";
+import cityGasIncludedS from "../optionPng/026-fuel-station.png";
+import petsS from "../optionPng/dog.png";
+
 const CHECK_LIKE = gql`
   query checkLike($postId: String!) {
     checkLike(postId: $postId)
@@ -43,8 +66,25 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
-const Column = styled.div`
-  height: 200px;
+const Column = styled.div``;
+
+const ColumnL = styled.div`
+  padding: 40px;
+  width: 40%;
+  margin-right: 15px;
+`;
+
+const ColumnR = styled.div`
+  position: relative;
+  width: 60%;
+`;
+
+const Caption = styled.div`
+  color: black;
+  overflow-wrap: break-word;
+  font-size: 27px;
+  font-weight: 500;
+  margin-top: 20px;
 `;
 
 const SubColumn = styled.div`
@@ -153,12 +193,27 @@ const OptionText = styled.div`
     color: grey;
   }
 `;
-const Option = styled.div`
-  height: 130px;
-  width: 20%;
-  padding: 1%;
-  background-color: #c5bfea;
+
+const StyledH1 = styled.h1`
+  font-size: 30px;
+  color: black;
+  margin-top: 70px;
+  margin-bottom: 30px;
 `;
+
+const Option = styled.div`
+  height: 90px;
+  width: 83px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 30px;
+    margin-bottom: 13px;
+  }
+`;
+
 const Options = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -166,7 +221,6 @@ const Options = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: pink;
   margin-top: -10px;
   margin-bottom: 30px;
 `;
@@ -249,16 +303,17 @@ const BoardParts = ({
   if (data.likes.length >= 1) {
     data &&
       data.likes.map(item => {
+        console.log(item, dataOfMe, "여기에는 뭐가 있나");
         if (
           String(item && item.user && item.user.id) ===
           String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
-          joayo = true;
+          return (joayo = true);
         } else if (
           String(item && item.user && item.user.id) !==
           String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
         ) {
-          joayo = false;
+          return (joayo = false);
         }
       });
   } else {
@@ -359,63 +414,6 @@ const BoardParts = ({
               />
             </Files>
           </Column>
-          <SubColumn>
-            <SmallSub>
-              <SelectType>{selectType}</SelectType>
-              <Deposit>보증금 {deposit}</Deposit>
-              {" / "}
-              <Money> 월세 {money}</Money>
-            </SmallSub>
-            <Subject>{caption}</Subject>
-          </SubColumn>
-          <OptionText>
-            <hr />
-            <h1>옵션</h1>
-          </OptionText>
-
-          <Options>
-            {data && data.airConditioner === "에어컨" && (
-              <Option>airConditioner</Option>
-            )}
-            {data && data.washer === "세탁기" && <Option>washer</Option>}
-            {data && data.refrigerator === true && (
-              <Option>refrigerator</Option>
-            )}
-            {data && data.internet === "인터넷" && <Option>internet</Option>}
-            {data && data.microwave === "전자렌지" && (
-              <Option>microwave</Option>
-            )}
-            {data && data.wifi === "wifi" && <Option>wifi</Option>}
-            {data && data.bed === "침대" && <Option>bed</Option>}
-            {data && data.desk === "책상" && <Option>desk</Option>}
-            {data && data.induction === "인덕션" && <Option>induction</Option>}
-            {data && data.gasRange === "가스레인지" && (
-              <Option>gasRange</Option>
-            )}
-            {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
-            {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
-            {data && data.pets === "애완동물" && <Option>pets</Option>}
-            {data && data.elevator === "엘리베이터" && (
-              <Option>elevator</Option>
-            )}
-            {data && data.parking === "주차" && <Option>parking</Option>}
-            {data && data.electricHeating === "전기난방" && (
-              <Option>electricHeating</Option>
-            )}
-            {data && data.cityGasHeating === "도시가스난방" && (
-              <Option>tecityGasHeatingst</Option>
-            )}
-            {data && data.nightElectric === "심야전기" && (
-              <Option>nightElectric</Option>
-            )}
-            {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
-            {data && data.includingElectricity === "전기세포함" && (
-              <Option>includingElectricity</Option>
-            )}
-            {data && data.cityGasIncluded === "도시가스포함" && (
-              <Option>cityGasIncluded</Option>
-            )}
-          </Options>
         </SnapContainerInn>
       </Container>
       <BottomFiles>

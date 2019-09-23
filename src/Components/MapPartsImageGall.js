@@ -282,19 +282,21 @@ const MapPartsImageGall = item => {
       item.item.likes.map(items => {
         if (
           String(items && items.user && items.user.id) ===
-          String(item && item.dataOfMe && item.dataOfMe.me.id)
+          String(
+            item && item.dataOfMe && item.dataOfMe.me && item.dataOfMe.me.id
+          )
         ) {
-          joayo = true;
+          return (joayo = true);
         } else if (
           String(items && items.user && items.user.id) !==
           String(
             item && item.dataOfMe && item.dataOfMe.me && item.dataOfMe.me.id
           )
         ) {
-          joayo = false;
+          return (joayo = false);
         } else {
           console.log("에러 방지용 윈도우 리로딩");
-          window.location.reload();
+          return window.location.reload();
         }
       });
   } else {

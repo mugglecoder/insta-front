@@ -94,6 +94,7 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   );
 
   const { data: dataOfMe } = useQuery(ME);
+  console.log(dataOfMe, "이건 되는가 룸스디테일");
 
   const _getQueryVariables = () => {
     const isNewPage =

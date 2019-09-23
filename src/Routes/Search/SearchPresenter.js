@@ -32,8 +32,8 @@ window.fetch = progressBarFetch;
 
 const Wrapper = styled.div`
   margin: 0 auto;
-  max-width: 1200px;
-  width: 100%;
+  max-width: 1370px;
+  width: 90%;
 `;
 const WrapperS = styled.div`
   margin: 0 auto;
@@ -223,6 +223,15 @@ const PaginationDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledH1 = styled.h1`
+  border-top: 1px solid #d5d5d5;
+  padding-top: 70px;
+  font-size: 30px;
+  color: black;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 export default ({
@@ -690,6 +699,17 @@ export default ({
       {detail ? (
         loading ? (
           <DetailLoader token={token} data={data} loading={loading} />
+        ) : newData && newData.preData ? (
+          <SearchDetail
+            joayoChanged={joayoChanged}
+            edit={edit}
+            token={token}
+            dataOfMe={dataOfMe}
+            data={newData.preData}
+            loading={loading}
+            props={props}
+            searchData={newData}
+          />
         ) : (
           newData &&
           newData.post &&
@@ -1147,11 +1167,12 @@ export default ({
               transitionLeaveTimeout={300}
             >
               <Container>
+                {loading && <StyledH1>다양한 매물이 있습니다</StyledH1>}
                 <Loading />
               </Container>
             </ReactCSSTransitionGroup>
           )}
-
+          {!loading && <StyledH1>다양한 매물이 있습니다</StyledH1>}
           {!loading && (
             <NewLinkPage
               joayoChanged={joayoChanged}

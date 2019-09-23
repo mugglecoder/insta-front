@@ -9,10 +9,33 @@ import DetailLoader from "../../Components/PlaceHolderForLoader/DetailLoader";
 import Carousel from "react-multi-carousel";
 import Gallery from "react-grid-gallery";
 import { Parallax, Background } from "react-parallax";
-
 import "react-multi-carousel/lib/styles.css";
 import "../../css/ReactGridGallery_tile.css";
 import BoardPartsInDetail from "../../Components/BoardPartsInDetail";
+
+import washerS from "../../optionPng/004-laundry.png";
+import airConditionerS from "../../optionPng/005-air-conditioner.png";
+import refrigeratorS from "../../optionPng/refrigerator.png";
+import wifiS from "../../optionPng/001-wifi.png";
+import internetS from "../../optionPng/002-domain.png";
+import microwaveS from "../../optionPng/003-microwave-oven.png";
+import bedS from "../../optionPng/007-bed.png";
+import deskS from "../../optionPng/008-desk.png";
+import inductionS from "../../optionPng/010-cooking.png";
+import gasRangeS from "../../optionPng/011-cooking-1.png";
+import doorLockS from "../../optionPng/015-door-knob.png";
+import cctvS from "../../optionPng/016-cctv.png";
+import upS from "../../optionPng/018-up.png";
+import parkingS from "../../optionPng/019-parking.png";
+import cityGasHeatingS from "../../optionPng/020-gas-station.png";
+import wateTaxS from "../../optionPng/021-raindrop.png";
+import includingElectricityS from "../../optionPng/023-light.png";
+import nightElectricS from "../../optionPng/023-light.png";
+
+import electricHeatingS from "../../optionPng/024-electric-charge.png";
+import cityGasIncludedS from "../../optionPng/026-fuel-station.png";
+import petsS from "../../optionPng/dog.png";
+
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
@@ -85,16 +108,22 @@ const Options = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: pink;
   margin-top: -10px;
   margin-bottom: 30px;
 `;
 
 const Option = styled.div`
   height: 130px;
-  width: 20%;
-  padding: 1%;
-  background-color: #c5bfea;
+  width: 10%;
+  margin-bottom: 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 65px;
+    margin-bottom: 13px;
+  }
 `;
 
 const OptionText = styled.div`
@@ -153,11 +182,12 @@ const MoreRoomsContainer = styled.div`
 
 const ContentWrap = styled.div`
   position: relative;
+  max-width: 2000px;
+  margin: 0 auto;
 `;
 
 const ImgIn = styled.img`
   width: 100vw;
-  height: 100vh;
   min-height: 500px;
 `;
 
@@ -322,8 +352,8 @@ const RoomsDetailPresenter = ({
 
       {!loading && (
         <ContentWrap>
-          <Parallax strength={400}>
-            <div style={{ height: "65vh" }} />
+          <Parallax strength={400} bgImageStyle={{ height: "50px" }}>
+            <div style={{ height: "750px" }} />
             <Background className="custom-bg">
               <ImgIn src={backImg} alt="" />
             </Background>
@@ -399,51 +429,139 @@ const RoomsDetailPresenter = ({
               </ColumnR>
             </Column>
             <OptionText>
+              <StyledH1>공과금</StyledH1>
+            </OptionText>
+            <Options>
+              {data && data.nightElectric === "심야전기" && (
+                <Option>
+                  <img src={nightElectricS} alt="nightElectric" />
+                  심야전기
+                </Option>
+              )}
+              {data && data.wateTax === "수도세" && (
+                <Option>
+                  <img src={wateTaxS} alt="wateTax" />
+                  수도세
+                </Option>
+              )}
+              {data && data.includingElectricity === "전기세포함" && (
+                <Option>
+                  <img src={includingElectricityS} alt="includingElectricity" />
+                  전기세(포함)
+                </Option>
+              )}
+              {data && data.cityGasIncluded === "도시가스포함" && (
+                <Option>
+                  <img src={cityGasIncludedS} alt="cityGasIncluded" />
+                  도시가스(포함)
+                </Option>
+              )}
+            </Options>
+            <OptionText>
               <StyledH1>옵션</StyledH1>
             </OptionText>
             <Options>
-              {data && data.airConditioner === "에어컨" && (
-                <Option>airConditioner</Option>
-              )}
-              {data && data.washer === "세탁기" && <Option>washer</Option>}
-              {data && data.refrigerator === "냉장고" && (
-                <Option>refrigerator</Option>
-              )}
-              {data && data.internet === "인터넷" && <Option>internet</Option>}
-              {data && data.microwave === "전자렌지" && (
-                <Option>microwave</Option>
-              )}
-              {data && data.wifi === "wifi" && <Option>wifi</Option>}
-              {data && data.bed === "침대" && <Option>bed</Option>}
-              {data && data.desk === "책상" && <Option>desk</Option>}
-              {data && data.induction === "인덕션" && (
-                <Option>induction</Option>
-              )}
-              {data && data.gasRange === "가스레인지" && (
-                <Option>gasRange</Option>
-              )}
-              {data && data.doorLock === "도어락" && <Option>doorLock</Option>}
-              {data && data.CCTV === "CCTV" && <Option>CCTV</Option>}
-              {data && data.pets === "애완동물" && <Option>pets</Option>}
-              {data && data.elevator === "엘리베이터" && (
-                <Option>elevator</Option>
-              )}
-              {data && data.parking === "주차" && <Option>parking</Option>}
               {data && data.electricHeating === "전기난방" && (
-                <Option>electricHeating</Option>
+                <Option>
+                  <img src={electricHeatingS} alt="electricHeating" />
+                  전기난방
+                </Option>
               )}
               {data && data.cityGasHeating === "도시가스난방" && (
-                <Option>tecityGasHeatingst</Option>
+                <Option>
+                  <img src={cityGasHeatingS} alt="cityGasHeating" />
+                  도시가스난방
+                </Option>
               )}
-              {data && data.nightElectric === "심야전기" && (
-                <Option>nightElectric</Option>
+              {data && data.airConditioner === "에어컨" && (
+                <Option>
+                  <img src={airConditionerS} alt="airConditioner" />
+                  에어컨
+                </Option>
               )}
-              {data && data.wateTax === "수도세" && <Option>wateTax</Option>}
-              {data && data.includingElectricity === "전기세포함" && (
-                <Option>includingElectricity</Option>
+              {data && data.washer === "세탁기" && (
+                <Option>
+                  <img src={washerS} alt="washer" />
+                  세탁기
+                </Option>
               )}
-              {data && data.cityGasIncluded === "도시가스포함" && (
-                <Option>cityGasIncluded</Option>
+              {data && data.refrigerator === "냉장고" && (
+                <Option>
+                  <img src={refrigeratorS} alt="refrigerator" />
+                  냉장고
+                </Option>
+              )}
+              {data && data.internet === "인터넷" && (
+                <Option>
+                  <img src={internetS} alt="internet" />
+                  인터넷
+                </Option>
+              )}
+              {data && data.microwave === "전자렌지" && (
+                <Option>
+                  <img src={microwaveS} alt="microwave" />
+                  전자레인지
+                </Option>
+              )}
+              {data && data.wifi === "wifi" && (
+                <Option>
+                  <img src={wifiS} alt="wifi" />
+                  WIFI
+                </Option>
+              )}
+              {data && data.bed === "침대" && (
+                <Option>
+                  <img src={bedS} alt="bed" />
+                  침대
+                </Option>
+              )}
+              {data && data.desk === "책상" && (
+                <Option>
+                  <img src={deskS} alt="desk" />
+                  책상
+                </Option>
+              )}
+              {data && data.induction === "인덕션" && (
+                <Option>
+                  <img src={inductionS} alt="induction" />
+                  인덕션
+                </Option>
+              )}
+              {data && data.gasRange === "가스레인지" && (
+                <Option>
+                  <img src={gasRangeS} alt="gasRange" />
+                  가스렌지
+                </Option>
+              )}
+              {data && data.doorLock === "도어락" && (
+                <Option>
+                  <img src={doorLockS} alt="doorLock" />
+                  도어락
+                </Option>
+              )}
+              {data && data.CCTV === "CCTV" && (
+                <Option>
+                  <img src={cctvS} alt="CCTV" />
+                  CCTV
+                </Option>
+              )}
+              {data && data.pets === "애완동물" && (
+                <Option>
+                  <img src={petsS} alt="pets" />
+                  애완동물
+                </Option>
+              )}
+              {data && data.elevator === "엘리베이터" && (
+                <Option>
+                  <img src={upS} alt="elevator" />
+                  엘리베이터
+                </Option>
+              )}
+              {data && data.parking === "주차" && (
+                <Option>
+                  <img src={parkingS} alt="parking" />
+                  주차
+                </Option>
               )}
             </Options>
 

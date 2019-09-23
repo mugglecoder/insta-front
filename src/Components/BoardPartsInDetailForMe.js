@@ -24,8 +24,7 @@ const SnapContainer = styled.div`
   /*border: 1px solid #f1f1f1*/
   padding: 20px 15px 20px 15px;
   border-radius: 5px;
-  width: 23%;
-  margin: 1%;
+  width: 85%;
   margin-bottom: 24px;
   background-color: #ffffff;
 `;
@@ -200,6 +199,8 @@ const StyledLink = styled(Link)`
 let url = [];
 
 const BoardParts = ({
+  beforeCheck,
+
   content,
   props,
   newData,
@@ -225,7 +226,7 @@ const BoardParts = ({
 
   const [toggleJoayo, { loading: toggleJoayoLoading }] = useMutation(
     TOGGLE_LIKE,
-    { variables: { postId: data.id } }
+    { variables: { postId: data && data.post && data.post.id } }
   );
 
   const toggleLike = async () => {
@@ -243,18 +244,14 @@ const BoardParts = ({
       setJoayoSS(toggleLike);
     }
   };
-
-  if (data && data.likes && data.likes.length >= 1) {
-    data &&
-      data.likes.map(item => {
-        if (
-          String(item && item.user && item.user.id) ===
-          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
-        ) {
+  console.log(data, "data!");
+  if (data && data.post && data.post.likes.length >= 1) {
+    data.post &&
+      data.post.likes.map(item => {
+        if (String(item && item.user && item.user.id) === String(dataOfMe)) {
           joayo = true;
         } else if (
-          String(item && item.user && item.user.id) !==
-          String(dataOfMe && dataOfMe.me && dataOfMe.me.id)
+          String(item && item.user && item.user.id) !== String(dataOfMe)
         ) {
           joayo = false;
         }
