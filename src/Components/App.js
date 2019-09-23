@@ -10,7 +10,6 @@ import Routes from "./Routes";
 import Theme from "../Styles/Theme";
 import Footer from "./Footer";
 import Header from "./Header";
-import ScriptTag from "react-script-tag";
 import { HeadProvider, Link } from "react-head";
 
 const QUERY = gql`
@@ -42,7 +41,6 @@ export default () => {
               <Wrapper>
                 <Routes isLoggedIn={isLoggedIn} />
                 <Footer />
-                <ScriptTag src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js" />
               </Wrapper>
             </>
           </Router>

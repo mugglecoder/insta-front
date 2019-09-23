@@ -13,11 +13,7 @@ const TOGGLE_LIKE = gql`
     toggleLike(postId: $postId)
   }
 `;
-const CHECK_LIKE = gql`
-  query checkLike($postId: String!) {
-    checkLike(postId: $postId)
-  }
-`;
+
 const BEFORE_CHECK = gql`
   mutation beforeLike($postId: String!) {
     beforeLike(postId: $postId)
@@ -250,10 +246,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   };
 
   // 좋아요
-  const {
-    data: { checkLike },
-    loading: checkLikeLoading
-  } = useQuery(CHECK_LIKE, { variables: { postId: id } });
 
   const [toggleButton, { loading: toggleJoayoLoading }] = useMutation(
     TOGGLE_LIKE
@@ -267,9 +259,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   const [joayo, setJoayo] = useState(false);
 
   //default 좋아요를 셋팅함
-  useEffect(() => {
-    setJoayo(checkLike);
-  }, []);
 
   //페이지 넘길때 좋아요 미리 표시해줌
   useEffect(() => {
@@ -352,7 +341,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
       ) : (
         <SearchDetailPresenter
           newData={newData}
-          checkLikeLoading={checkLikeLoading}
           toggleJoayoLoading={toggleJoayoLoading}
           searchData={searchData}
           beforeCheck={beforeCheck}
@@ -360,7 +348,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
           toggleButton={toggleButton}
           props={props}
           id={id}
-          checkLike={checkLike}
           responsive={responsive}
           joayo={joayo}
           toggleLike={toggleLike}

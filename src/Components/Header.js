@@ -3,19 +3,10 @@ import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Compass, HeartEmpty, User, Logo } from "./Icons";
+import { Compass, HeartEmpty, User } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
-import gql from "graphql-tag";
 
-const ME = gql`
-  {
-    me {
-      id
-      username
-      email
-    }
-  }
-`;
+import { ME } from "../../src/SharedQueries";
 
 const Header = styled.header`
   width: 100%;
@@ -73,8 +64,8 @@ const HeaderLink = styled.a`
 
 export default withRouter(({ history }) => {
   const search = useInput("");
-  const { data } = useQuery(ME);
-
+  const { data, loading } = useQuery(ME);
+  console.log(data, "data?");
   const onSearchSubmit = e => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
@@ -104,12 +95,13 @@ export default withRouter(({ history }) => {
           <Link to="/new/search">
             <HeartEmpty />
           </Link>
-          {!data.me ? (
-            <Link to="/#">
+
+          {!loading && data && data.me ? (
+            <Link to={`/info/${data && data.me && data.me.username}`}>
               <User />
             </Link>
           ) : (
-            <Link to={`/info/${data.me.username}`}>
+            <Link to="/#">
               <User />
             </Link>
           )}

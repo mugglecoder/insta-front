@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "apollo-boost";
 
 export const ME = gql`
   {
@@ -12,7 +12,6 @@ export const ME = gql`
           id
           caption
           likes {
-            id
             user {
               id
             }

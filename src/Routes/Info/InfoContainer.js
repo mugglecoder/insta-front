@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import InfoPresenter from "./InfoPresenter";
-import { gql } from "apollo-boost";
-import { useQuery, useMutation } from "react-apollo-hooks";
+import { useQuery } from "react-apollo-hooks";
 import { ME } from "../../SharedQueries";
 
 export default props => {

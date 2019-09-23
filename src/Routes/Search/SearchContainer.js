@@ -1,39 +1,11 @@
 import React, { useState, useEffect } from "react";
 import SearchPresenter from "./SearchPresenter";
 import { withRouter } from "react-router-dom";
-import gql from "graphql-tag";
+import { gql } from "apollo-boost";
+import { ME } from "../../SharedQueries";
 import { useQuery, useMutation } from "react-apollo-hooks";
 
 import { Link } from "react-router-dom/cjs/react-router-dom";
-
-const ME = gql`
-  {
-    me {
-      id
-      username
-      email
-      likes {
-        id
-        post {
-          id
-          caption
-          likes {
-            id
-            user {
-              id
-            }
-          }
-          deposit
-          money
-          files {
-            id
-            url
-          }
-        }
-      }
-    }
-  }
-`;
 
 const GETPOST = gql`
   query detailPost($id: String!) {
