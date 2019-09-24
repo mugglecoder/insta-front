@@ -28,28 +28,28 @@ const EDITPOST = gql`
     $caption: String
     $files: [String]
     $content: String
-    $airConditioner: Boolean
-    $washer: Boolean
-    $refrigerator: Boolean
-    $internet: Boolean
-    $microwave: Boolean
-    $wifi: Boolean
-    $bed: Boolean
-    $desk: Boolean
-    $induction: Boolean
-    $gasRange: Boolean
-    $doorLock: Boolean
-    $CCTV: Boolean
-    $pets: Boolean
-    $elevator: Boolean
-    $parking: Boolean
+    $airConditioner: String
+    $washer: String
+    $refrigerator: String
+    $internet: String
+    $microwave: String
+    $wifi: String
+    $bed: String
+    $desk: String
+    $induction: String
+    $gasRange: String
+    $doorLock: String
+    $CCTV: String
+    $pets: String
+    $elevator: String
+    $parking: String
     $numberOfFoors: String
-    $electricHeating: Boolean
-    $cityGasHeating: Boolean
-    $nightElectric: Boolean
-    $wateTax: Boolean
-    $includingElectricity: Boolean
-    $cityGasIncluded: Boolean
+    $electricHeating: String
+    $cityGasHeating: String
+    $nightElectric: String
+    $wateTax: String
+    $includingElectricity: String
+    $cityGasIncluded: String
     $MLSnumber: String
   ) {
     editPost(
@@ -98,7 +98,11 @@ const EDITPOST = gql`
   }
 `;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  max-width: 1360px;
+  margin: 0 auto;
+  width: 100%;
+`;
 
 const Inputs = styled.div`
   display: flex;
@@ -178,10 +182,9 @@ export default props => {
     () => console.log(imageUploadMulter, "imageUpLoad multer에 변화가 일어남"),
     [imageUploadMulter]
   );
-  console.log(imageUploadMulter, "여길 체크해서 고쳐야한다");
 
   const [files, setFiles] = useState([]);
-  console.log(files, "files");
+
   const [testt, setOnsubmit] = useState(false);
   useEffect(() => {
     if (testt) {
@@ -239,7 +242,7 @@ export default props => {
   let fileData = [];
   let arrayOfPath = [];
   const id = preData && preData.id;
-  const editPosts = useMutation(EDITPOST, {
+  const [editPosts] = useMutation(EDITPOST, {
     variables: {
       id,
       action,
@@ -510,7 +513,7 @@ export default props => {
       }
     } = await editPosts();
     if (id && onSubmit) {
-      props.history.push(`/roomsdetail/${id}/new/1`);
+      props && props.history && props.history.push(`/roomsdetail/${id}/new/1`);
       window.location.reload();
       return false;
     }
@@ -542,7 +545,9 @@ export default props => {
 
     setFiles(fileData);
     setOnsubmit(true);
-    props.history.push({ pathname: "/uploading", state: { id: 123 } });
+    props &&
+      props.history &&
+      props.history.push({ pathname: "/uploading", state: { id: 123 } });
     return lastCall(fileData);
 
     //props.history.push(`/roomsdetail/${id}`);
@@ -665,15 +670,7 @@ export default props => {
               placeholder={"보증금 ex)200만원"}
               {...deposit}
             />
-            <SelectBox namevalue={select} onChange={handleChange}>
-              <option value="">유형선택</option>
-              <option value="월세" required>
-                월세
-              </option>
-              <option value="전세" required>
-                전세
-              </option>
-            </SelectBox>
+
             <InputMoney
               type={"number"}
               onSubmit={noClick}

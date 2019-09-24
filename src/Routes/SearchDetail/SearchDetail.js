@@ -261,19 +261,19 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   //default 좋아요를 셋팅함
 
   //페이지 넘길때 좋아요 미리 표시해줌
-  useEffect(() => {
-    (async function() {
-      try {
-        const {
-          data: { beforeLike }
-        } = await beforeCheck({ variables: { postId: id } });
-        setJoayo(beforeLike);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    window.scrollTo(0, 0);
-  }, [props && props.match.params]);
+  //  useEffect(() => {
+  //    (async function() {
+  //      try {
+  //        const {
+  //          data: { beforeLike }
+  //        } = await beforeCheck({ variables: { postId: id } });
+  //        setJoayo(beforeLike);
+  //      } catch (e) {
+  //        console.error(e);
+  //      }
+  //    })();
+  //    window.scrollTo(0, 0);
+  //  }, [props && props.match.params]);
 
   //좋아요 클릭했을때 로직인데 음
   const toggleLike = async () => {
