@@ -303,7 +303,6 @@ const BoardParts = ({
   if (data.likes.length >= 1) {
     data &&
       data.likes.map(item => {
-        console.log(item, dataOfMe, "여기에는 뭐가 있나");
         if (
           String(item && item.user && item.user.id) ===
           String(dataOfMe && dataOfMe.me && dataOfMe.me.id)

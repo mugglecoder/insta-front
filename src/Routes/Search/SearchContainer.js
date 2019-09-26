@@ -64,6 +64,35 @@ const GETPOST = gql`
     }
   }
 `;
+const LOADPLACE = gql`
+  mutation getPlace($lat: Float, $lng: Float) {
+    getPlace(lat: $lat, lng: $lng) {
+      id
+      post {
+        id
+        caption
+        lat
+        lng
+        content
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          id
+        }
+      }
+    }
+  }
+`;
 
 const SEARCH = gql`
   mutation searchRoom(
@@ -146,64 +175,6 @@ const SEARCH = gql`
       numberOfFoors: $numberOfFoors
       MLSnumber: $MLSnumber
     ) {
-      preData {
-        id
-        caption
-        places {
-          id
-          lat
-          lng
-        }
-        lat
-        lng
-        count
-        content
-        airConditioner
-        washer
-        refrigerator
-        internet
-        microwave
-        wifi
-        bed
-        desk
-        induction
-        gasRange
-        doorLock
-        CCTV
-        pets
-        elevator
-        parking
-        electricHeating
-        cityGasHeating
-        nightElectric
-        wateTax
-        includingElectricity
-        cityGasIncluded
-        numberOfFoors
-        MLSnumber
-        deposit
-        money
-        selectType
-        createdAt
-        user {
-          id
-          username
-        }
-        files {
-          id
-          url
-        }
-        likes {
-          post {
-            id
-            caption
-          }
-          user {
-            id
-            username
-          }
-        }
-      }
       post {
         id
         caption
@@ -252,17 +223,128 @@ const SEARCH = gql`
           url
         }
         likes {
-          post {
-            id
-            caption
-          }
           user {
             id
             username
           }
         }
       }
-      counts
+    }
+  }
+`;
+
+const SEARCHMAIN = gql`
+  mutation searchRoom(
+    $id: String
+    $first: Int
+    $skip: Int
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
+    $deposit: Int
+    $deposit2: Int
+    $money: Int
+    $money2: Int
+    $caption: String
+    $content: String
+    $files: [String]
+    $selectType: String
+    $airConditioner: String
+    $washer: String
+    $refrigerator: String
+    $internet: String
+    $microwave: String
+    $wifi: String
+    $bed: String
+    $desk: String
+    $induction: String
+    $gasRange: String
+    $doorLock: String
+    $CCTV: String
+    $pets: String
+    $elevator: String
+    $parking: String
+    $electricHeating: String
+    $cityGasHeating: String
+    $nightElectric: String
+    $wateTax: String
+    $includingElectricity: String
+    $cityGasIncluded: String
+    $numberOfFoors: String
+    $MLSnumber: String
+  ) {
+    searchRoom(
+      id: $id
+      first: $first
+      skip: $skip
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
+      deposit: $deposit
+      deposit2: $deposit2
+      money: $money
+      money2: $money2
+      caption: $caption
+      content: $content
+      files: $files
+      selectType: $selectType
+      airConditioner: $airConditioner
+      washer: $washer
+      refrigerator: $refrigerator
+      internet: $internet
+      microwave: $microwave
+      wifi: $wifi
+      bed: $bed
+      desk: $desk
+      induction: $induction
+      gasRange: $gasRange
+      doorLock: $doorLock
+      CCTV: $CCTV
+      pets: $pets
+      elevator: $elevator
+      parking: $parking
+      electricHeating: $electricHeating
+      cityGasHeating: $cityGasHeating
+      nightElectric: $nightElectric
+      wateTax: $wateTax
+      includingElectricity: $includingElectricity
+      cityGasIncluded: $cityGasIncluded
+      numberOfFoors: $numberOfFoors
+      MLSnumber: $MLSnumber
+    ) {
+      post {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        content
+
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          user {
+            id
+            username
+          }
+        }
+      }
     }
   }
 `;
@@ -619,6 +701,10 @@ export default props => {
       : props.location.pathname.split("/")[3];
 
   const [searchData, { loading }] = useMutation(SEARCH);
+  const [searchData2, { loading2 }] = useMutation(SEARCHMAIN);
+
+  //로드플레이스
+  const [firstPlace] = useMutation(LOADPLACE);
 
   const [newData, setNewData] = useState();
 
@@ -699,6 +785,7 @@ export default props => {
 
   const findRoom2 = async () => {
     if (detail) {
+      return false;
     } else {
       const map = JSON.parse(localStorage.getItem("map"));
       localStorage.setItem("zoom", JSON.stringify(17));
@@ -753,12 +840,18 @@ export default props => {
       const lng =
         bound === 1 ? map && map.lng - 0.00551462173462 : bound && bound[1];
 
+      const latValue = JSON.parse(localStorage.getItem("map")).lat;
+      const lngValue = JSON.parse(localStorage.getItem("map")).lng;
+
       first = LINKS_PER_PAGE;
       setSkip(0);
-      props.history.push(`/new/search/${activePage}`);
+      const { data: test } = await firstPlace({
+        variables: { lat: latValue, lng: lngValue }
+      });
+      console.log(test, latValue, lngValue, "tettetetest");
       const {
         data: { searchRoom }
-      } = await searchData({
+      } = await searchData2({
         variables: {
           id,
           first,
@@ -797,6 +890,7 @@ export default props => {
           //  MLSnumber
         }
       });
+      props.history.push(`/new/search/${activePage}`);
       await setNewData(searchRoom);
     }
   };
@@ -875,171 +969,12 @@ export default props => {
         props.history.push(`/new/detail/${id}`);
       })();
     }
-    //    const newLatandLng = JSON.parse(localStorage.getItem("bound"));
-    //    const id =
-    //      props &&
-    //      props.location &&
-    //      props.location.pathname &&
-    //      props.location.pathname.split("/")[3];
-    //    if (JSON.parse(localStorage.getItem("보증금")) === null) {
-    //      localStorage.setItem("zoom", JSON.stringify(17));
-    //      localStorage.setItem("종류", "");
-    //      localStorage.setItem("종류2", "");
-    //      localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
-    //      localStorage.setItem("월세", JSON.stringify([0, 1000000]));
-    //      localStorage.setItem(
-    //        "map",
-    //        JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
-    //      );
-    //      window.location.reload();
-    //    } else {
-    //      console.log("else");
-    //    }
-    //    if (detail) {
-    //      const id =
-    //        props &&
-    //        props.location &&
-    //        props.location.pathname &&
-    //        props.location.pathname.split("/")[3];
-    //      let lat = parseFloat(newLatandLng && newLatandLng.lat);
-    //      let lat2 = parseFloat(newLatandLng && newLatandLng.lat2S);
-    //      let lng = parseFloat(newLatandLng && newLatandLng.lng);
-    //      let lng2 = parseFloat(newLatandLng && newLatandLng.lng2S);
-    //      (async function() {
-    //        const {
-    //          data: { searchRoom }
-    //        } = await searchData({
-    //          variables: {
-    //            id,
-    //            first,
-    //            skip,
-    //            lat,
-    //            lat2,
-    //            lng,
-    //            lng2,
-    //            deposit,
-    //            deposit2,
-    //            money,
-    //            money2,
-    //            selectType: select,
-    //            airConditioner,
-    //            washer,
-    //            refrigerator,
-    //            internet,
-    //            microwave,
-    //            wifi,
-    //            bed,
-    //            desk,
-    //            induction,
-    //            gasRange,
-    //            doorLock,
-    //            CCTV,
-    //            pets,
-    //            elevator,
-    //            parking,
-    //            electricHeating,
-    //            cityGasHeating,
-    //            nightElectric,
-    //            wateTax,
-    //            includingElectricity,
-    //            cityGasIncluded
-    //            // numberOfFoors,
-    //            //  MLSnumber
-    //          }
-    //        });
-    //        //가끔씩 페이지에 아무것도 안뜨는것을 고친 로직
-    //        let checker = [];
-    //        searchRoom.post.map(item => {
-    //          checker.push(item.id === searchRoom.preData.id);
-    //        });
-    //        if (checker && checker.includes(true)) {
-    //        } else {
-    //          window.location.reload();
-    //        }
-    //        if (newLatandLng === null) {
-    //          const yseCenter = JSON.parse(localStorage.getItem("map"));
-    //          localStorage.setItem(
-    //            "bound",
-    //            JSON.stringify({
-    //              lat2S: yseCenter.lat - 0.001516634371,
-    //              lat: yseCenter.lat + 0.0020903087423,
-    //              lng2S: yseCenter.lng + 0.0058364868164,
-    //              lng: yseCenter.lng - 0.00551462173462
-    //            })
-    //          );
-    //          if (detail) {
-    //            localStorage.setItem(
-    //              "bound",
-    //              JSON.stringify({
-    //                lat2S: searchRoom.preData.lat - 0.001516634371,
-    //                lat: searchRoom.preData.lat + 0.0020903087423,
-    //                lng2S: searchRoom.preData.lng + 0.0058364868164,
-    //                lng: searchRoom.preData.lng - 0.00551462173462
-    //              })
-    //            );
-    //            window.location.reload();
-    //          }
-    //        } else {
-    //          localStorage.setItem(
-    //            "bound",
-    //            JSON.stringify({
-    //              lat2S: searchRoom.preData.lat - 0.001516634371,
-    //              lat: searchRoom.preData.lat + 0.0020903087423,
-    //              lng2S: searchRoom.preData.lng + 0.0058364868164,
-    //              lng: searchRoom.preData.lng - 0.00551462173462
-    //            })
-    //          );
-    //          props.history.push(`/new/detail/${id}`);
-    //        }
-    //        localStorage.setItem("zoom", JSON.stringify(17));
-    //        localStorage.setItem("종류", "");
-    //        localStorage.setItem("종류2", "");
-    //        localStorage.setItem(
-    //          "map",
-    //          JSON.stringify({
-    //            lat: searchRoom.preData.lat,
-    //            lng: searchRoom.preData.lng
-    //          })
-    //        );
-    //        localStorage.setItem(
-    //          "bound",
-    //          JSON.stringify({
-    //            lat2S: center.lat - 0.001516634371,
-    //            lat: center.lat + 0.0020903087423,
-    //            lng2S: center.lng + 0.0058364868164,
-    //            lng: center.lng - 0.00551462173462
-    //          })
-    //        );
-    //        //        (function() {
-    //        //          if (window.localStorage) {
-    //        //            if (!localStorage.getItem("firstLoad")) {
-    //        //              localStorage["firstLoad"] = true;
-    //        //              window.location.reload();
-    //        //            } else localStorage.removeItem("firstLoad");
-    //        //          }
-    //        //        })();
-    //        await setNewData(searchRoom);
-    //        props.history.push(`/new/detail/${id}`);
-    //      })();
-    //    } else {
-    //      localStorage.setItem("zoom", JSON.stringify(17));
-    //      localStorage.setItem("종류", "");
-    //      localStorage.setItem("종류2", "");
-    //      localStorage.setItem("보증금", JSON.stringify([0, 1000000]));
-    //      localStorage.setItem("월세", JSON.stringify([0, 1000000]));
-    //      localStorage.setItem(
-    //        "map",
-    //        JSON.stringify({ lat: 35.8898463607061, lng: 128.61687976455687 })
-    //      );
-    //      const first = 100;
-    //      const skip = 0;
-    //    }
+
     setSelectValue1(localStorage.getItem("종류"));
     setSelectValue2(localStorage.getItem("종류2"));
     setSelectValue3(JSON.parse(localStorage.getItem("보증금")));
     setSelectValue4(JSON.parse(localStorage.getItem("월세")));
   }, []);
-
   return (
     <SearchPresenter
       newData={newData}

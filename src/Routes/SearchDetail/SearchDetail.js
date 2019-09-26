@@ -8,15 +8,211 @@ import Axios from "axios";
 import ModifyPresenter from "./ModifyPresenter";
 import Loading from "../../Components/PlaceHolderForLoader/Loading";
 
-const TOGGLE_LIKE = gql`
-  mutation toggleLike($postId: String!) {
-    toggleLike(postId: $postId)
+const SEARCH = gql`
+  mutation searchRoom(
+    $id: String
+    $first: Int
+    $skip: Int
+    $lat: Float
+    $lng: Float
+    $lat2: Float
+    $lng2: Float
+    $deposit: Int
+    $deposit2: Int
+    $money: Int
+    $money2: Int
+    $caption: String
+    $content: String
+    $files: [String]
+    $selectType: String
+    $airConditioner: String
+    $washer: String
+    $refrigerator: String
+    $internet: String
+    $microwave: String
+    $wifi: String
+    $bed: String
+    $desk: String
+    $induction: String
+    $gasRange: String
+    $doorLock: String
+    $CCTV: String
+    $pets: String
+    $elevator: String
+    $parking: String
+    $electricHeating: String
+    $cityGasHeating: String
+    $nightElectric: String
+    $wateTax: String
+    $includingElectricity: String
+    $cityGasIncluded: String
+    $numberOfFoors: String
+    $MLSnumber: String
+  ) {
+    searchRoom(
+      id: $id
+      first: $first
+      skip: $skip
+      lat: $lat
+      lng: $lng
+      lat2: $lat2
+      lng2: $lng2
+      deposit: $deposit
+      deposit2: $deposit2
+      money: $money
+      money2: $money2
+      caption: $caption
+      content: $content
+      files: $files
+      selectType: $selectType
+      airConditioner: $airConditioner
+      washer: $washer
+      refrigerator: $refrigerator
+      internet: $internet
+      microwave: $microwave
+      wifi: $wifi
+      bed: $bed
+      desk: $desk
+      induction: $induction
+      gasRange: $gasRange
+      doorLock: $doorLock
+      CCTV: $CCTV
+      pets: $pets
+      elevator: $elevator
+      parking: $parking
+      electricHeating: $electricHeating
+      cityGasHeating: $cityGasHeating
+      nightElectric: $nightElectric
+      wateTax: $wateTax
+      includingElectricity: $includingElectricity
+      cityGasIncluded: $cityGasIncluded
+      numberOfFoors: $numberOfFoors
+      MLSnumber: $MLSnumber
+    ) {
+      preData {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        count
+        content
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        numberOfFoors
+        MLSnumber
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
+        }
+      }
+      post {
+        id
+        caption
+        places {
+          id
+          lat
+          lng
+        }
+        lat
+        lng
+        count
+        content
+        airConditioner
+        washer
+        refrigerator
+        internet
+        microwave
+        wifi
+        bed
+        desk
+        induction
+        gasRange
+        doorLock
+        CCTV
+        pets
+        elevator
+        parking
+        electricHeating
+        cityGasHeating
+        nightElectric
+        wateTax
+        includingElectricity
+        cityGasIncluded
+        numberOfFoors
+        MLSnumber
+        deposit
+        money
+        selectType
+        createdAt
+        user {
+          id
+          username
+        }
+        files {
+          id
+          url
+        }
+        likes {
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
+        }
+      }
+      counts
+    }
   }
 `;
 
-const BEFORE_CHECK = gql`
-  mutation beforeLike($postId: String!) {
-    beforeLike(postId: $postId)
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
   }
 `;
 
@@ -67,6 +263,8 @@ const Wrapper = styled.div``;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
+  console.log(data, "서치 데이타");
+
   const id = props && props.location && props.location.pathname.split("/")[3];
 
   //구글지도
@@ -90,7 +288,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
   );
 
   const { data: dataOfMe } = useQuery(ME);
-  console.log(dataOfMe, "이건 되는가 룸스디테일");
 
   const _getQueryVariables = () => {
     const isNewPage =
@@ -251,9 +448,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
     TOGGLE_LIKE
   );
 
-  const [beforeCheck] = useMutation(BEFORE_CHECK);
-  //
-
   //
 
   const [joayo, setJoayo] = useState(false);
@@ -343,7 +537,6 @@ const RoomsDetail = ({ props, data, loading, searchData, newData }) => {
           newData={newData}
           toggleJoayoLoading={toggleJoayoLoading}
           searchData={searchData}
-          beforeCheck={beforeCheck}
           setJoayo={setJoayo}
           toggleButton={toggleButton}
           props={props}
