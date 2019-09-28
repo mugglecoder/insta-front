@@ -223,6 +223,10 @@ const SEARCH = gql`
           url
         }
         likes {
+          post {
+            id
+            caption
+          }
           user {
             id
             username
