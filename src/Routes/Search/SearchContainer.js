@@ -87,7 +87,14 @@ const LOADPLACE = gql`
           url
         }
         likes {
-          id
+          post {
+            id
+            caption
+          }
+          user {
+            id
+            username
+          }
         }
       }
     }
