@@ -59,7 +59,7 @@
     "styled-jsx": "^3.2.1",
     "styled-reset": "^2.0.13",
     "use-react-router": "^1.0.7",
-    "yarn": "^1.17.3"
+    "yarn": "^1.22.0"
   },
   "scripts": {
     "start": "react-scripts start",
