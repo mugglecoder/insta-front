@@ -11,7 +11,7 @@
     "apollo-link-error": "^1.1.11",
     "apollo-link-state": "^0.4.2",
     "apollo-upload-client": "^10.0.1",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-hooks": "^1.1.0",
     "classnames": "^2.2.6",
     "daum-maps-react": "^1.0.1",
