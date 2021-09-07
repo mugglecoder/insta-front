@@ -15,7 +15,7 @@
     "axios-hooks": "^1.1.0",
     "classnames": "^2.2.6",
     "daum-maps-react": "^1.0.1",
-    "file-upload-with-preview": "^4.0.2",
+    "file-upload-with-preview": "^4.2.0",
     "filepond": "^4.4.10",
     "filepond-plugin-image-preview": "^4.2.1",
     "google-map-react": "^1.1.4",
